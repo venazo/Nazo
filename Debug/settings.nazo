@@ -1,0 +1,11 @@
+SpriteSheets:
+  - Path: C:\Users\n7\Desktop\nazo\Debug/assets/nazo/textures/gizmos.png
+    Width: 24
+    Height: 48
+    Num: 3
+    Spacing: 0
+  - Path: C:\Users\n7\Desktop\nazo\Debug/assets\textures\test.png
+    Width: 16
+    Height: 16
+    Num: 4
+    Spacing: 0

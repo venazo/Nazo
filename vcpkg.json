@@ -1,0 +1,24 @@
+{
+    "name": "nazo",
+    "version": "1.0.0",
+    "dependencies": [
+        "boost-filesystem",
+        "boost-dll",
+        "boost-function",
+        "boost-json",
+        "glfw3",
+        "glm",
+        {
+            "name": "imgui",
+            "features": [
+              "glfw-binding",
+              "opengl3-binding",
+              "docking-experimental"
+            ]
+        },
+        "glad",
+        "yaml-cpp",
+        "stb",
+        "box2d"
+    ]
+}
