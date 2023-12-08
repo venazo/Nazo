@@ -49,7 +49,7 @@ namespace Zewada {
 		std::filesystem::path pathstr(spriteSheet->GetTexture()->GetPath());
 		if (Utils::Contains(m_spriteSheets, pathstr))
 		{
-			Z_WARN("The SpriteSheet " + pathstr.string() + " has already been added!");
+			Z_WARN() << "The SpriteSheet " + pathstr.string() + " has already been added!";
 			return;
 		}
 		m_spriteSheets.insert({ pathstr, spriteSheet });
@@ -62,7 +62,7 @@ namespace Zewada {
 		{
 			return m_spriteSheets[pathstr];
 		}
-		Z_ERROR("The SpriteSheet " + pathstr.string() + " has not been added!");
+		Z_ERROR() << "The SpriteSheet " + pathstr.string() + " has not been added!";
 		return std::make_shared<SpriteSheet>();
 	}
 
@@ -84,7 +84,7 @@ namespace Zewada {
 			m_spriteSheets.erase(pathstr);
 			return;
 		}
-		Z_WARN("The SpriteSheet " + pathstr.string() + " has not been found!");
+		Z_WARN() << "The SpriteSheet " + pathstr.string() + " has not been found!";
 	}
 
 	void AssetPool::ReplaceSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet)
@@ -95,7 +95,7 @@ namespace Zewada {
 			m_spriteSheets[pathstr] = spriteSheet;
 			return;
 		}
-		Z_WARN("The SpriteSheet " + pathstr.string() + " has not been found!");
+		Z_WARN() << "The SpriteSheet " + pathstr.string() + " has not been found!";
 	}
 
 	AssetPool::AssetPool()

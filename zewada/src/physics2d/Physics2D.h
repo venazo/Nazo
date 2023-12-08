@@ -5,7 +5,7 @@
 #include "../ECS/core/Coordinator.h"
 #include <glm/glm.hpp>
 #include "../scene/SceneManager.h"
-#include "../utils/debug/logger.h"
+#include "../utils/debug/Logger.h"
 
 namespace Zewada {
 

@@ -4,6 +4,8 @@
 
 namespace Zewada {
 
+	class AssetPool;
+
 	class Texture
 	{
 	private:

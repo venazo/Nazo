@@ -22,7 +22,7 @@ namespace Zewada
             }
             catch(const std::exception& e)
             {
-                Z_ERROR("Could not find " + symbol);
+                Z_ERROR() << "Could not find " + symbol;
                 return std::make_shared<ScriptableEntity>();
             }
 

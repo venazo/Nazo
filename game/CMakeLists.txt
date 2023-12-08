@@ -24,9 +24,9 @@ find_package(Stb REQUIRED)
 
 add_definitions(-D_WIN)
 
-include_directories(AFTER game ../zewada/src)
-
 add_executable(game ${SRC})
+
+target_include_directories(game PRIVATE ../zewada/src)
 
 target_link_libraries(game PRIVATE zewada ${YAML_CPP_LIBRARIES} glm::glm Boost::filesystem yaml-cpp glfw glad::glad box2d::box2d)
 

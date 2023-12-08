@@ -4,6 +4,7 @@
 #include "../../scene/Scene.h"
 
 namespace Zewada {
+
     Rigidbody2DSystem::Rigidbody2DSystem()
     {
 
@@ -13,14 +14,13 @@ namespace Zewada {
     {
         for(auto& entity : m_entities)
         {
-            GameObject go = GameObject(entity, m_scene.lock());
+            GameObject go = GameObject(entity, m_scene);
             auto& rb = go.GetComponent<Rigidbody2D>();
             b2Body* rawBody = rb.rawBody;
             if(rawBody)
             {
                 Transform& transform = go.GetComponent<Transform>();
-                transform.pos.x = rawBody->GetPosition().x;
-                transform.pos.y = rawBody->GetPosition().y;
+                go.SetWorldPos(rawBody->GetPosition().x, rawBody->GetPosition().y);
                 transform.rotation = rawBody->GetAngle() * (180.0f / M_PI);
             }
         }

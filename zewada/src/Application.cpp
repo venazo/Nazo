@@ -10,12 +10,14 @@ namespace Zewada
 	Application::Application(const ApplicationSpecs& settings)
 		: m_settings(settings)
 	{
+		FileUtils::SetCurrentPath();
+
+		m_logger = std::make_shared<Logger>();
 		m_window = std::make_shared<Window>(m_settings.name.c_str(), settings.width, settings.height, settings.vSync, settings.resizeable);
 		m_input = std::make_shared<Input>(this);
+		m_assetPool = std::make_shared<AssetPool>();
 		m_sceneManager = std::make_shared<SceneManager>(this);
 		m_renderer2D = std::make_shared<Renderer2D>();
-		m_assetPool = std::make_shared<AssetPool>();
-		m_serializer = std::make_shared<Serializer>();
 		m_debugDraw = std::make_shared<DebugDraw>(m_assetPool->GetShader("assets/shaders/Debug2DLines.glsl"));
 		m_physics2D = std::make_shared<Physics2D>(m_sceneManager);
 		m_scriptLoader = std::make_shared<ScriptLoader>();
@@ -35,7 +37,7 @@ namespace Zewada
 
 	Application::~Application()
 	{
-		GetSerializer()->SerializeAssets(m_assetPool);
+		
 	}
 
 	void Application::OnEvent(Event& e)

@@ -45,9 +45,9 @@ namespace Zewada
         contact->GetWorldManifold(worldmanifold);
         glm::vec2 aNormal = glm::vec2(worldmanifold->normal.x, worldmanifold->normal.y);
         glm::vec2 bNormal = glm::vec2(aNormal.x * -1.0f, aNormal.y * -1.0f);
-        
+
         //check if object was deleted to break contact
-        if(m_sceneManager->GetActiveScene()->Exist(objA->GetID()))
+        if(m_sceneManager->GetActiveScene()->Exist(objA->GetID()) && objA->operator bool())
         {
             if(objA->HasComponent<NativeScript>())
             {
@@ -59,17 +59,16 @@ namespace Zewada
             }
         }
 
-        if(m_sceneManager->GetActiveScene()->Exist(objB->GetID()))
+        if(m_sceneManager->GetActiveScene()->Exist(objB->GetID()) && objA->operator bool())
         {
             if(objB->HasComponent<NativeScript>())
             {
                 auto& ns = objB->GetComponent<NativeScript>();
                 if(ns.className != "NONE")
-                {
+                {   
                     ns.script->OnEndContact(bNormal);
                 }
             }
         }
-
     }
 }

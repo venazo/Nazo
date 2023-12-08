@@ -19,8 +19,7 @@ namespace Nazo {
 
 	void EditorLayer::OnAttach()
 	{
-		m_application->GetSerializer()->DeserializeAssets(m_application->GetAssetPool());
-
+		ZImGui::SetAssetPool(m_application->GetAssetPool());
 		m_cameraController = std::make_unique<CameraController>(m_application);
 		m_gizmoSystem = std::make_unique<GizmoSystem>(m_application, m_cameraController->GetCamera());
 		m_defaultShader = m_application->GetAssetPool()->GetShader("assets/shaders/Default_Editor.glsl");
@@ -174,7 +173,8 @@ namespace Nazo {
 		//because of gameviewportview
 		glm::vec2 size = glm::vec2(m_application->GetImGuiLayer()->GetEditorView()->GetWindowWidth(), m_application->GetImGuiLayer()->GetEditorView()->GetWindowHeight());
 		m_cameraController->OnResize(size.x, size.y);
-		m_application->GetSceneManager()->GetActiveScene()->OnResize(event);
+		if(m_application->GetSceneManager()->HasActiveScene())
+			m_application->GetSceneManager()->GetActiveScene()->OnResize(event);
 		return false;
 	}
 
@@ -186,16 +186,20 @@ namespace Nazo {
 
 		//startFrame Game
 		m_application->GetImGuiLayer()->GetGameView()->Bind();
-		GameObject maincamera = GameObject(m_application->GetSceneManager()->GetActiveScene()->GetCameraSystem()->GetMaincameraObject(), m_application->GetSceneManager()->GetActiveScene());
-		if(maincamera.operator bool())
+		if(m_application->GetSceneManager()->HasActiveScene())
 		{
-			m_application->GetInput()->CalcWorldMousePosition(maincamera.GetComponent<Transform>(), 
-				maincamera.GetComponent<Camera>());
+			GameObject maincamera = GameObject(m_application->GetSceneManager()->GetActiveScene()->GetCameraSystem()->GetMaincameraObject(), m_application->GetSceneManager()->GetActiveScene());
+			if(maincamera.operator bool())
+			{
+				m_application->GetInput()->CalcWorldMousePosition(maincamera.GetComponent<Transform>(), 
+					maincamera.GetComponent<Camera>());
+			}
+			else
+			{
+				m_application->GetInput()->CalcWorldMousePosition(Transform(), Camera());
+			}
 		}
-		else
-		{
-			m_application->GetInput()->CalcWorldMousePosition(Transform(), Camera());
-		}
+
 
 		//Update Game
 		if(!m_scenePlaying)
@@ -235,7 +239,7 @@ namespace Nazo {
 
 		if (m_passed > 1.0f)
 		{
-			Z_INFO(m_frames);
+			Z_INFO() << m_frames;
 			//PrintMemory();
 			m_passed = 0.0f;
 			m_frames = 0;
@@ -249,7 +253,7 @@ namespace Nazo {
 
 	bool EditorLayer::CheckActiveGameObject()
 	{
-		if (m_application->GetInput()->IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !m_application->GetInput()->IsDraging() && m_application->GetImGuiLayer()->GetEditorView()->IsHovering())
+		if (m_application->GetInput()->IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !m_application->GetInput()->IsDraging() && m_application->GetImGuiLayer()->GetEditorView()->IsHovering() && m_application->GetSceneManager()->HasActiveScene())
 		{
 			//just bind because we want no clear and no translation
 			glm::vec2 pos = m_application->GetInput()->GetMousePosition();
@@ -286,10 +290,14 @@ namespace Nazo {
 
 	void EditorLayer::EditorDrawing()
 	{
-		for(auto cam : m_application->GetSceneManager()->GetActiveScene()->GetCameraSystem()->GetEntities())
+		if(m_application->GetSceneManager()->HasActiveScene())
 		{
-			m_application->GetDebugDraw()->AddCamera(m_application->GetSceneManager()->GetActiveScene()->GetCoordinator()->GetComponent<Transform>(cam));
+			for(auto cam : m_application->GetSceneManager()->GetActiveScene()->GetCameraSystem()->GetEntities())
+			{
+				m_application->GetDebugDraw()->AddCamera(m_application->GetSceneManager()->GetActiveScene()->GetCoordinator()->GetComponent<Transform>(cam));
+			}
 		}
+		
 
 		if(m_activeGameObject == nullptr)
 			return;
@@ -313,7 +321,10 @@ namespace Nazo {
 
 	bool EditorLayer::OnGameEnd(GameEndEvent& event)
 	{
+		m_activeGameObject = nullptr;
+		m_activeID = -1;
 		m_scenePlaying = false;
+		m_application->GetSceneManager()->OnStop();
 		LoadSceneEvent SceneEvent(m_application->GetSceneManager()->GetActiveScene()->GetPath());
 		m_callback(SceneEvent);
 		return true;
@@ -333,7 +344,7 @@ namespace Nazo {
 	bool EditorLayer::OnChangedScene(ChangedSceneEvent& event)
 	{
 		m_loading = false;
-		SetGameObject(event.GetScene()->GetEntity(m_activeID));
+
 		return true;
 	}
 
@@ -346,7 +357,7 @@ namespace Nazo {
 				std::string path = "assets/scenes/Default_Scene.zs";
 				m_application->GetSceneManager()->GetActiveScene()->SetPath(path);
 			}
-			m_application->GetSerializer()->Serialize(m_application->GetSceneManager()->GetActiveScene());
+			m_application->GetSceneManager()->SaveActiveScene();
 		}
 			
 		return true;

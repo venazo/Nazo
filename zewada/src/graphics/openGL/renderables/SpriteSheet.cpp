@@ -48,7 +48,7 @@ namespace Zewada {
 			return m_sprites[index];
 		}
 
-		Z_WARN("SpriteSheet " + m_texture->GetPath() + " does not have " + std::to_string(index + 1) + " Sprites!");
+		Z_WARN() << "SpriteSheet " + m_texture->GetPath() + " does not have " + std::to_string(index + 1) + " Sprites!";
 		return std::make_shared<Sprite>();
 	}
 }

@@ -10,8 +10,27 @@ namespace Zewada
 
 #define BIND_EVENT_FN(x) std::bind(&Zewada::Scene::x, this, std::placeholders::_1)
 
-	void Scene::Init()
+	void Scene::Init(Application* application)
 	{
+		m_application = application;
+
+		m_transformSystem->Init(this->shared_from_this(), m_coordinator);
+		m_spriteRendererSystem->Init(this->shared_from_this(), m_coordinator);
+		m_cameraSystem->Init(this->shared_from_this(), m_coordinator);
+		m_rigidBody2Dsystem->Init(this->shared_from_this(), m_coordinator);
+		m_nativeScriptSystem->Init(this->shared_from_this(), m_coordinator);
+
+		m_application->GetRenderer2D()->SetBackgroundColor(m_scenePlan.backgroundColor);
+		m_application->GetPhysics2D()->SetGravity(m_scenePlan.gravity.x, m_scenePlan.gravity.y);
+
+		m_physics2D = m_application->GetPhysics2D();
+	}
+
+	Scene::Scene(const std::string &path, ScenePlan scenePlan)
+	{
+		m_path = path;
+		m_scenePlan = scenePlan;
+
 		m_coordinator = std::make_shared<Coordinator>();
 
 		m_coordinator->RegisterComponent<Tag>();
@@ -29,15 +48,11 @@ namespace Zewada
 		transformSystemSignature.set(m_coordinator->GetComponentType<Transform>());
 		m_coordinator->SetSystemSignature<TransformSystem>(transformSystemSignature);
 
-		m_transformSystem->Init(this->shared_from_this(), m_coordinator);
-
 		m_spriteRendererSystem = m_coordinator->RegisterSystem<SpriteRendererSystem>();
 
 		Signature spriteRendererSignature;
 		spriteRendererSignature.set(m_coordinator->GetComponentType<SpriteRenderer>());
 		m_coordinator->SetSystemSignature<SpriteRendererSystem>(spriteRendererSignature);
-
-		m_spriteRendererSystem->Init(this->shared_from_this(), m_coordinator);
 
 		m_cameraSystem = m_coordinator->RegisterSystem<CameraSystem>();
 
@@ -45,15 +60,11 @@ namespace Zewada
 		cameraSystemSignature.set(m_coordinator->GetComponentType<Camera>());
 		m_coordinator->SetSystemSignature<CameraSystem>(cameraSystemSignature);
 
-		m_cameraSystem->Init(this->shared_from_this(), m_coordinator);
-
 		m_rigidBody2Dsystem = m_coordinator->RegisterSystem<Rigidbody2DSystem>();
 
 		Signature rigidBody2DSystemSignature;
 		rigidBody2DSystemSignature.set(m_coordinator->GetComponentType<Rigidbody2D>());
 		m_coordinator->SetSystemSignature<Rigidbody2DSystem>(rigidBody2DSystemSignature);
-
-		m_rigidBody2Dsystem->Init(this->shared_from_this(), m_coordinator);
 		
 		m_nativeScriptSystem = m_coordinator->RegisterSystem<NativeScriptSystem>();
 
@@ -61,17 +72,6 @@ namespace Zewada
 		nativeScriptSystemSignature.set(m_coordinator->GetComponentType<NativeScript>());
 		m_coordinator->SetSystemSignature<NativeScriptSystem>(nativeScriptSystemSignature);
 
-		m_nativeScriptSystem->Init(this->shared_from_this(), m_coordinator);
-
-		m_physics2D = m_application->GetPhysics2D();
-	}
-
-	Scene::Scene(const std::string &path, Application* application)
-	{
-		m_application = application;
-		m_path = path;
-
-		m_application = application;
 		for (int i = 0; i < MAX_ENTITIES; i++)
 		{
 			m_ids.push_back(i);
@@ -81,7 +81,7 @@ namespace Zewada
 
 	Scene::~Scene()
 	{
-
+		
 	}
 
 	void Scene::OnStart()
@@ -103,9 +103,9 @@ namespace Zewada
 	void Scene::OnRuntimeUpdate(float dt)
 	{
 		m_cameraSystem->OnUpdate(dt);
-		
+
 		m_nativeScriptSystem->OnUpdate(dt);
-		m_physics2D->OnUpdate(dt);
+		m_physics2D->OnUpdate(dt);	
 		m_rigidBody2Dsystem->OnUpdate(dt);
 
 		//last systems
@@ -171,7 +171,7 @@ namespace Zewada
 	{
 		if (entity == -1)
 		{
-			Z_INFO("Tried to destroy -1 entitiy!");
+			Z_INFO() << "Tried to destroy -1 entitiy!";
 			return;
 		}
 		GameObject go = GameObject(entity, this->shared_from_this());
@@ -194,12 +194,13 @@ namespace Zewada
 			}
 		}
 
-		if(go.HasComponent<Camera>())
-			GetCameraSystem()->DestroyEntity(go.GetID());
 		if(go.HasComponent<Rigidbody2D>())
 			m_application->GetPhysics2D()->DestroyEntity(go.GetID());
 
-		
+		if(go.HasComponent<Camera>())
+			GetCameraSystem()->DestroyEntity(go.GetID());
+
+
 		std::vector<ID> &goChildren = transform.children;
 		for (auto &child : goChildren)
 		{
@@ -242,5 +243,11 @@ namespace Zewada
 				return true;
 		}
 		return false;
+	}
+
+	void Scene::Save()
+	{
+		m_scenePlan.gravity = m_physics2D->GetGravity();
+		m_scenePlan.backgroundColor = m_application->GetRenderer2D()->GetBackgroundColor();
 	}
 }

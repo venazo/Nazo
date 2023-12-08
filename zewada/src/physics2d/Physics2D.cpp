@@ -123,6 +123,8 @@ namespace Zewada {
 		Rigidbody2D& rigidbody = go.GetComponent<Rigidbody2D>();
         //delete (GameObject*)rigidbody.rawBody->GetUserData().pointer;
         delete (GameObject*)rigidbody.rawBody->GetFixtureList()->GetUserData().pointer;
+        GameObject* nullObject = GameObject::GetNullObject();
+        rigidbody.rawBody->GetFixtureList()->GetUserData().pointer = (uintptr_t)nullObject;
 		if(rigidbody.rawBody != nullptr)
 		{
             m_world->DestroyBody(rigidbody.rawBody);

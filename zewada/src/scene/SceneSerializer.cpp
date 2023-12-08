@@ -1,5 +1,5 @@
 #include <zpch.h>
-#include "Serializer.h"
+#include "SceneSerializer.h"
 #include <Scene/GameObject.h>
 
 namespace YAML {
@@ -103,12 +103,12 @@ namespace Zewada {
 		return out;
 	}
 
-	Serializer::Serializer()
+	SceneSerializer::SceneSerializer()
 	{
 		m_file = "settings.nazo";
 	}
 
-	void Serializer::SerializeEntity(YAML::Emitter& out, const GameObject& go)
+	void SceneSerializer::SerializeEntity(YAML::Emitter& out, const GameObject& go)
 	{
 		out << YAML::BeginMap;
 
@@ -229,7 +229,7 @@ namespace Zewada {
 		out << YAML::EndMap;
 	}
 
-	void Serializer::SerializeAssets(std::shared_ptr<AssetPool> assetPool)
+	void SceneSerializer::SerializeAssets(std::shared_ptr<AssetPool> assetPool)
 	{
 		const std::string filepath = std::filesystem::current_path().string() + "/" + m_file;
 		YAML::Emitter out;
@@ -248,7 +248,7 @@ namespace Zewada {
 		fout << out.c_str();
 	}
 
-	void Serializer::DeserializeAssets(std::shared_ptr<AssetPool> assetPool)
+	void SceneSerializer::DeserializeAssets(std::shared_ptr<AssetPool> assetPool)
 	{
 		YAML::Node data;
 		try
@@ -259,13 +259,13 @@ namespace Zewada {
 				data = YAML::LoadFile(path);
 			else
 			{
-				Z_INFO("No Settings File yet!");
+				Z_INFO() << "No Settings File yet!";
 				return;
 			}
 		}
 		catch (YAML::ParserException e)
 		{
-			Z_INFO("No Settings File yet!");
+			Z_INFO() << "No Settings File yet!";
 			return;
 		}
 		if(data["SpriteSheets"])
@@ -283,7 +283,7 @@ namespace Zewada {
 		}
 	}
 
-	void Serializer::SerializeSpriteSheet(YAML::Emitter& out, std::shared_ptr<SpriteSheet> spriteSheet)
+	void SceneSerializer::SerializeSpriteSheet(YAML::Emitter& out, std::shared_ptr<SpriteSheet> spriteSheet)
 	{
 		out << YAML::BeginMap;
 		out << YAML::Key << "Path" << YAML::Value << spriteSheet->GetTexture()->GetPath();
@@ -294,14 +294,17 @@ namespace Zewada {
 		out << YAML::EndMap;
 	}
 
-	void Serializer::Serialize(std::shared_ptr<Scene> scene)
+	static std::mutex mutex;
+
+	void SceneSerializer::Serialize(std::shared_ptr<Scene> scene)
 	{
+		std::lock_guard<std::mutex> lock(mutex);
 		const std::string& filepath = scene->GetPath();
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << scene->GetPath();
-		out << YAML::Key << "BackgroundColor" << YAML::Value << scene->GetApplication()->GetRenderer2D()->GetBackgroundColor();
-		out << YAML::Key << "Gravity" << YAML::Value << scene->GetPhysics2D()->GetGravity();
+		out << YAML::Key << "BackgroundColor" << YAML::Value << scene->GetBackgroundColor();
+		out << YAML::Key << "Gravity" << YAML::Value << scene->GetGravity();
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		auto entities = scene->GetCoordinator()->GetAllEntities();
 		for(auto entity : entities)
@@ -321,8 +324,9 @@ namespace Zewada {
 		fout << out.c_str();
 	}
 
-	std::shared_ptr<Scene> Serializer::Deserialize(const std::string& filepath, Application* application)
+	std::shared_ptr<Scene> SceneSerializer::Deserialize(const std::string& filepath)
 	{
+		std::lock_guard<std::mutex> lock(mutex);
 		YAML::Node data;
 		try
 		{
@@ -330,21 +334,19 @@ namespace Zewada {
 		}
 		catch (YAML::ParserException e)
 		{
-			Z_ERROR("Failed to load file: " + filepath);
-			return std::make_shared<Scene>(filepath, application);
+			Z_ERROR() << "Failed to load file: " + filepath;
+			return std::make_shared<Scene>(filepath);
 		}
 
 		if (!data["Scene"])
 		{
-			Z_ERROR("File " + filepath + " is not functional!");
+			Z_ERROR() << "File " + filepath + " is not functional!";
 			return std::make_shared<Scene>();
 		}
-			
-		std::shared_ptr<Scene> result = std::make_shared<Scene>(filepath, application);
-		result->Init();
-		application->GetRenderer2D()->SetBackgroundColor(data["BackgroundColor"].as<glm::vec4>());
-		glm::vec2 gravity = data["Gravity"].as<glm::vec2>();
-		application->GetPhysics2D()->SetGravity(gravity.x, gravity.y);
+		
+		ScenePlan scenePlan = {data["BackgroundColor"].as<glm::vec4>(), data["Gravity"].as<glm::vec2>()};
+
+		std::shared_ptr<Scene> result = std::make_shared<Scene>(filepath, scenePlan);
 
 		auto entities = data["Entities"];
 		if (entities)
@@ -386,7 +388,7 @@ namespace Zewada {
 					if (spriteRendererComponent["Sprite"])
 					{
 						std::string texPath = spriteRendererComponent["Sprite"]["TexturePath"].as<std::string>();
-						src.sprite->SetTexture(application->GetAssetPool()->GetTexture(texPath.c_str()));
+						src.sprite->SetTextureToLoad(texPath);
 						std::array<glm::vec2, 4> uv;
 						for(int i = 0; i < 4; i++)
 						{

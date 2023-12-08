@@ -1,19 +1,25 @@
 #include <zpch.h>
 #include "SceneManager.h"
 #include "Scene.h"
-#include "../utils/resource/Serializer.h"
+#include "SceneSerializer.h"
 
 namespace Zewada {
 
 	SceneManager::SceneManager(Application* application)
 	{
 		m_application = application;
+		m_sceneSerializer = std::make_shared<SceneSerializer>();
+		m_sceneSerializer->DeserializeAssets(m_application->GetAssetPool());
+	}
+	
+	SceneManager::~SceneManager()
+	{
+		m_sceneSerializer->SerializeAssets(m_application->GetAssetPool());
 	}
 	
 	void SceneManager::CreateDefaultScene()
 	{
-		std::shared_ptr scene = m_application->GetSerializer()->Deserialize("assets/scenes/Default_Scene.zs", m_application);
-		m_scenes.push(scene);
+		SetActiveScene("assets/scenes/Default_Scene.zs");
 	}
 
 	void SceneManager::OnStart()
@@ -27,43 +33,68 @@ namespace Zewada {
 	}
 
 	void SceneManager::OnRuntimeUpdate(float dt)
-	{
-		if(m_scenes.size() == 1)
+	{	
+			if(m_sceneLoading._Is_ready())
+			{
+				if(m_scenes.size() > 0)
+				{
+					m_scenes.front()->OnStop();
+					m_scenes.pop();
+				}
+
+				m_scenes.push(m_sceneLoading.get());
+				m_scenes.front()->Init(m_application);
+
+				ChangedSceneEvent event(m_scenes.front());
+				m_callback(event);
+				m_scenes.front()->OnStart();
+				m_scenes.front()->OnRuntimeUpdate(dt);
+				return;
+			}
+		
+		if(m_scenes.size() > 0)
 			m_scenes.front()->OnRuntimeUpdate(dt);
-		else
-		{
-			OnStop();
-			m_scenes.pop();
-			ChangedSceneEvent event(m_scenes.front());
-			m_callback(event);
-			m_scenes.front()->OnStart();
-			m_scenes.front()->OnRuntimeUpdate(dt);
-		}
 	}
 
 	void SceneManager::OnUpdate(float dt)
 	{
-		if(m_scenes.size() == 1)
+			if(m_sceneLoading._Is_ready())
+			{
+				if(m_scenes.size() > 0)
+				{
+					m_scenes.front()->OnStop();
+					m_scenes.pop();
+				}
+			
+				m_scenes.push(m_sceneLoading.get());
+				m_scenes.front()->Init(m_application);
+
+				ChangedSceneEvent event(m_scenes.front());
+				m_callback(event);
+				m_scenes.front()->OnUpdate(dt);
+				return;
+			}
+		
+		if(m_scenes.size() > 0)
 			m_scenes.front()->OnUpdate(dt);
-		else
-		{
-			OnStop();
-			m_scenes.pop();
-			ChangedSceneEvent event(m_scenes.front());
-			m_callback(event);
-			m_scenes.front()->OnUpdate(dt);
-		}
 	}
 
 	void SceneManager::OnRender()
 	{
-		m_scenes.front()->OnRender();
+		if(m_scenes.size() > 0)
+			m_scenes.front()->OnRender();
+	}
+
+	void SceneManager::SaveActiveScene()
+	{
+		m_scenes.front()->Save();
+		std::shared_ptr<Scene> scene = std::make_shared<Scene>(*m_scenes.front().get());
+		m_sceneSaving = std::move(std::async(std::launch::async, &SceneSerializer::Serialize, *m_sceneSerializer, scene));
 	}
 
 	void SceneManager::SetActiveScene(const std::string path)
 	{
-		std::shared_ptr<Scene> scene = m_application->GetSerializer()->Deserialize(path, m_application);
-		m_scenes.push(scene);
+		m_sceneLoading = std::move(std::async(std::launch::async, &SceneSerializer::Deserialize, *m_sceneSerializer, path));
 	}
 
 	void SceneManager::SetEventCallback(const EventCallbackFn& callback)

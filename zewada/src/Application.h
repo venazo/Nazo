@@ -5,7 +5,7 @@
 #include "scene/SceneManager.h"
 #include "graphics/openGL/DebugDrawing/DebugDraw.h"
 #include "utils/resource/ScriptLoader.h"
-#include "utils/resource/Serializer.h"
+#include "scene/SceneSerializer.h"
 
 #include "../src/utils/Time.h"
 #include "utils/debug/Logger.h"
@@ -51,12 +51,12 @@ namespace Zewada
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
+		inline std::shared_ptr<Logger> GetLogger() const {return m_logger;}
 		inline std::shared_ptr<Window> GetWindow() const { return m_window; }
 		inline std::shared_ptr<Input> GetInput() const { return m_input; }
+		inline std::shared_ptr<AssetPool> GetAssetPool() const {return m_assetPool;}
 		inline std::shared_ptr<SceneManager> GetSceneManager() const { return m_sceneManager; }
 		inline std::shared_ptr<Renderer2D> GetRenderer2D() const {return m_renderer2D;}
-		inline std::shared_ptr<AssetPool> GetAssetPool() const {return m_assetPool;}
-		inline std::shared_ptr<Serializer> GetSerializer() const {return m_serializer;}
 		inline std::shared_ptr<DebugDraw> GetDebugDraw() const { return m_debugDraw;}
 		inline std::shared_ptr<Physics2D> GetPhysics2D() const {return m_physics2D;}
 		inline std::shared_ptr<ScriptLoader> GetScriptLoader() const { return m_scriptLoader;}
@@ -64,15 +64,16 @@ namespace Zewada
 
 		void Run();
 	private:
+		std::shared_ptr<Logger> m_logger;
 		std::shared_ptr<Window> m_window;
 		std::shared_ptr<Input> m_input;
+		std::shared_ptr<AssetPool> m_assetPool;
 		std::shared_ptr<SceneManager> m_sceneManager;
 		std::shared_ptr<Renderer2D> m_renderer2D;
-		std::shared_ptr<AssetPool> m_assetPool;
-		std::shared_ptr<Serializer> m_serializer;
 		std::shared_ptr<DebugDraw> m_debugDraw;
 		std::shared_ptr<Physics2D> m_physics2D;
 		std::shared_ptr<ScriptLoader> m_scriptLoader;
+
 
 
 		const ApplicationSpecs& m_settings;

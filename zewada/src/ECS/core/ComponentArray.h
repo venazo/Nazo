@@ -31,7 +31,7 @@ namespace Zewada {
 			std::string componentName = typeid(T).name();
 			if (m_size >= MAX_ENTITIES)
 			{
-				Z_ERROR(componentName + " has no space for GameObject " + std::to_string(entity) + " left!");
+				Z_ERROR() << componentName + " has no space for GameObject " + std::to_string(entity) + " left!";
 				return;
 			}
 			m_entity2Index[entity] = m_size;

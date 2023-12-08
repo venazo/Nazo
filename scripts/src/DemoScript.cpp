@@ -1,5 +1,10 @@
 #include "DemoScript.h"
 
+void DemoScript::OnStart()
+{
+    
+}
+
 void DemoScript::OnUpdate(float dt)
 {
     Application* application = GetApplication();
@@ -21,12 +26,11 @@ void DemoScript::OnUpdate(float dt)
     {
         x -= 10.0f;
     }
-    if(application->GetInput()->IsKeyPressed(GLFW_KEY_9))
-    {
-        GetGameObject().Destroy();
-    }
-   
-    GetGameObject().Set2DVelocity(x, y);
+}
+
+void DemoScript::OnDestroy()
+{
+    
 }
 
 DemoScript::~DemoScript()

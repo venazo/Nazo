@@ -11,8 +11,8 @@ namespace Zewada {
 	{
 		for(auto entity : m_entities)
 		{
-			Camera& cam = m_coordinator.lock()->GetComponent<Camera>(entity);
-			Transform& transform = m_coordinator.lock()->GetComponent<Transform>(entity);
+			Camera& cam = m_coordinator->GetComponent<Camera>(entity);
+			Transform& transform = m_coordinator->GetComponent<Transform>(entity);
 			if(cam.maincamera)
 			{
 				transform.scale.y = transform.scale.x / m_ratio;
@@ -27,7 +27,7 @@ namespace Zewada {
 		m_ratio = width / height;
 		if(m_maincamera != -1)
 		{
-			Transform& transform = m_coordinator.lock()->GetComponent<Transform>(m_maincamera);
+			Transform& transform = m_coordinator->GetComponent<Transform>(m_maincamera);
 			transform.scale = glm::vec2(transform.scale.x, transform.scale.x / m_ratio);
 		}
 	}
@@ -48,19 +48,19 @@ namespace Zewada {
 	{
 		if(m_maincamera != -1)
 		{
-			m_coordinator.lock()->GetComponent<Camera>(m_maincamera).maincamera = false;
+			m_coordinator->GetComponent<Camera>(m_maincamera).maincamera = false;
 		}
 		m_maincamera = entity;
 		if(entity != -1)
 		{
-			m_coordinator.lock()->GetComponent<Camera>(m_maincamera).maincamera = true;
-			m_coordinator.lock()->GetComponent<Transform>(m_maincamera).scale = glm::vec2(16.0f, 16.0f / m_ratio);
+			m_coordinator->GetComponent<Camera>(m_maincamera).maincamera = true;
+			m_coordinator->GetComponent<Transform>(m_maincamera).scale = glm::vec2(16.0f, 16.0f / m_ratio);
 		}
 	}
 
 	void CameraSystem::DestroyEntity(Entity entity)
 	{
-		if(m_coordinator.lock()->GetComponent<Camera>(entity).maincamera)
+		if(m_coordinator->GetComponent<Camera>(entity).maincamera)
 		{
 			m_maincamera = -1;
 		}
@@ -72,7 +72,7 @@ namespace Zewada {
 		{
 			for(auto& entity : m_entities)
 			{
-				GameObject go = GameObject(entity, m_scene.lock());
+				GameObject go = GameObject(entity, m_scene);
 				if(go.GetComponent<Camera>().maincamera)
 					m_maincamera = entity;
 			}
@@ -86,11 +86,11 @@ namespace Zewada {
 		{
 			for(auto& entity : m_entities)
 			{
-				GameObject go = GameObject(entity, m_scene.lock());
+				GameObject go = GameObject(entity, m_scene);
 				if(go.GetComponent<Camera>().maincamera)
 					m_maincamera = entity;
 			}
 		}	
-		return m_coordinator.lock()->GetComponent<Camera>(m_maincamera);
+		return m_coordinator->GetComponent<Camera>(m_maincamera);
 	}
 }

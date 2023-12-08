@@ -7,7 +7,7 @@ namespace Zewada
 {
     void PrintMemory()
     {
-        Z_INFO(memoryUsing);
+        Z_INFO() << memoryUsing;
     }
 }
 

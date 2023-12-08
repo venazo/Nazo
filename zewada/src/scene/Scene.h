@@ -14,6 +14,19 @@
 
 namespace Zewada {
 
+	//to descerialize Scene
+	struct ScenePlan
+	{
+		ScenePlan() = default;
+		ScenePlan(glm::vec4 bgc, glm::vec2 g)
+			:backgroundColor(bgc), gravity(g)
+		{
+			
+		}
+		glm::vec4 backgroundColor = glm::vec4(0.17f, 0.17f, 0.17f, 1.0f);
+		glm::vec2 gravity = glm::vec2(0, -10.0f);
+	};
+
 	class GameObject;
 
 	class Scene : public std::enable_shared_from_this<Scene>
@@ -22,6 +35,8 @@ namespace Zewada {
 		std::string m_path = "Undefined";
 		std::vector<ID> m_ids;
 		std::unordered_map<ID, Entity> m_ID2Entity;
+		
+		ScenePlan m_scenePlan;
 
 		Application* m_application;
 
@@ -35,9 +50,9 @@ namespace Zewada {
 		std::shared_ptr<NativeScriptSystem> m_nativeScriptSystem;
 
 		Scene() = default;
-		Scene(const std::string& path, Application* application);
+		Scene(const std::string& path, ScenePlan scenePlan = ScenePlan());
 		~Scene();
-		void Init();
+		void Init(Application* application);
 
 		void OnStart();
 		void OnStop();
@@ -56,7 +71,9 @@ namespace Zewada {
 
 		void SetPath(const std::string& path);
 
-		inline std::shared_ptr<Coordinator> GetCoordinator(){return m_coordinator;}
+		void Save();
+
+		inline std::shared_ptr<Coordinator> GetCoordinator() const {return m_coordinator;}
 		inline std::shared_ptr<TransformSystem> GetTransformSystem(){return m_transformSystem;}
 		inline std::shared_ptr<SpriteRendererSystem> GetSpriteSystem(){return m_spriteRendererSystem;}
 		inline std::shared_ptr<CameraSystem> GetCameraSystem(){return m_cameraSystem;}
@@ -64,5 +81,8 @@ namespace Zewada {
 		inline const std::string& GetPath() const {return m_path;}
 		inline std::shared_ptr<Physics2D> GetPhysics2D() const {return m_physics2D;} 
 		inline Application* GetApplication() const {return m_application;} 
+
+		inline const glm::vec2 GetGravity(){return m_scenePlan.gravity;}
+		inline const glm::vec4 GetBackgroundColor(){return m_scenePlan.backgroundColor;}
 	};
 }

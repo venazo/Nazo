@@ -10,7 +10,7 @@ namespace Zewada {
 	GameObject::GameObject(Entity entity, std::shared_ptr<Scene> scene)
 		:m_entity(entity), m_scene(scene)
 	{
-		m_coordinator = m_scene.lock()->GetCoordinator();
+		m_coordinator = m_scene->GetCoordinator();
 	}
 	
 	void GameObject::Destroy()
@@ -18,17 +18,22 @@ namespace Zewada {
 		GetComponent<Transform>().destroyed = true;
 	}
 
+	void GameObject::SetWorldPos(float x, float y, float z)
+	{
+		SetWorldPos(glm::vec3(x, y, z));
+	}
+
 	void GameObject::SetWorldPos(const glm::vec3& pos)
 	{
-		GameObject parent = GameObject(GetComponent<Transform>().parent, m_scene.lock());
+		GameObject parent = GameObject(m_scene->GetEntity(GetComponent<Transform>().parent), m_scene);
 		if(parent.operator bool())
 		{
 			glm::vec3 parentPos = parent.GetComponent<Transform>().worldPos;
-			GetComponent<Transform>().pos = pos - parentPos;
+			SetPosition(pos - parentPos);
 		}
 		else
 		{
-			GetComponent<Transform>().pos = pos;
+			SetPosition(pos);
 		}
 	}
 
@@ -56,13 +61,13 @@ namespace Zewada {
 
 	GameObject GameObject::Copy() const
 	{
-		GameObject result = GameObject(m_scene.lock()->CreateEntity(GetComponent<Tag>().name), m_scene.lock());
+		GameObject result = GameObject(m_scene->CreateEntity(GetComponent<Tag>().name), m_scene);
 		result.GetComponent<Transform>() = Transform(GetComponent<Transform>());
 		std::vector<Entity>& children = result.GetComponent<Transform>().children;
 		std::vector<Entity> newChildren;
 		for(auto child : children)
 		{
-			GameObject childgo = GameObject(m_scene.lock()->GetEntity(child), m_scene.lock());
+			GameObject childgo = GameObject(m_scene->GetEntity(child), m_scene);
 			GameObject newChild = childgo.Copy();
 			newChild.GetComponent<Transform>().parent = result.GetComponent<Tag>().id;
 			newChildren.push_back(newChild.GetComponent<Tag>().id);
@@ -92,13 +97,13 @@ namespace Zewada {
 		return result;
 	}
 
-	void GameObject::SetPosition(float x, float y, float z)
+    void GameObject::SetPosition(float x, float y, float z)
 	{
 		Transform& transform = GetComponent<Transform>();
+
 		if(HasComponent<Rigidbody2D>())
 		{
-			Rigidbody2D& rb = GetComponent<Rigidbody2D>();
-			rb.rawBody->SetTransform(b2Vec2(x, y), rb.rawBody->GetAngle());
+			GetComponent<Rigidbody2D>().rawBody->SetTransform(b2Vec2(x, y), transform.rotation / 180.0f * M_PI);
 		}
 
 		transform.pos.x = x;
@@ -106,38 +111,29 @@ namespace Zewada {
 		transform.pos.z = z;
 	}
 
-	void GameObject::Set2DVelocity(const glm::vec2& vec)
-	{
-		if(HasComponent<Rigidbody2D>())
-		{
-			auto& rb = GetComponent<Rigidbody2D>();
-			b2Vec2 velocity = b2Vec2(vec.x, vec.y);
-			rb.rawBody->SetLinearVelocity(velocity);
-		}
-	}
-
-    void GameObject::Set2DVelocity(float x, float y)
-    {
-		Set2DVelocity(glm::vec2(x, y));
-    }
-
-    void GameObject::Add2DVelocity(const glm::vec2 &vec)
-    {
-		if(HasComponent<Rigidbody2D>())
-		{
-			auto& rb = GetComponent<Rigidbody2D>();
-			b2Vec2 velocity = rb.rawBody->GetLinearVelocity() + b2Vec2(vec.x, vec.y);
-			rb.rawBody->SetLinearVelocity(velocity);
-		}
-    }
-
-    void GameObject::Add2DVelocity(float x, float y)
-    {
-		Add2DVelocity(glm::vec2(x, y));
-    }
-
 	void GameObject::SetPosition(const glm::vec3& vec)
 	{
 		SetPosition(vec.x, vec.y, vec.z);
+	}
+
+	void GameObject::AddRotation(float r)
+	{
+		SetRotation(GetComponent<Transform>().rotation + r);
+	}
+
+	void GameObject::SetRotation(float r)
+	{
+		auto& trans = GetComponent<Transform>();
+		trans.rotation = r;
+		if(HasComponent<Rigidbody2D>())
+		{
+			GetComponent<Rigidbody2D>().rawBody->SetTransform(b2Vec2(trans.worldPos.x, trans.worldPos.y), r);
+		}
+	}
+
+	GameObject* GameObject::GetNullObject()
+	{ 
+		static GameObject* go = new GameObject();
+		return go;
 	}
 }

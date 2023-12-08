@@ -7,7 +7,7 @@ namespace Nazo {
 #define BIND_EVENT_FN(x) std::bind(&Nazo::ImGuiLayer::x, this, std::placeholders::_1)
 
     ImGuiLayer::ImGuiLayer(NazoApplication* application)
-        :Layer("ImGuiLayer"), m_assetPanel(AssetPanel(this, application->GetAssetPool())), m_propertiesPanel(PropertiesPanel(application)), m_sceneHierarchyPanel(SceneHierarchyPanel(application)), m_terminalPanel(TerminalPanel())
+        :Layer("ImGuiLayer"), m_assetPanel(AssetPanel(this, application->GetAssetPool())), m_propertiesPanel(PropertiesPanel(application)), m_sceneHierarchyPanel(SceneHierarchyPanel(application)), m_terminalPanel(TerminalPanel(application->GetLogger()))
     {
         m_application = application;
         m_width = m_application->GetWindow()->GetWidth();
@@ -107,7 +107,7 @@ namespace Nazo {
                 ImGui::EndMenu();
             }
 
-            if(ImGui::MenuItem("PLAY", "F5", m_isPlaying, !m_isPlaying))
+            if(ImGui::MenuItem("PLAY", "F5", m_isPlaying, !m_isPlaying && m_application->GetSceneManager()->HasActiveScene()))
             {
                 GameStartEvent event;
                 m_eventCallback(event);
@@ -120,7 +120,7 @@ namespace Nazo {
 
             if(ImGui::MenuItem("DEBUG STOP", ""))
             {
-                Z_INFO("STOP");
+                Z_INFO() << "STOP";
             }
             ImGui::EndMainMenuBar();
         }

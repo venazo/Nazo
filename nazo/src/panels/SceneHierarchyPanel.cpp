@@ -12,6 +12,11 @@ namespace Nazo {
     void SceneHierarchyPanel::ImGui() 
     {
         ImGui::Begin("Scene Hierarchy");
+        if(!m_application->GetSceneManager()->HasActiveScene())
+        {
+            ImGui::End();
+            return;
+        }
         std::string path = m_application->GetSceneManager()->GetActiveScene()->GetPath();
         std::filesystem::path fsPath(path);
         ImGui::Text(fsPath.filename().string().c_str());

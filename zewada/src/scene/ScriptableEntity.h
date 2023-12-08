@@ -15,11 +15,11 @@ namespace Zewada {
 
             Application* GetApplication()
             {
-                return m_gameObject.GetScene().lock()->GetApplication();
+                return m_gameObject.GetScene()->GetApplication();
             }
         public:
 
-            virtual void OnCreate(){}
+            virtual void OnStart(){}
             virtual void OnUpdate(float dt){}
             virtual void OnDestroy(){}
 

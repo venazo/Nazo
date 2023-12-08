@@ -27,9 +27,9 @@ find_package(imgui CONFIG REQUIRED)
 
 add_definitions(-D_WIN)
 
-include_directories(AFTER src ../zewada/src)
-
 add_executable(nazo ${SRC})
+
+target_include_directories(nazo PRIVATE src ../zewada/src)
 
 target_link_libraries(nazo PRIVATE zewada imgui::imgui ${YAML_CPP_LIBRARIES} glm::glm Boost::filesystem yaml-cpp glfw glad::glad box2d::box2d)
 

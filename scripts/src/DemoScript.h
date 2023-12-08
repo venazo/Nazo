@@ -12,10 +12,11 @@ class DemoScript : public ScriptableEntity
 public:
     ~DemoScript();
 
+    void OnStart() override;
     void OnUpdate(float dt) override;
+    void OnDestroy() override;
     
     static std::shared_ptr<DemoScript> Create();
 };
-
 
 BOOST_DLL_ALIAS(DemoScript::Create, SCRIPT_DemoScript)

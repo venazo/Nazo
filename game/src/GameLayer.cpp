@@ -12,11 +12,7 @@ namespace Game
 
     void GameLayer::OnAttach()
     {
-        m_application->GetSerializer()->DeserializeAssets(m_application->GetAssetPool());
-
 		m_defaultShader = m_application->GetAssetPool()->GetShader("assets/shaders/Default_Editor.glsl");
-		
-		m_application->GetSceneManager()->OnStart();
     }
 
     void GameLayer::OnUpdate(float dt)

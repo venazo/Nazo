@@ -77,6 +77,7 @@ namespace Zewada
 
 		struct UnSerializable
 		{
+
 		};
 
 		struct Rigidbody2D
@@ -99,7 +100,7 @@ namespace Zewada
 			glm::vec2 offset = glm::vec2();
 			glm::vec2 origin = glm::vec2();
 		};
-
+		
 		struct NativeScript
 		{
 			std::string className = "NONE";

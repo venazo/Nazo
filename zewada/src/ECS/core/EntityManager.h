@@ -27,7 +27,7 @@ namespace Zewada {
 		{
 			if (m_entities >= MAX_ENTITIES)
 			{
-				Z_WARN("MAX Entities");
+				Z_WARN() << "MAX Entities";
 			}
 			Entity id = m_availableEntities.front();
 			m_availableEntities.pop();
@@ -56,6 +56,6 @@ namespace Zewada {
 			m_entities--;
 		}
 
-		inline const std::vector<Entity>& GetUsedEntities() { return m_usedEntities; }
+		inline const std::vector<Entity>& GetUsedEntities() const { return m_usedEntities; }
 	};
 }

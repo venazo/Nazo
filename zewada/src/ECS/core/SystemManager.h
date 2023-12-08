@@ -13,9 +13,9 @@ namespace Zewada {
 	{
 	public:
 		std::set<Entity> m_entities;
-		std::weak_ptr<Scene> m_scene;
-		std::weak_ptr<Coordinator> m_coordinator;
-		void Init(std::shared_ptr<Scene> scene, std::shared_ptr<Coordinator> coordinator) {m_scene = scene; m_coordinator = coordinator;}
+		std::shared_ptr<Scene> m_scene;
+		std::shared_ptr<Coordinator> m_coordinator;
+		virtual void Init(std::shared_ptr<Scene> scene, std::shared_ptr<Coordinator> coordinator) {m_scene = scene; m_coordinator = coordinator;}
 		virtual void OnUpdate(float dt) = 0;
 	};
 

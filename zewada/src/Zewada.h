@@ -5,7 +5,7 @@
 #include "Graphics/OpenGL/Renderables/Framebuffer.h"
 #include "Utils/Resource/AssetPool.h"
 #include "Application.h"
-#include "utils/resource/Serializer.h"
+#include "scene/SceneSerializer.h"
 #include "utils/Math.h"
 #include "scene/GameObject.h"
 #include "utils/resource/FileUtils.h"

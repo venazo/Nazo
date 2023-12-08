@@ -76,7 +76,7 @@ namespace Zewada {
 			}
 			else
 			{
-				Z_WARN("Entity " + std::to_string(entity) + " had no " + typeid(T).name() + " Component!");
+				Z_WARN() << "Entity " + std::to_string(entity) + " had no " + typeid(T).name() + " Component!";
 				AddComponent<T>(T(), entity);
 				return m_componentManager->GetComponent<T>(entity);
 			}
@@ -107,6 +107,6 @@ namespace Zewada {
 			m_systemManager->SetSignature<T>(signature);
 		}
 
-		inline const std::vector<Entity>& GetAllEntities() { return m_entityManager->GetUsedEntities(); }
+		inline const std::vector<Entity>& GetAllEntities() const { return m_entityManager->GetUsedEntities(); }
 	};
 }

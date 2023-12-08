@@ -27,7 +27,7 @@ namespace Zewada {
 				return m_componentTypes[type];
 			else 
 			{
-				Z_ERROR((std::string)typeid(T).name() + " has not been registered!");
+				Z_ERROR() << (std::string)typeid(T).name() + " has not been registered!";
 				return -1;
 			}
 		}
@@ -58,7 +58,7 @@ namespace Zewada {
 				return std::static_pointer_cast<ComponentArray<T>>(m_componentArrays[type]);
 			else
 			{
-				Z_ERROR(type + " has not been registered!");
+				Z_ERROR() << type + " has not been registered!";
 				return std::make_shared<ComponentArray<T>>();
 			}
 		}

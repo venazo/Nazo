@@ -59,7 +59,7 @@ namespace Zewada {
 
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		{
-			Z_ERROR("Framebuffer is not complete!");
+			Z_ERROR() << "Framebuffer is not complete!";
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);

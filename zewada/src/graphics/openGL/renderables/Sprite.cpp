@@ -1,5 +1,6 @@
 #include <zpch.h>
 #include "Sprite.h"
+#include "../../../utils/resource/AssetPool.h"
 
 namespace Zewada {
 
@@ -14,12 +15,36 @@ namespace Zewada {
 	{
 		m_texture = texture;
 		GenTexCoords();
+		m_textureToLoad = "";
 	}
 
 	Sprite::Sprite(std::shared_ptr<Texture> texture, const std::array<glm::vec2, 4>& texCoords)
 	{
 		m_texture = texture;
 		m_texCoords = texCoords;
+		m_textureToLoad = "";
+	}
+
+	Sprite::Sprite(const std::string& textureToLoad)
+	{
+		m_textureToLoad = textureToLoad;
+		GenTexCoords();
+	}
+
+	Sprite::Sprite(const std::string& textureToLoad, const std::array<glm::vec2, 4>& texCoords)
+	{
+		m_textureToLoad = textureToLoad;
+		m_texCoords = texCoords;
+	}
+
+	void Sprite::LoadTexture(std::shared_ptr<AssetPool> assetPool)
+	{
+		SetTexture(assetPool->GetTextureAbsolutePath(m_textureToLoad.c_str()));
+	}
+
+	void Sprite::SetTextureToLoad(const std::string& textureToLoad)
+	{
+		m_textureToLoad = textureToLoad;
 	}
 
 	void Sprite::GenTexCoords()
