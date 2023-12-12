@@ -136,4 +136,55 @@ namespace Zewada {
 		static GameObject* go = new GameObject();
 		return go;
 	}
+
+	void GameObject::ApplyForce(float x, float y)
+	{
+		if(!HasComponent<Rigidbody2D>())
+		{
+			Z_INFO() << "Can't apply force because gameobject doesn't have Rigidbody2D";
+			return;
+		}
+
+		b2Vec2 vec = b2Vec2(x* 100.0f, y * 100.0f) ;
+		auto& rb = GetComponent<Rigidbody2D>();
+		auto body = rb.rawBody;
+		body->ApplyForceToCenter(vec, true);
+	}
+
+	void GameObject::ApplyForce(const glm::vec2& force)
+	{
+		ApplyForce(force.x, force.y);
+	}
+
+	void GameObject::ApplyImpulse(float x, float y)
+	{
+		if(!HasComponent<Rigidbody2D>())
+		{
+			Z_INFO() << "Can't apply impulse because gameobject doesn't have Rigidbody2D";
+			return;
+		}
+
+		b2Vec2 vec = b2Vec2(x* 100.0f, y* 100.0f);
+		auto& rb = GetComponent<Rigidbody2D>();
+		auto body = rb.rawBody;
+		body->ApplyLinearImpulseToCenter(vec, true);
+	}
+
+	void GameObject::ApplyImpulse(const glm::vec2& impulse)
+	{
+		ApplyImpulse(impulse.x, impulse.y);
+	}
+
+	void GameObject::ApplyTorque(float torque)
+	{
+		if(!HasComponent<Rigidbody2D>())
+		{
+			Z_INFO() << "Can't apply torque because gameobject doesn't have Rigidbody2D";
+			return;
+		}
+
+		auto& rb = GetComponent<Rigidbody2D>();
+		auto body = rb.rawBody;
+		body->ApplyTorque(torque, true);
+	}
 }

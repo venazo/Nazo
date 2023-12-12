@@ -40,6 +40,7 @@ namespace Zewada
 		m_coordinator->RegisterComponent<UnSerializable>();
 		m_coordinator->RegisterComponent<Rigidbody2D>();
 		m_coordinator->RegisterComponent<Box2DCollider>();
+		m_coordinator->RegisterComponent<Circle2DCollider>();
 		m_coordinator->RegisterComponent<NativeScript>();
 
 		m_transformSystem = m_coordinator->RegisterSystem<TransformSystem>();

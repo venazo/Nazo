@@ -101,6 +101,13 @@ namespace Zewada
 			glm::vec2 origin = glm::vec2();
 		};
 		
+		struct Circle2DCollider
+		{
+			float radius = 1.0f;
+			glm::vec2 offset = glm::vec2();
+			glm::vec2 origin = glm::vec2();
+		};
+
 		struct NativeScript
 		{
 			std::string className = "NONE";

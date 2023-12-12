@@ -308,6 +308,13 @@ namespace Nazo {
 			const Transform& transform = m_activeGameObject->GetComponent<Transform>();
 			m_application->GetDebugDraw()->Add2DBox(boxCollider.offset + glm::vec2(transform.worldPos), boxCollider.halfSize, transform.rotation, glm::vec4(0.2f, 0.8f, 0.15f, 1.0f));
 		}
+
+		if(m_activeGameObject->HasComponent<Circle2DCollider>())
+		{
+			const Circle2DCollider& circle2DCollider = m_activeGameObject->GetComponent<Circle2DCollider>();
+			const Transform& transform = m_activeGameObject->GetComponent<Transform>();
+			m_application->GetDebugDraw()->AddCircle(circle2DCollider.offset + glm::vec2(transform.worldPos), circle2DCollider.radius, glm::vec4(0.2f, 0.8f, 0.15f, 1.0f));
+		}
 	}
 
 	bool EditorLayer::OnGameStart(GameStartEvent& event)

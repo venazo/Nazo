@@ -12,20 +12,22 @@ void DemoScript::OnUpdate(float dt)
     float y = 0.0f;
     if(application->GetInput()->IsKeyPressed(GLFW_KEY_W))
     {
-        y += 10.0f;
+        y += 100.0f;
     }
     if(application->GetInput()->IsKeyPressed(GLFW_KEY_S))
     {
-        y -= 10.0f;
+        y -= 100.0f;
     }
     if(application->GetInput()->IsKeyPressed(GLFW_KEY_D))
     {
-        x += 10.0f;
+        x += 100.0f;
     }
     if(application->GetInput()->IsKeyPressed(GLFW_KEY_A))
     {
-        x -= 10.0f;
+        x -= 100.0f;
     }
+
+    GetGameObject().ApplyImpulse(glm::vec2(x, y));
 }
 
 void DemoScript::OnDestroy()

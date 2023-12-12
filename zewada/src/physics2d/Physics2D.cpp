@@ -24,6 +24,7 @@ namespace Zewada {
     {
         m_sceneManager = sceneManager;
         m_contactListener = std::make_shared<ContactListener>(sceneManager);
+        m_world = nullptr;
     }
     
     void Physics2D::OnStart()
@@ -55,7 +56,7 @@ namespace Zewada {
         {
             return;
         }
-        if(!go->HasComponent<Box2DCollider>())
+        if(!go->HasComponent<Box2DCollider>() && !go->HasComponent<Circle2DCollider>())
         {
             return;
         }
@@ -80,19 +81,38 @@ namespace Zewada {
                 bodyDef.type = b2_dynamicBody; break;
         }
 
-        b2PolygonShape* shape = new b2PolygonShape();
+        b2Shape* shape;
+
         if(go->HasComponent<Box2DCollider>())
         {
+            b2PolygonShape* box = new b2PolygonShape();
             Box2DCollider& boxCollider = go->GetComponent<Box2DCollider>();
             const glm::vec2& halfSize = boxCollider.halfSize * 0.5f;
             const glm::vec2& offset = boxCollider.offset;
             const glm::vec2& origin = boxCollider.origin;
-            shape->SetAsBox(halfSize.x, halfSize.y, b2Vec2(origin.x, origin.y), 0);
+            box->SetAsBox(halfSize.x, halfSize.y, b2Vec2(origin.x, origin.y), 0);
 
             b2Vec2& pos = bodyDef.position;
             float xPos = pos.x + offset.x;
             float yPos = pos.y + offset.y;
             bodyDef.position.Set(xPos, yPos);
+            shape = box;
+        }
+        
+        if(go->HasComponent<Circle2DCollider>())
+        {
+            b2CircleShape* circle = new b2CircleShape();
+            auto& circleCollider = go->GetComponent<Circle2DCollider>();
+            const glm::vec2& offset = circleCollider.offset;
+            const glm::vec2& origin = circleCollider.origin;
+            b2CircleShape* cshape;
+            circle->m_radius = circleCollider.radius;
+
+            b2Vec2& pos = bodyDef.position;
+            float xPos = pos.x + offset.x;
+            float yPos = pos.y + offset.y;
+            bodyDef.position.Set(xPos, yPos);
+            shape = circle;
         }
 
         b2Body* body = m_world->CreateBody(&bodyDef);
@@ -121,14 +141,18 @@ namespace Zewada {
         }
         GameObject go = GameObject(entity, m_sceneManager->GetActiveScene());
 		Rigidbody2D& rigidbody = go.GetComponent<Rigidbody2D>();
-        //delete (GameObject*)rigidbody.rawBody->GetUserData().pointer;
-        delete (GameObject*)rigidbody.rawBody->GetFixtureList()->GetUserData().pointer;
-        GameObject* nullObject = GameObject::GetNullObject();
-        rigidbody.rawBody->GetFixtureList()->GetUserData().pointer = (uintptr_t)nullObject;
-		if(rigidbody.rawBody != nullptr)
-		{
-            m_world->DestroyBody(rigidbody.rawBody);
-            rigidbody.rawBody = nullptr;
-		}
+
+        if(go.HasComponent<Box2DCollider>() || go.HasComponent<Circle2DCollider>())
+        {
+            //delete (GameObject*)rigidbody.rawBody->GetUserData().pointer;
+            delete (GameObject*)rigidbody.rawBody->GetFixtureList()->GetUserData().pointer; 
+            GameObject* nullObject = GameObject::GetNullObject();
+            rigidbody.rawBody->GetFixtureList()->GetUserData().pointer = (uintptr_t)nullObject;
+            if(rigidbody.rawBody != nullptr)
+		    {
+                m_world->DestroyBody(rigidbody.rawBody);
+                rigidbody.rawBody = nullptr;
+		    }
+        }
     }
 }   

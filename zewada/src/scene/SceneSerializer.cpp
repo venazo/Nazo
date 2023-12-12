@@ -215,6 +215,19 @@ namespace Zewada {
 			out << YAML::EndMap;	
 		}
 
+		if(go.HasComponent<Circle2DCollider>())
+		{
+			out << YAML::Key << "Circle2DCollider";
+			out << YAML::BeginMap;
+
+			const Circle2DCollider& cc = go.GetComponent<Circle2DCollider>();
+			out << YAML::Key << "Radius" << YAML::Value << cc.radius;
+			out << YAML::Key << "Offset" << YAML::Value << cc.offset;
+			out << YAML::Key << "Origin" << YAML::Value << cc.origin;
+
+			out << YAML::EndMap;	
+		}
+
 		if(go.HasComponent<NativeScript>())
 		{
 			out << YAML::Key << "NativeScript";
@@ -433,7 +446,18 @@ namespace Zewada {
 					src.halfSize = box2DCollider["HalfSize"].as<glm::vec2>();
 					src.offset = box2DCollider["Offset"].as<glm::vec2>();
 					src.origin = box2DCollider["Origin"].as<glm::vec2>();
-				}	
+				}
+				
+				auto circle2DCollider = entity["Circle2DCollider"];
+				if(circle2DCollider)
+				{
+					deserializedEntity.AddComponent<Circle2DCollider>(Circle2DCollider());
+					auto& src  = deserializedEntity.GetComponent<Circle2DCollider>();
+
+					src.radius = circle2DCollider["Radius"].as<float>();
+					src.offset = circle2DCollider["Offset"].as<glm::vec2>();
+					src.origin = circle2DCollider["Origin"].as<glm::vec2>();
+				}		
 
 				auto nativeScript = entity["NativeScript"];
 				if(nativeScript)

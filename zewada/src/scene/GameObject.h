@@ -31,6 +31,12 @@ namespace Zewada {
 		void AddRotation(float r);
 		void SetRotation(float r);
 
+		void ApplyForce(float x, float y);
+		void ApplyForce(const glm::vec2& force);
+		void ApplyImpulse(float x, float y);
+		void ApplyImpulse(const glm::vec2& impulse);
+		void ApplyTorque(float torque);
+
 
 		template<typename T>	
 		void AddComponent(T component)

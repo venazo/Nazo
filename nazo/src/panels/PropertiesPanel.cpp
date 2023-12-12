@@ -140,6 +140,14 @@ namespace Nazo {
 					m_activeGameObject->AddComponent<Box2DCollider>(Box2DCollider());
 				}
 			}
+		
+			if(!m_activeGameObject->HasComponent<Circle2DCollider>())
+			{
+				if(ImGui::MenuItem("Add Circle2DCollider"))
+				{
+					m_activeGameObject->AddComponent<Circle2DCollider>(Circle2DCollider());
+				}
+			}
 
 			if(!m_activeGameObject->HasComponent<NativeScript>())
 			{
@@ -271,6 +279,22 @@ namespace Nazo {
 				ZImGui::DrawVec2Control("Halfsize", box2DCollider.halfSize, 0.0f);
 				ZImGui::DrawVec2Control("Offset", box2DCollider.offset, 0.0f);
 				ZImGui::DrawVec2Control("Origin", box2DCollider.origin, 0.0f);
+			}
+			else if(temp == 2)
+			{
+				m_activeGameObject->RemoveComponent<Box2DCollider>();
+			}
+		}
+
+		if(m_activeGameObject->HasComponent<Circle2DCollider>())
+		{
+			int temp = ZImGui::ComponentHeader("Circle2DCollider");
+			if(temp == 1)
+			{
+				Circle2DCollider& circle2DCollider = m_activeGameObject->GetComponent<Circle2DCollider>();
+				ZImGui::DragFloat("Radius", circle2DCollider.radius, 0.0f);
+				ZImGui::DrawVec2Control("Offset", circle2DCollider.offset, 0.0f);
+				ZImGui::DrawVec2Control("Origin", circle2DCollider.origin, 0.0f);
 			}
 			else if(temp == 2)
 			{
