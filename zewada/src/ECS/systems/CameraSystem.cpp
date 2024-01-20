@@ -39,9 +39,9 @@ namespace Zewada {
 
 	void CameraSystem::AdjustViewMatrix(const Transform& transform, Camera& cam)
 	{
-		glm::vec3 cameraFront(transform.pos.x, transform.pos.y, transform.pos.z);
+		glm::vec3 cameraFront(transform.worldPos.x, transform.worldPos.y, transform.worldPos.z);
 		glm::vec3 cameraUp(0.0f, 1.0f, 0.0f);
-		cam.viewMatrix = glm::lookAt(glm::vec3(transform.pos.x, transform.pos.y, transform.pos.z + 100.0f), transform.pos, cameraUp);
+		cam.viewMatrix = glm::lookAt(glm::vec3(transform.worldPos.x, transform.worldPos.y, transform.worldPos.z + 100.0f), transform.worldPos, cameraUp);
 	}
 
 	void CameraSystem::SetMaincamera(Entity entity)
@@ -54,7 +54,7 @@ namespace Zewada {
 		if(entity != -1)
 		{
 			m_coordinator->GetComponent<Camera>(m_maincamera).maincamera = true;
-			m_coordinator->GetComponent<Transform>(m_maincamera).scale = glm::vec2(16.0f, 16.0f / m_ratio);
+			m_coordinator->GetComponent<Transform>(m_maincamera).scale = glm::vec2(19.2f, 19.2f / m_ratio);
 		}
 	}
 

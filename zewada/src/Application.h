@@ -56,6 +56,7 @@ namespace Zewada
 		inline std::shared_ptr<Input> GetInput() const { return m_input; }
 		inline std::shared_ptr<AssetPool> GetAssetPool() const {return m_assetPool;}
 		inline std::shared_ptr<SceneManager> GetSceneManager() const { return m_sceneManager; }
+		inline std::shared_ptr<SceneSerializer> GetSceneSerializer() const {return m_sceneSerializer;}
 		inline std::shared_ptr<Renderer2D> GetRenderer2D() const {return m_renderer2D;}
 		inline std::shared_ptr<DebugDraw> GetDebugDraw() const { return m_debugDraw;}
 		inline std::shared_ptr<Physics2D> GetPhysics2D() const {return m_physics2D;}
@@ -69,6 +70,7 @@ namespace Zewada
 		std::shared_ptr<Input> m_input;
 		std::shared_ptr<AssetPool> m_assetPool;
 		std::shared_ptr<SceneManager> m_sceneManager;
+		std::shared_ptr<SceneSerializer> m_sceneSerializer;
 		std::shared_ptr<Renderer2D> m_renderer2D;
 		std::shared_ptr<DebugDraw> m_debugDraw;
 		std::shared_ptr<Physics2D> m_physics2D;

@@ -17,7 +17,7 @@ namespace Zewada {
 		SpriteSheet(std::shared_ptr<Texture> texture, int spriteWidth, int spriteHeight, int numSprites, int spacing);
 		SpriteSheet() = default;
 
-		const std::shared_ptr<Sprite> GetSprite(unsigned int index);
+		std::shared_ptr<Sprite> GetSprite(unsigned int index);
 
 		inline int GetSpriteWidth() {return m_width;};
 		inline int GetSpriteHeight() { return m_height;};

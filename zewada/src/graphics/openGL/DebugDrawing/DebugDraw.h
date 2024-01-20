@@ -30,5 +30,8 @@ namespace Zewada {
 		void AddLine(const glm::vec2& from, const glm::vec2& to, const glm::vec3& color, float t = 0);
 		void Add2DBox(const glm::vec2& center, const glm::vec2& dimensions, float rotation, const glm::vec3& color, unsigned int t = 0);
 		void AddCircle(const glm::vec2& center, float radius, const glm::vec3& color, unsigned int t = 0);
+		void AddOpenPolygon(const glm::vec2& center, std::vector<glm::vec2> vertices, const glm::vec3& color, unsigned int t = 0);
+		void AddEdge(const glm::vec2& center, std::vector<glm::vec2> vertices, const glm::vec3& color, unsigned int t = 0);
+		void AddPolygon(const glm::vec2& center, std::vector<glm::vec2> vertices, const glm::vec3& color, unsigned int t = 0);
     };
 }

@@ -10,6 +10,7 @@
 namespace Zewada {
 
     class ContactListener;
+    class GameObject;
 
     class Physics2D
     {
@@ -24,6 +25,8 @@ namespace Zewada {
         float m_physicsTimeStep = 1.0f / 60.0f;
         int m_velocityIterations = 8;
         int m_positionIterations = 3;
+
+        void AddFixture(const b2BodyDef& bodyDef, b2Shape* shape, GameObject* go);
     public:
         Physics2D(std::shared_ptr<SceneManager> sceneManager);
 
@@ -33,7 +36,9 @@ namespace Zewada {
         void OnStart();
         void DestroyEntity(const Entity& entity);
 
+        bool RaycastLine(const glm::vec2& first, const glm::vec2& second);
+
         void SetGravity(float x, float y);
         inline glm::vec2 GetGravity() {return glm::vec2(m_gravity.x, m_gravity.y);}
     };
-}
+}\

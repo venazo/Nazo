@@ -19,6 +19,8 @@ namespace Zewada
 		m_cameraSystem->Init(this->shared_from_this(), m_coordinator);
 		m_rigidBody2Dsystem->Init(this->shared_from_this(), m_coordinator);
 		m_nativeScriptSystem->Init(this->shared_from_this(), m_coordinator);
+		m_animationSystem->Init(this->shared_from_this(), m_coordinator);
+		m_animationManagerSystem->Init(this->shared_from_this(), m_coordinator);
 
 		m_application->GetRenderer2D()->SetBackgroundColor(m_scenePlan.backgroundColor);
 		m_application->GetPhysics2D()->SetGravity(m_scenePlan.gravity.x, m_scenePlan.gravity.y);
@@ -41,7 +43,13 @@ namespace Zewada
 		m_coordinator->RegisterComponent<Rigidbody2D>();
 		m_coordinator->RegisterComponent<Box2DCollider>();
 		m_coordinator->RegisterComponent<Circle2DCollider>();
+		m_coordinator->RegisterComponent<Edge2DCollider>();
+		m_coordinator->RegisterComponent<Polygon2DCollider>();
 		m_coordinator->RegisterComponent<NativeScript>();
+		m_coordinator->RegisterComponent<Animation>();
+		m_coordinator->RegisterComponent<AnimationManager>();
+		m_coordiantor->RegisterComponent<Grid>();
+		m_coordinator->RegisterComponent<GridObject>();
 
 		m_transformSystem = m_coordinator->RegisterSystem<TransformSystem>();
 
@@ -73,6 +81,18 @@ namespace Zewada
 		nativeScriptSystemSignature.set(m_coordinator->GetComponentType<NativeScript>());
 		m_coordinator->SetSystemSignature<NativeScriptSystem>(nativeScriptSystemSignature);
 
+		m_animationSystem = m_coordinator->RegisterSystem<AnimationSystem>();
+
+		Signature animationSystemSignature;
+		animationSystemSignature.set(m_coordinator->GetComponentType<Animation>());
+		m_coordinator->SetSystemSignature<AnimationSystem>(animationSystemSignature);
+
+		m_animationManagerSystem = m_coordinator->RegisterSystem<AnimationManagerSystem>();
+
+		Signature animationManagerSystemSignature;
+		animationManagerSystemSignature.set(m_coordinator->GetComponentType<AnimationManager>());
+		m_coordinator->SetSystemSignature<AnimationManagerSystem>(animationManagerSystemSignature);
+
 		for (int i = 0; i < MAX_ENTITIES; i++)
 		{
 			m_ids.push_back(i);
@@ -92,6 +112,9 @@ namespace Zewada
 		{
 			m_physics2D->Add(entity);
 		}
+
+		m_animationManagerSystem->OnStart();
+
 		m_nativeScriptSystem->OnStart();
 	}
 
@@ -108,6 +131,9 @@ namespace Zewada
 		m_nativeScriptSystem->OnUpdate(dt);
 		m_physics2D->OnUpdate(dt);	
 		m_rigidBody2Dsystem->OnUpdate(dt);
+
+		m_animationManagerSystem->OnUpdate(dt);
+		m_animationSystem->OnUpdate(dt);
 
 		//last systems
 		m_transformSystem->OnUpdate(dt);
@@ -196,10 +222,10 @@ namespace Zewada
 		}
 
 		if(go.HasComponent<Rigidbody2D>())
-			m_application->GetPhysics2D()->DestroyEntity(go.GetID());
+			m_application->GetPhysics2D()->DestroyEntity(go.GetEntity());
 
 		if(go.HasComponent<Camera>())
-			GetCameraSystem()->DestroyEntity(go.GetID());
+			GetCameraSystem()->DestroyEntity(go.GetEntity());
 
 
 		std::vector<ID> &goChildren = transform.children;

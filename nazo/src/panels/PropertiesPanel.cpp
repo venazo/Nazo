@@ -110,14 +110,14 @@ namespace Nazo {
 
 		if(ImGui::BeginPopupContextWindow("ComponentAdder"))
 		{
-			if(!m_activeGameObject->HasComponent<Camera>())
+			if(!m_activeGameObject->HasComponent<Camera>() && !m_activeGameObject->HasComponent<SpriteRenderer>())
 			{
 				if(ImGui::MenuItem("Add Camera"))
 				{
 					m_activeGameObject->AddComponent<Camera>(Camera());
 				}
 			}			
-			if(!m_activeGameObject->HasComponent<SpriteRenderer>())
+			if(!m_activeGameObject->HasComponent<SpriteRenderer>() && !m_activeGameObject->HasComponent<Camera>())
 			{
 				if(ImGui::MenuItem("Add SpriteRenderer"))
 				{
@@ -133,20 +133,25 @@ namespace Nazo {
 				}
 			}
 
-			if(!m_activeGameObject->HasComponent<Box2DCollider>())
+			if(!m_activeGameObject->HasCollider())
 			{
 				if(ImGui::MenuItem("Add Box2DCollider"))
 				{
 					m_activeGameObject->AddComponent<Box2DCollider>(Box2DCollider());
 				}
-			}
-		
-			if(!m_activeGameObject->HasComponent<Circle2DCollider>())
-			{
-				if(ImGui::MenuItem("Add Circle2DCollider"))
+				else if(ImGui::MenuItem("Add Circle2DCollider"))
 				{
 					m_activeGameObject->AddComponent<Circle2DCollider>(Circle2DCollider());
 				}
+				else if(ImGui::MenuItem("Add Edge2DCollider"))
+				{
+					m_activeGameObject->AddComponent<Edge2DCollider>(Edge2DCollider());
+				}
+				else if(ImGui::MenuItem("Add Polygon2DCollider"))
+				{
+					m_activeGameObject->AddComponent<Polygon2DCollider>(Polygon2DCollider());
+				}
+
 			}
 
 			if(!m_activeGameObject->HasComponent<NativeScript>())
@@ -154,6 +159,19 @@ namespace Nazo {
 				if(ImGui::MenuItem("Add NativeScript"))
 				{
 					m_activeGameObject->AddComponent<NativeScript>(NativeScript());
+				}
+			}
+
+			if(!m_activeGameObject->HasComponent<Animation>() && !m_activeGameObject->HasComponent<AnimationManager>())
+			{
+				if(ImGui::MenuItem("Add Animation"))
+				{
+					m_activeGameObject->AddComponent<Animation>(Animation());
+				}
+
+				if(ImGui::MenuItem("Add AnimationManager"))
+				{
+					m_activeGameObject->AddComponent<AnimationManager>(AnimationManager());
 				}
 			}
 
@@ -168,9 +186,9 @@ namespace Nazo {
 		if(ImGui::CollapsingHeader("Transform"))
 		{
 			Transform& transform = m_activeGameObject->GetComponent<Transform>();
-			ZImGui::DrawVec3Control("Position", transform.pos, 0.0f);
-			ZImGui::DrawVec2Control("Scale", transform.scale, 100.0f);
-			ZImGui::DragFloat("Rotation", transform.rotation, 0.0f);
+			ZImGui::DrawVec3Control("Position", transform.pos);
+			ZImGui::DrawVec2Control("Scale", transform.scale);
+			ZImGui::DragFloat("Rotation", transform.rotation);
 		}
 		
 		if(m_activeGameObject->HasComponent<Camera>())
@@ -181,14 +199,14 @@ namespace Nazo {
 			{
 				Camera& camera = m_activeGameObject->GetComponent<Camera>();
 				//maincamera
-				bool maincamera = (cameraSystem->GetMaincameraObject() == m_activeGameObject->GetID());
+				bool maincamera = (cameraSystem->GetMaincameraObject() == m_activeGameObject->GetEntity());
 				if(!maincamera && camera.maincamera)
 				{
 					camera.maincamera = false;
 				}
 				ImGui::Checkbox("Maincamera", &maincamera);
 				if(maincamera && !camera.maincamera)
-					cameraSystem->SetMaincamera(m_activeGameObject->GetID());
+					cameraSystem->SetMaincamera(m_activeGameObject->GetEntity());
 				if(!maincamera && camera.maincamera)
 				{
 					cameraSystem->SetMaincamera(-1);
@@ -217,11 +235,8 @@ namespace Nazo {
 			if(temp == 1)
 			{
 				SpriteRenderer& spriteRenderer = m_activeGameObject->GetComponent<SpriteRenderer>();
-				ZImGui::ColorPicker4("Color", spriteRenderer.color, 0.0f);
-				const std::string path = spriteRenderer.sprite->GetTexture()->GetPath();
-				std::filesystem::path realPath(path);
-				std::string name = realPath.filename().string();
-				ZImGui::TextureInput(name, spriteRenderer);
+				ZImGui::ColorPicker4("Color", spriteRenderer.color);
+				ZImGui::TextureInput("Texture", spriteRenderer.sprite);
 			}
 			else if(temp == 2)
 			{
@@ -236,9 +251,9 @@ namespace Nazo {
 			{
 				Rigidbody2D& rigidbody2D = m_activeGameObject->GetComponent<Rigidbody2D>();
 
-				ZImGui::DragFloat("Angular damping", rigidbody2D.angularDamping, 0.8f);
-				ZImGui::DragFloat("Linear damping", rigidbody2D.linearDamping, 0.9f);
-				ZImGui::DragFloat("Mass", rigidbody2D.mass, 1.0f);
+				ZImGui::DragFloat("Angular damping", rigidbody2D.angularDamping);
+				ZImGui::DragFloat("Linear damping", rigidbody2D.linearDamping);
+				ZImGui::DragFloat("Mass", rigidbody2D.mass);
 				
 				if (ImGui::BeginCombo("##BodyType", bodyType2Names[rigidbody2D.bodyType].c_str()))
 				{
@@ -261,7 +276,7 @@ namespace Nazo {
 				ImGui::Checkbox("Continuous collision", &rigidbody2D.continuousCollision);
 
 				glm::vec2 gravity = m_application->GetPhysics2D()->GetGravity();
-				ZImGui::DrawVec2Control("Gravity", gravity, -10.0f);
+				ZImGui::DrawVec2Control("Gravity", gravity);
 				m_application->GetPhysics2D()->SetGravity(gravity.x, gravity.y);
 			}
 			else if(temp == 2)
@@ -276,9 +291,8 @@ namespace Nazo {
 			if(temp == 1)
 			{
 				Box2DCollider& box2DCollider = m_activeGameObject->GetComponent<Box2DCollider>();
-				ZImGui::DrawVec2Control("Halfsize", box2DCollider.halfSize, 0.0f);
-				ZImGui::DrawVec2Control("Offset", box2DCollider.offset, 0.0f);
-				ZImGui::DrawVec2Control("Origin", box2DCollider.origin, 0.0f);
+				ZImGui::DrawVec2Control("Halfsize", box2DCollider.halfSize);
+				ZImGui::DrawVec2Control("Offset", box2DCollider.offset);
 			}
 			else if(temp == 2)
 			{
@@ -292,13 +306,45 @@ namespace Nazo {
 			if(temp == 1)
 			{
 				Circle2DCollider& circle2DCollider = m_activeGameObject->GetComponent<Circle2DCollider>();
-				ZImGui::DragFloat("Radius", circle2DCollider.radius, 0.0f);
-				ZImGui::DrawVec2Control("Offset", circle2DCollider.offset, 0.0f);
-				ZImGui::DrawVec2Control("Origin", circle2DCollider.origin, 0.0f);
+				ZImGui::DragFloat("Radius", circle2DCollider.radius);
+				ZImGui::DrawVec2Control("Offset", circle2DCollider.offset);
 			}
 			else if(temp == 2)
 			{
-				m_activeGameObject->RemoveComponent<Box2DCollider>();
+				m_activeGameObject->RemoveComponent<Circle2DCollider>();
+			}
+		}
+		
+		if(m_activeGameObject->HasComponent<Polygon2DCollider>())
+		{
+			int temp = ZImGui::ComponentHeader("Polygon2DCollider");
+			if(temp == 1)
+			{
+				Polygon2DCollider& polygon2DCollider = m_activeGameObject->GetComponent<Polygon2DCollider>();
+				ZImGui::Vector<glm::vec2>("Vertices", "Vertex", polygon2DCollider.vertices, ZImGui::DrawVec2Control);
+				ZImGui::DrawVec2Control("Offset", polygon2DCollider.offset);
+			}
+			else if(temp == 2)
+			{
+				m_activeGameObject->RemoveComponent<Polygon2DCollider>();
+			}
+		}
+
+		if(m_activeGameObject->HasComponent<Edge2DCollider>())
+		{
+			int temp = ZImGui::ComponentHeader("Edge2DCollider");
+			if(temp == 1)
+			{
+				Edge2DCollider& edge2DCollider = m_activeGameObject->GetComponent<Edge2DCollider>();
+				ZImGui::Vector<glm::vec2>("Vertices", "Vertex", edge2DCollider.vertices, ZImGui::DrawVec2Control);
+				ZImGui::DrawVec2Control("Previous Ghost", edge2DCollider.previousGhostVertex);
+				ZImGui::DrawVec2Control("Next Ghost", edge2DCollider.nextGhostVertex);
+				ZImGui::DrawVec2Control("Offset", edge2DCollider.offset);
+
+			}
+			else if(temp == 2)
+			{
+				m_activeGameObject->RemoveComponent<Edge2DCollider>();
 			}
 		}
 
@@ -314,6 +360,36 @@ namespace Nazo {
 			else if(temp == 2)
 			{
 				m_activeGameObject->RemoveComponent<NativeScript>();
+			}
+		}
+
+		if(m_activeGameObject->HasComponent<Animation>() && !m_activeGameObject->HasComponent<AnimationManager>())
+		{
+			int temp = ZImGui::ComponentHeader("Animation");
+			if(temp == 1)
+			{
+				auto& ac = m_activeGameObject->GetComponent<Animation>();
+
+				ZImGui::Animation("Frames", ac);
+			}
+			else if(temp == 2)
+			{
+				m_activeGameObject->RemoveComponent<Animation>();
+			}
+		}
+
+		if(m_activeGameObject->HasComponent<AnimationManager>())
+		{
+			int temp = ZImGui::ComponentHeader("AnimationManager");
+			if(temp == 1)
+			{
+				auto& ac = m_activeGameObject->GetComponent<AnimationManager>();
+
+				ZImGui::Unordered_map<std::string, Animation>("Animations", "Name", "Animation", ac.animations, ZImGui::TextInput, ZImGui::Animation);
+			}
+			else if(temp == 2)
+			{
+				m_activeGameObject->RemoveComponent<AnimationManager>();
 			}
 		}
 		

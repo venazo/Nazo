@@ -139,6 +139,7 @@ namespace Nazo {
 			{
 				if(m_activeGameObject->operator bool())
 					m_activeGameObject->Destroy();
+				SetGameObject(-1);
 			}
 			return true;
 		}
@@ -315,6 +316,27 @@ namespace Nazo {
 			const Transform& transform = m_activeGameObject->GetComponent<Transform>();
 			m_application->GetDebugDraw()->AddCircle(circle2DCollider.offset + glm::vec2(transform.worldPos), circle2DCollider.radius, glm::vec4(0.2f, 0.8f, 0.15f, 1.0f));
 		}
+
+		if(m_activeGameObject->HasComponent<Edge2DCollider>())
+		{
+			const Edge2DCollider& edge2DCollider = m_activeGameObject->GetComponent<Edge2DCollider>();
+			const Transform& transform = m_activeGameObject->GetComponent<Transform>();
+			if(edge2DCollider.vertices.size() > 1)
+			{
+				m_application->GetDebugDraw()->AddEdge(glm::vec2(transform.worldPos) + edge2DCollider.offset, edge2DCollider.vertices, glm::vec4(0.2, 0.8f, 0.15f, 1.0f));
+				m_application->GetDebugDraw()->AddLine(glm::vec2(transform.worldPos) + edge2DCollider.offset + edge2DCollider.vertices[0], 
+					glm::vec2(transform.worldPos) + edge2DCollider.offset + edge2DCollider.previousGhostVertex, glm::vec4(0.9, 0.15f, 0.2f, 1.0f));
+				m_application->GetDebugDraw()->AddLine(glm::vec2(transform.worldPos) + edge2DCollider.offset + edge2DCollider.vertices[edge2DCollider.vertices.size() - 1], 
+					glm::vec2(transform.worldPos) + edge2DCollider.offset + edge2DCollider.nextGhostVertex, glm::vec4(0.9, 0.15f, 0.2f, 1.0f));
+			}
+		}
+
+		if(m_activeGameObject->HasComponent<Polygon2DCollider>())
+		{
+			const Polygon2DCollider& polygon2DCollider = m_activeGameObject->GetComponent<Polygon2DCollider>();
+			const Transform& transform = m_activeGameObject->GetComponent<Transform>();
+			m_application->GetDebugDraw()->AddPolygon(glm::vec2(transform.worldPos) + polygon2DCollider.offset, polygon2DCollider.vertices, glm::vec4(0.2, 0.8f, 0.15f, 1.0f));
+		}
 	}
 
 	bool EditorLayer::OnGameStart(GameStartEvent& event)
@@ -359,11 +381,6 @@ namespace Nazo {
 	{
 		if(!m_loading && !m_scenePlaying)
 		{
-			if(m_application->GetSceneManager()->GetActiveScene()->GetPath() == "")
-			{
-				std::string path = "assets/scenes/Default_Scene.zs";
-				m_application->GetSceneManager()->GetActiveScene()->SetPath(path);
-			}
 			m_application->GetSceneManager()->SaveActiveScene();
 		}
 			

@@ -48,5 +48,7 @@ namespace Zewada {
 		inline std::shared_ptr<Scene> GetActiveScene() const { return m_scenes.front(); }
 
 		inline bool HasActiveScene() {return (m_scenes.size() > 0);}
+
+		inline std::shared_ptr<SceneSerializer> GetSceneSerializer() {return m_sceneSerializer;}
 	};
 }

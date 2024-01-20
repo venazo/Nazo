@@ -21,12 +21,12 @@ namespace Nazo
 		return false;
 	}
 
-	void Nazo::ZImGui::DrawVec2Control(std::string label, glm::vec2& value, float resetValue, float columnWidth)
+	void Nazo::ZImGui::DrawVec2Control(const std::string& label, glm::vec2& value)
 	{
 		ImGui::PushID(label.c_str());
 		
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::SetColumnWidth(0, COLUMNWIDTH);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
@@ -42,7 +42,7 @@ namespace Nazo
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
 		if (ImGui::Button("X", buttonSize))
 		{
-			value.x = resetValue;
+			value.x = 0.0f;
 		}
 		
 		ImGui::SameLine();
@@ -57,7 +57,7 @@ namespace Nazo
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
 		if (ImGui::Button("Y", buttonSize))
 		{
-			value.y = resetValue;
+			value.y = 0.0f;
 		}
 
 		ImGui::SameLine();
@@ -74,12 +74,12 @@ namespace Nazo
 		ImGui::PopID();
 	}
 
-	void ZImGui::DrawVec3Control(std::string label, glm::vec3& value, float resetValue, float columnWidth)
+	void ZImGui::DrawVec3Control(const std::string& label, glm::vec3& value)
 	{
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::SetColumnWidth(0, COLUMNWIDTH);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
@@ -95,7 +95,7 @@ namespace Nazo
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
 		if (ImGui::Button("X", buttonSize))
 		{
-			value.x = resetValue;
+			value.x = 0.0f;
 		}
 		
 		ImGui::SameLine();
@@ -110,7 +110,7 @@ namespace Nazo
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
 		if (ImGui::Button("Y", buttonSize))
 		{
-			value.y = resetValue;
+			value.y = 0.0f;
 		}
 
 		ImGui::SameLine();
@@ -125,7 +125,7 @@ namespace Nazo
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.15f, 0.8f, 1.0f));
 		if (ImGui::Button("Z", buttonSize))
 		{
-			value.z = resetValue;
+			value.z = 0.0f;
 		}
 
 		ImGui::SameLine();
@@ -140,12 +140,12 @@ namespace Nazo
 		ImGui::Columns(1);
 		ImGui::PopID();
 	}
-	void ZImGui::DragFloat(std::string label, float& value, float resetValue, float columnWidth)
+	void ZImGui::DragFloat(const std::string& label, float& value)
 	{
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::SetColumnWidth(0, COLUMNWIDTH);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
@@ -155,12 +155,12 @@ namespace Nazo
 		ImGui::PopID();
 	}
 
-	void ZImGui::DragInt(std::string label, int& value, float resetValue, float columnWidth)
+	void ZImGui::DragInt(const std::string& label, int& value)
 	{
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::SetColumnWidth(0, COLUMNWIDTH);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
@@ -170,12 +170,12 @@ namespace Nazo
 		ImGui::PopID();
 	}
 
-	void ZImGui::ColorPicker4(std::string label, glm::vec4& value, float resetValue, float columnWidth)
+	void ZImGui::ColorPicker4(const std::string& label, glm::vec4& value)
 	{
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::SetColumnWidth(0, COLUMNWIDTH);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
@@ -192,20 +192,19 @@ namespace Nazo
 		ImGui::PopID();
 	}
 
-	bool ZImGui::DrawButton(std::string label, const glm::vec4& color, float columnWidth)
+	bool ZImGui::DrawButton(const std::string& label, const glm::vec4& color)
 	{
 		ImGui::PushID(label.c_str());
 
 		float lineHeight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2.0f;
 
 		ImGui::Columns(1);
-		ImGui::SetColumnWidth(0, columnWidth);
 
-		ImGui::PushItemWidth(columnWidth);
+		ImGui::PushItemWidth(COLUMNWIDTH);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(color.x, color.y, color.z, color.w));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(color.x + 0.1f, color.y + 0.1f, color.z + 0.1f, color.w));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(color.x, color.y, color.z, color.w));
-		bool result = ImGui::Button(label.c_str(), ImVec2(columnWidth, lineHeight));
+		bool result = ImGui::Button(label.c_str(), ImVec2(COLUMNWIDTH, lineHeight));
 		
 		ImGui::PopItemWidth();
 		ImGui::PopStyleColor(3);
@@ -215,18 +214,18 @@ namespace Nazo
 		return result;
 	}
 	
-	void ZImGui::TextInput(std::string label, std::string& value, float columnWidth)
+	void ZImGui::TextInput(const std::string& label, std::string& value)
 	{	
 		char value_c[32];
     	memcpy(value_c, value.c_str(), value.size() + 1);
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::SetColumnWidth(0, COLUMNWIDTH);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
-		ImGui::PushItemWidth(columnWidth);
+		ImGui::PushItemWidth(COLUMNWIDTH);
 		ImGui::InputText("##Text", value_c, 32);
 		if(ImGui::IsItemFocused() && ImGui::IsItemClicked() && ImGui::IsItemActive())
 		{
@@ -244,7 +243,7 @@ namespace Nazo
 		value = std::string(value_c);
 	}
 
-	int ZImGui::ComponentHeader(std::string label, float columnWidth)
+	int ZImGui::ComponentHeader(const std::string& label)
 	{
 		int result = 0;
 
@@ -272,7 +271,7 @@ namespace Nazo
 		return result;
 	}
 	
-	bool ZImGui::ImageButtonWithName(std::string label, ImTextureID texid)
+	bool ZImGui::ImageButtonWithName(const std::string& label, ImTextureID texid)
 	{
 		ImGui::PushID(label.c_str());
 		ImVec2 padding = ImGui::GetStyle().FramePadding;
@@ -287,7 +286,7 @@ namespace Nazo
 		return result;
 	}
 	
-	void ZImGui::TextureInput(std::string label, SpriteRenderer& spriteRenderer, float columnWidth)
+	void ZImGui::TextureInput(const std::string& label, std::shared_ptr<Sprite>& sprite)
 	{
 		ImGui::PushID(label.c_str());
 
@@ -295,14 +294,18 @@ namespace Nazo
 		float width = ImGui::CalcItemWidth();
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
-		ImGui::Text("Texture");
+		ImGui::SetColumnWidth(0, COLUMNWIDTH);
+		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
-		ImGui::PushItemWidth(columnWidth);
-		if(ImGui::Button(label.c_str()))
+		const std::string path = sprite->GetTexture()->GetPath();				
+		std::filesystem::path realPath(path);
+		std::string name = realPath.filename().string();
+
+		ImGui::PushItemWidth(COLUMNWIDTH);
+		if(ImGui::Button(name.c_str()))
 		{
-			spriteRenderer.sprite->SetTexture(std::make_shared<Texture>());
+			sprite->SetTexture(std::make_shared<Texture>());
 		}
 
 		if(ImGui::BeginDragDropTarget())
@@ -313,17 +316,17 @@ namespace Nazo
 			{
 				const wchar_t* path = (wchar_t*)payLoadObj->Data;
 				std::filesystem::path scenePath(path);
-				spriteRenderer.sprite->SetTexture(Get().m_assetPool->GetTexture(scenePath.string().c_str()));
+				sprite = std::make_shared<Sprite>(Get().m_assetPool->GetTexture(scenePath.string().c_str()));
 			}
 			else if(payLoadSprite != nullptr)
 			{
 				const wchar_t* charSprite = (wchar_t*)payLoadSprite->Data;
 				std::wstring wsprite(charSprite);
-				std::string sprite(wsprite.begin(), wsprite.end());
-				unsigned int size = sprite.find("$.%.$");
-				std::string path = sprite.substr(0, size);
-				int num = std::stoi(sprite.substr(size + 5, sprite.length()));
-				spriteRenderer.sprite = Get().m_assetPool->GetSpriteSheet(path.c_str())->GetSprite(num);
+				std::string spritePath(wsprite.begin(), wsprite.end());
+				unsigned int size = spritePath.find("$.%.$");
+				std::string path = spritePath.substr(0, size);
+				int num = std::stoi(spritePath.substr(size + 5, spritePath.length()));
+				sprite = Get().m_assetPool->GetSpriteSheet(path.c_str())->GetSprite(num);
 			}
 		}
 		ImGui::PopItemWidth();
@@ -332,7 +335,7 @@ namespace Nazo
 		ImGui::PopID();
 	}	
 	
-	void ZImGui::ScriptInput(std::string label, NativeScript& nativeScript, float columnWidth)
+	void ZImGui::ScriptInput(const std::string& label, NativeScript& nativeScript)
 	{
 		ImGui::PushID(label.c_str());
 
@@ -340,11 +343,11 @@ namespace Nazo
 		float width = ImGui::CalcItemWidth();
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::SetColumnWidth(0, COLUMNWIDTH);
 		ImGui::Text("Script");
 		ImGui::NextColumn();
 
-		ImGui::PushItemWidth(columnWidth);
+		ImGui::PushItemWidth(COLUMNWIDTH);
 		if(ImGui::Button(label.c_str()))
 		{
 			nativeScript.className = "NONE";
@@ -365,6 +368,35 @@ namespace Nazo
 			}
 		}
 		ImGui::PopItemWidth();
+		ImGui::Columns(1);
+
+		ImGui::PopID();
+	}
+
+	void ZImGui::Frame(const std::string& label, Animation::Frame& frame)
+	{
+		ImGui::PushID(label.c_str());
+
+		ImGui::Columns(1);
+
+		ImGui::Text(label.c_str());
+
+		TextureInput("Texture", frame.sprite);
+		DragFloat("Duration", frame.duration);
+
+		ImGui::Columns(1);
+
+		ImGui::PopID();
+	}
+
+	void ZImGui::Animation(const std::string& label, Zewada::Animation& animation)
+	{
+		ImGui::PushID(label.c_str());
+
+		ImGui::Columns(1);
+
+		Vector<Animation::Frame>(label.c_str(), "Frame", animation.frames, ZImGui::Frame);		
+
 		ImGui::Columns(1);
 
 		ImGui::PopID();

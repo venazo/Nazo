@@ -76,9 +76,55 @@ namespace Zewada {
 		AddLine(points[length - 1], points[0], color, t);
 	}
 
+	void DebugDraw::AddPolygon(const glm::vec2& center, std::vector<glm::vec2> vertices, const glm::vec3& color, unsigned int t)
+	{
+		if(vertices.size() > 2)
+		{
+			for(int i = 1; i < vertices.size(); i++)
+			{
+				AddLine(vertices[i - 1] + center, vertices[i] + center, color, t);
+			}
+			AddLine(vertices[0] + center, vertices[vertices.size() - 1] + center, color, t);
+		}
+	}
+
+	void DebugDraw::AddOpenPolygon(const glm::vec2& center, std::vector<glm::vec2> vertices, const glm::vec3& color, unsigned int t)
+	{
+		if(vertices.size() > 1)
+		{
+			for(int i = 1; i < vertices.size(); i++)
+			{
+				AddLine(center + vertices[i - 1], center + vertices[i], color, t);
+			}
+		}
+	}
+
+	void DebugDraw::AddEdge(const glm::vec2& center, std::vector<glm::vec2> vertices, const glm::vec3& color, unsigned int t)
+	{
+		AddOpenPolygon(center, vertices, color, t);
+
+		glm::vec2 vec = vertices[1] - vertices[0];
+
+		glm::vec2 offset(vec.y, -vec.x);
+		offset = glm::vec2(offset.x, offset.y);
+
+		float length = glm::length(offset);
+		offset /= length;
+		offset *= 0.1f;
+
+		for(auto& vertex : vertices)
+		{
+			vertex += offset;
+		}
+
+		glm::vec newColor = color + glm::vec3(0.2f, 0.2f, 0.2f);
+
+		AddOpenPolygon(center, vertices, newColor, t);
+	}
+
 	void DebugDraw::AddCamera(const Transform& transform)
 	{
-		Add2DBox(transform.pos, transform.scale, 0.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 0);
+		Add2DBox(transform.worldPos, transform.scale, 0.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 0);
 	}
 
 	void DebugDraw::EndFrame(float dt)

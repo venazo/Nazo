@@ -93,7 +93,7 @@ namespace Nazo {
 
 	void CameraController::Zoom(float scrollY)
 	{
-		float addValue = pow(abs(scrollY * m_scrollSens), 1 / m_camera.zoom);
+		float addValue = pow(abs(scrollY * pow(m_camera.zoom * m_scrollSens, m_camera.zoom)), 1 / m_camera.zoom);
 		addValue *= -sgn(scrollY);
 		m_camera.zoom += addValue;
 	}

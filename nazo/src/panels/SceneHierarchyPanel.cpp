@@ -91,9 +91,9 @@ namespace Nazo {
                     
                     bool recursive = false;
                     GameObject parentOfParent = GameObject(scene->GetEntity(m_rects[index].index), scene);
-                    while(parentOfParent.GetID() != -1)
+                    while(parentOfParent.GetEntity() != -1)
                     {
-                        if(parentOfParent.GetID() == go->GetID())
+                        if(parentOfParent.GetEntity() == go->GetEntity())
                         {
                             recursive = true;
                         }
@@ -157,7 +157,7 @@ namespace Nazo {
     bool SceneHierarchyPanel::DoTreeNode(const GameObject& go)
     {
         std::shared_ptr<Scene> scene = m_application->GetSceneManager()->GetActiveScene();
-        ImGui::PushID(go.GetID());
+        ImGui::PushID(go.GetEntity());
         bool treeNodeOpen = ImGui::TreeNodeEx(
                 go.GetComponent<Tag>().name.c_str(), 
                 ImGuiTreeNodeFlags_DefaultOpen |
@@ -188,9 +188,9 @@ namespace Nazo {
                     Entity parentID = scene->GetEntity(go.GetComponent<Transform>().parent);
                     bool recursive = false;
                     GameObject parentOfParent = GameObject(parentID, scene);
-                    while(parentOfParent.GetID() != -1)
+                    while(parentOfParent.GetEntity() != -1)
                     {
-                        if(parentOfParent.GetID() == payLoadGo->GetID())
+                        if(parentOfParent.GetEntity() == payLoadGo->GetEntity())
                         {
                             recursive = true;
                         }
@@ -222,7 +222,7 @@ namespace Nazo {
 
         if(ImGui::IsItemClicked())
         {
-            m_application->GetEditorLayer()->SetGameObject(go.GetID());
+            m_application->GetEditorLayer()->SetGameObject(go.GetEntity());
         }
 
         ImVec2 cursorPos = ImGui::GetCursorPos();
@@ -255,11 +255,11 @@ namespace Nazo {
             {
                 if(m_application->GetEditorLayer()->GetActiveGameObject().get() != nullptr)
                 {
-                    if(m_application->GetEditorLayer()->GetActiveGameObject()->GetID() == go.GetID())
+                    if(m_application->GetEditorLayer()->GetActiveGameObject()->GetEntity() == go.GetEntity())
                         m_application->GetEditorLayer()->SetGameObject(-1);
                 }
 
-                m_application->GetSceneManager()->GetActiveScene()->DestroyEntity(go.GetID());
+                m_application->GetSceneManager()->GetActiveScene()->DestroyEntity(go.GetEntity());
             }
             if (ImGui::MenuItem("Duplicate Entity", "CTR + D"))
             {

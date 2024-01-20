@@ -5,6 +5,8 @@
 #include "core/Coordinator.h"
 #include "../physics2d/Physics2D.h"
 #include <boost/shared_ptr.hpp>
+#include <array>
+#include <unordered_map>
 
 using ID = int;
 
@@ -98,14 +100,26 @@ namespace Zewada
 		{
 			glm::vec2 halfSize = glm::vec2(1.0f, 1.0f);
 			glm::vec2 offset = glm::vec2();
-			glm::vec2 origin = glm::vec2();
 		};
 		
 		struct Circle2DCollider
 		{
 			float radius = 1.0f;
 			glm::vec2 offset = glm::vec2();
-			glm::vec2 origin = glm::vec2();
+		};
+
+		struct Edge2DCollider
+		{
+			std::vector<glm::vec2> vertices;
+			glm::vec2 previousGhostVertex = glm::vec2();
+			glm::vec2 nextGhostVertex = glm::vec2();
+			glm::vec2 offset = glm::vec2();
+		};
+
+		struct Polygon2DCollider
+		{
+			std::vector<glm::vec2> vertices;
+			glm::vec2 offset = glm::vec2();
 		};
 
 		struct NativeScript
@@ -117,6 +131,59 @@ namespace Zewada
 			NativeScript(std::string c_className)
 				: className(c_className)
 			{}
+		};
+
+		struct Animation
+		{
+			struct Frame
+			{
+				std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
+				float duration = 0.0f;
+
+				Frame() = default;
+				Frame(std::shared_ptr<Sprite> c_sprite)
+					: sprite(c_sprite)
+				{}
+				Frame(float c_duration)
+					: duration(c_duration)
+				{}
+				Frame(std::shared_ptr<Sprite> c_sprite, float c_duration)
+					: sprite(c_sprite), duration(c_duration)
+				{}
+			};
+
+			std::vector<Frame> frames{};
+			int activeFrame = 0.0f;
+			float dt = 0.0f;
+			Animation() = default;
+			Animation(std::vector<Frame> c_frames)
+				: frames(c_frames)
+			{}
+		};
+
+		struct AnimationManager
+		{
+			std::unordered_map<std::string, Animation> animations{};
+			std::string activeAnimation;
+		};
+
+		struct Grid
+		{
+			float size = 100.0f;
+
+			Grid() = default;
+			Grid(float c_size)
+				: size(c_size) {}
+
+		};
+
+		struct GridObject
+		{
+			ID gridID;
+
+			GridObject() = default;
+			GridObject(const ID id)
+				: gridID(id) {}
 		};
 	}
 

@@ -104,6 +104,7 @@ namespace Zewada {
 		GetTexture("assets/nazo/textures/folderIcon.png");
 		GetTexture("assets/nazo/textures/sceneIcon.png");
 		GetTexture("assets/nazo/textures/fileIcon.png");
+		GetTexture("assets/nazo/textures/prefabsIcon.png");
 		AddSpriteSheet(std::make_shared<SpriteSheet>(GetTexture("assets/nazo/textures/gizmos.png"), 24, 48, 3, 0));
 	}
 }

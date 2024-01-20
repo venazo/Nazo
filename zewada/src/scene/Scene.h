@@ -9,6 +9,8 @@
 #include "../ECS/systems/TransformSystem.h"
 #include "../ECS/systems/Rigidbody2DSystem.h"
 #include "../ECS/systems/NativeScriptSystem.h"
+#include "../ECS/systems/AnimationSystem.h"
+#include "../ECS/systems/AnimationManagerSystem.h"
 
 #include "../application.h"
 
@@ -48,6 +50,8 @@ namespace Zewada {
 		std::shared_ptr<CameraSystem> m_cameraSystem;
 		std::shared_ptr<Rigidbody2DSystem> m_rigidBody2Dsystem;
 		std::shared_ptr<NativeScriptSystem> m_nativeScriptSystem;
+		std::shared_ptr<AnimationSystem> m_animationSystem;
+		std::shared_ptr<AnimationManagerSystem> m_animationManagerSystem;
 
 		Scene() = default;
 		Scene(const std::string& path, ScenePlan scenePlan = ScenePlan());
@@ -78,6 +82,7 @@ namespace Zewada {
 		inline std::shared_ptr<SpriteRendererSystem> GetSpriteSystem(){return m_spriteRendererSystem;}
 		inline std::shared_ptr<CameraSystem> GetCameraSystem(){return m_cameraSystem;}
 		inline std::shared_ptr<Rigidbody2DSystem> GetRigidbody2DSystem(){return m_rigidBody2Dsystem;}
+		
 		inline const std::string& GetPath() const {return m_path;}
 		inline std::shared_ptr<Physics2D> GetPhysics2D() const {return m_physics2D;} 
 		inline Application* GetApplication() const {return m_application;} 

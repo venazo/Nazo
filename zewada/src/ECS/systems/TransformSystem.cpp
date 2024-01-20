@@ -60,8 +60,8 @@ namespace Zewada
                 width *= abs(coords[0].x - coords[2].x);
                 height *= abs(coords[1].y - coords[3].y);
 
-                transform.worldScale.x *= width;
-                transform.worldScale.y *= height;
+                transform.worldScale.x *= width / 100.0f;
+                transform.worldScale.y *= height / 100.0f;
             }
         }
     }

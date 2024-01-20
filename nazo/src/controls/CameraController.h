@@ -20,7 +20,7 @@ namespace Nazo {
 		float m_dragDebounce = 0.032f;
 		glm::vec2 m_clickedPos;
 		float m_dragSens = 1.0f;
-		float m_scrollSens = 0.1;
+		float m_scrollSens = 0.1f;
 
 		Camera m_camera;
 		Transform m_transform;

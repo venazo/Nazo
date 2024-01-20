@@ -37,6 +37,7 @@ namespace Zewada {
 		void ApplyImpulse(const glm::vec2& impulse);
 		void ApplyTorque(float torque);
 
+		void SetAnimation(const std::string& animation);
 
 		template<typename T>	
 		void AddComponent(T component)
@@ -68,13 +69,13 @@ namespace Zewada {
 			m_coordinator->RemoveComponent<T>(m_entity);
 		}
 
-		void SetPosition(float x, float y);
+		bool HasCollider();
 
 		GameObject Copy() const;
 
 		inline std::shared_ptr<Scene> GetScene() const {return m_scene;}
 
-		inline const Entity& GetID() const { return m_entity; }
+		inline const Entity& GetEntity() const { return m_entity; }
 
 		operator bool() const { return m_entity != -1; }
 

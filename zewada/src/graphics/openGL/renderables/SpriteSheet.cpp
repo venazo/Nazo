@@ -41,7 +41,7 @@ namespace Zewada {
 		}
 	}
 
-	const std::shared_ptr<Sprite> SpriteSheet::GetSprite(unsigned int index)
+	std::shared_ptr<Sprite> SpriteSheet::GetSprite(unsigned int index)
 	{
 		if (index < m_sprites.size())
 		{

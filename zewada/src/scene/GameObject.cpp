@@ -52,8 +52,8 @@ namespace Zewada {
                 auto coords = sprite->GetUV();
                 width *= abs(coords[0].x - coords[2].y);
                 height *= abs(coords[1].y - coords[3].y);
-				scale.x *= 1/width;
-				scale.y *= 1/height;
+				scale.x *= 1/(width/100.0f);
+				scale.y *= 1/(height/100.0f);
             }
 			transform.scale += scale;
         }
@@ -139,13 +139,12 @@ namespace Zewada {
 
 	void GameObject::ApplyForce(float x, float y)
 	{
-		if(!HasComponent<Rigidbody2D>())
+		if(!HasComponent<Rigidbody2D>() || !HasCollider())
 		{
-			Z_INFO() << "Can't apply force because gameobject doesn't have Rigidbody2D";
 			return;
 		}
 
-		b2Vec2 vec = b2Vec2(x* 100.0f, y * 100.0f) ;
+		b2Vec2 vec = b2Vec2(x, y) ;
 		auto& rb = GetComponent<Rigidbody2D>();
 		auto body = rb.rawBody;
 		body->ApplyForceToCenter(vec, true);
@@ -158,13 +157,12 @@ namespace Zewada {
 
 	void GameObject::ApplyImpulse(float x, float y)
 	{
-		if(!HasComponent<Rigidbody2D>())
+		if(!HasComponent<Rigidbody2D>() || !HasCollider())
 		{
-			Z_INFO() << "Can't apply impulse because gameobject doesn't have Rigidbody2D";
 			return;
 		}
 
-		b2Vec2 vec = b2Vec2(x* 100.0f, y* 100.0f);
+		b2Vec2 vec = b2Vec2(x, y);
 		auto& rb = GetComponent<Rigidbody2D>();
 		auto body = rb.rawBody;
 		body->ApplyLinearImpulseToCenter(vec, true);
@@ -177,14 +175,29 @@ namespace Zewada {
 
 	void GameObject::ApplyTorque(float torque)
 	{
-		if(!HasComponent<Rigidbody2D>())
+		if(!HasComponent<Rigidbody2D>() || !HasCollider())
 		{
-			Z_INFO() << "Can't apply torque because gameobject doesn't have Rigidbody2D";
 			return;
 		}
 
 		auto& rb = GetComponent<Rigidbody2D>();
 		auto body = rb.rawBody;
 		body->ApplyTorque(torque, true);
+	}
+
+	void GameObject::SetAnimation(const std::string& animation)
+	{
+		if(HasComponent<AnimationManager>())
+		{
+			auto& am = GetComponent<AnimationManager>();
+			am.activeAnimation = animation;
+			am.animations[am.activeAnimation].dt = 0.0f;
+			am.animations[am.activeAnimation].activeFrame = 0;
+		}
+	}
+
+	bool GameObject::HasCollider()
+	{
+		return (HasComponent<Box2DCollider>() || HasComponent<Circle2DCollider>() || HasComponent<Edge2DCollider>() || HasComponent<Polygon2DCollider>());
 	}
 }

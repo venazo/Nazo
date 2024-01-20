@@ -1,5 +1,20 @@
 #include "DemoScript.h"
 
+//animationmanager
+//grid
+
+//jumping timing based the better timing the higher jumps
+//dodges
+//bit level design
+//ideas game design in general
+
+//sound
+//improve engine features (quality of life)
+
+//cool weapons and boss fights
+//heavily movement based
+//map
+
 void DemoScript::OnStart()
 {
     
@@ -8,26 +23,22 @@ void DemoScript::OnStart()
 void DemoScript::OnUpdate(float dt)
 {
     Application* application = GetApplication();
+    const auto& transform = GetComponent<Transform>();
     float x = 0.0f;
     float y = 0.0f;
-    if(application->GetInput()->IsKeyPressed(GLFW_KEY_W))
+    if(application->GetInput()->IsKeyPressed(GLFW_KEY_W) && 
+        application->GetPhysics2D()->RaycastLine(glm::vec2(transform.worldPos), glm::vec2(transform.worldPos) + glm::vec2(0.0f, -0.01f - (transform.worldScale.y / 2.0f))))
     {
-        y += 100.0f;
-    }
-    if(application->GetInput()->IsKeyPressed(GLFW_KEY_S))
-    {
-        y -= 100.0f;
+        GetGameObject().ApplyImpulse(glm::vec2(0.0f, 10.0f));
     }
     if(application->GetInput()->IsKeyPressed(GLFW_KEY_D))
     {
-        x += 100.0f;
+        GetGameObject().ApplyForce(glm::vec2(10.0f, 0.0f));
     }
     if(application->GetInput()->IsKeyPressed(GLFW_KEY_A))
     {
-        x -= 100.0f;
+        GetGameObject().ApplyForce(glm::vec2(-10.0f, 0.0f));
     }
-
-    GetGameObject().ApplyImpulse(glm::vec2(x, y));
 }
 
 void DemoScript::OnDestroy()

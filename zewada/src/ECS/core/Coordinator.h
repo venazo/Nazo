@@ -77,8 +77,7 @@ namespace Zewada {
 			else
 			{
 				Z_WARN() << "Entity " + std::to_string(entity) + " had no " + typeid(T).name() + " Component!";
-				AddComponent<T>(T(), entity);
-				return m_componentManager->GetComponent<T>(entity);
+				return T();
 			}
 		}
 

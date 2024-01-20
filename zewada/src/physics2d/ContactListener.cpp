@@ -47,7 +47,7 @@ namespace Zewada
         glm::vec2 bNormal = glm::vec2(aNormal.x * -1.0f, aNormal.y * -1.0f);
 
         //check if object was deleted to break contact
-        if(m_sceneManager->GetActiveScene()->Exist(objA->GetID()) && objA->operator bool())
+        if(m_sceneManager->GetActiveScene()->Exist(objA->GetEntity()) && objA->operator bool())
         {
             if(objA->HasComponent<NativeScript>())
             {
@@ -59,7 +59,7 @@ namespace Zewada
             }
         }
 
-        if(m_sceneManager->GetActiveScene()->Exist(objB->GetID()) && objA->operator bool())
+        if(m_sceneManager->GetActiveScene()->Exist(objB->GetEntity()) && objB->operator bool())
         {
             if(objB->HasComponent<NativeScript>())
             {
