@@ -175,6 +175,14 @@ namespace Nazo {
 				}
 			}
 
+			if(!m_activeGameObject->HasComponent<Grid>())
+			{
+				if(ImGui::MenuItem("Add Grid"))
+				{
+					m_activeGameObject->AddComponent<Grid>(Grid());
+				}
+			}
+
 			ImGui::EndPopup();
 		}
 		
@@ -390,6 +398,21 @@ namespace Nazo {
 			else if(temp == 2)
 			{
 				m_activeGameObject->RemoveComponent<AnimationManager>();
+			}
+		}
+		
+		if(m_activeGameObject->HasComponent<Grid>())
+		{
+			int temp = ZImGui::ComponentHeader("Grid");
+			if(temp == 1)
+			{
+				auto& grid = m_activeGameObject->GetComponent<Grid>();
+
+				ZImGui::DragFloat("Size", grid.size);
+			}
+			else if(temp == 2)
+			{
+				m_activeGameObject->RemoveComponent<Grid>();
 			}
 		}
 		

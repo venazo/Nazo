@@ -4,8 +4,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(EXPORT_COMPILE_COMMANDS ON)
-
 #set executable directory
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../)
 
@@ -29,8 +27,8 @@ add_definitions(-D_WIN)
 
 add_executable(nazo ${SRC})
 
-target_include_directories(nazo PRIVATE src ../zewada/src)
+target_include_directories(nazo PRIVATE src ../zewada/src ${Stb_INCLUDE_DIR})
 
-target_link_libraries(nazo PRIVATE zewada imgui::imgui ${YAML_CPP_LIBRARIES} glm::glm Boost::filesystem yaml-cpp glfw glad::glad box2d::box2d)
+target_link_libraries(nazo PRIVATE zewada imgui::imgui ${YAML_CPP_LIBRARIES} Boost::boost Boost::filesystem glm::glm  yaml-cpp glfw glad::glad box2d::box2d)
 
 target_precompile_headers(nazo PUBLIC ../zewada/src/zpch.h)

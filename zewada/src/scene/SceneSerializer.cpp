@@ -446,6 +446,28 @@ namespace Zewada {
 			out << YAML::EndMap;
 		}
 
+		if(go.HasComponent<Grid>())
+		{
+			out << YAML::Key << "Grid";
+			out << YAML::BeginMap;
+
+			Grid& grid = go.GetComponent<Grid>();
+			out << YAML::Key << "Gridsize" << YAML::Value << grid.size;
+
+			out << YAML::EndMap;
+		}
+
+		if(go.HasComponent<GridObject>())
+		{
+			out << YAML::Key << "GridObject";
+			out << YAML::BeginMap;
+
+			GridObject& gridObject = go.GetComponent<GridObject>();
+			out << YAML::Key << "GridPosition" << YAML::Value << gridObject.gridPos;
+
+			out << YAML::EndMap;
+		}
+
 		out << YAML::EndMap;
 	}
 
@@ -676,14 +698,14 @@ namespace Zewada {
 		{
 			for (auto entity : entities)
 			{
-				std::unordered_map<ID, ID> OLDToID;
+				std::unordered_map<int, int> OLDToID;
 				std::string name;
-				ID id;
+				int id;
 				auto tagComponent = entity["Tag"];
 				if (tagComponent)
 				{
 					name = tagComponent["Tag"].as<std::string>();
-					id = tagComponent["ID"].as<ID>();
+					id = tagComponent["ID"].as<int>();
 				}
 
 				GameObject deserializedEntity;
@@ -843,6 +865,25 @@ namespace Zewada {
 					
 					src.animations = animationManager["Animations"].as<std::unordered_map<std::string, Animation>>();
 				}
+
+				auto grid = entity["Grid"];
+				if(grid)
+				{
+					deserializedEntity.AddComponent<Grid>(Grid());
+					auto& src = deserializedEntity.GetComponent<Grid>();
+
+					src.size = grid["Gridsize"].as<float>();
+				}
+
+				auto gridObject = entity["GridObject"];
+				if(gridObject)
+				{
+					deserializedEntity.AddComponent<GridObject>(GridObject());
+					auto& src = deserializedEntity.GetComponent<GridObject>();
+
+					src.gridPos = gridObject["GridPosition"].as<glm::vec2>();
+				}
+
 			}
 		}
 	}

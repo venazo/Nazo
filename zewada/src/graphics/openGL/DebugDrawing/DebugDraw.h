@@ -4,6 +4,7 @@
 #include "Line2D.h"
 #include "../renderer/Renderer2D.h"
 #include "../../../utils/resource/AssetPool.h"
+#include <tgmath.h>
 
 #define MAX_LINES 500
 #define MAX_VERTECIES MAX_LINES * 6 * 2
@@ -33,5 +34,6 @@ namespace Zewada {
 		void AddOpenPolygon(const glm::vec2& center, std::vector<glm::vec2> vertices, const glm::vec3& color, unsigned int t = 0);
 		void AddEdge(const glm::vec2& center, std::vector<glm::vec2> vertices, const glm::vec3& color, unsigned int t = 0);
 		void AddPolygon(const glm::vec2& center, std::vector<glm::vec2> vertices, const glm::vec3& color, unsigned int t = 0);
+		void AddGrid(const glm::vec2& center, float width, float height, const glm::vec2& gridCenter, float gridSize, const glm::vec3& color, unsigned int t = 0);
     };
 }

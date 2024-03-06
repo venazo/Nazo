@@ -2,6 +2,7 @@
 #include "SpriteRendererSystem.h"
 #include "../../scene/Scene.h"
 #include "../../scene/GameObject.h"
+#include "../../ECS/Components.h"
 
 namespace Zewada {
 
@@ -24,7 +25,12 @@ namespace Zewada {
 	{
 		for (Entity entity : m_entities)
 		{
-			m_scene->GetApplication()->GetRenderer2D()->Submit(&m_coordinator->GetComponent<Transform>(entity), &m_coordinator->GetComponent<SpriteRenderer>(entity), m_coordinator->GetComponent<Tag>(entity).id);
+			GameObject go(entity, m_scene);
+			
+			if(go.HasComponent<GridObject>())
+				m_scene->GetApplication()->GetRenderer2D()->Submit(&m_coordinator->GetComponent<Transform>(entity), &m_coordinator->GetComponent<SpriteRenderer>(entity), m_coordinator->GetComponent<Tag>(m_scene->GetEntity(go.GetComponent<Transform>().parent)).id);
+			else
+				m_scene->GetApplication()->GetRenderer2D()->Submit(&m_coordinator->GetComponent<Transform>(entity), &m_coordinator->GetComponent<SpriteRenderer>(entity), m_coordinator->GetComponent<Tag>(entity).id);
 		}
 	}
 }	

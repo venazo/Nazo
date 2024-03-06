@@ -14,7 +14,7 @@ namespace Zewada {
 	
 	SceneManager::~SceneManager()
 	{
-		m_sceneSerializer->SerializeAssets(m_application->GetAssetPool());
+		
 	}
 	
 	void SceneManager::CreateDefaultScene()

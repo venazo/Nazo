@@ -9,6 +9,7 @@
 #include "../panels/SceneHierarchyPanel.h"
 #include "../panels/AssetPanel.h"
 #include "../panels/TerminalPanel.h"
+#include "../panels/GridPanel.h"
 
 #include <Layers/Layer.h>
 #include <Application.h>
@@ -36,6 +37,7 @@ namespace Nazo {
 		SceneHierarchyPanel m_sceneHierarchyPanel;
 		AssetPanel m_assetPanel;
 		TerminalPanel m_terminalPanel;
+		GridPanel m_gridPanel;
 	public:
 		ImGuiLayer(NazoApplication* application);
 		~ImGuiLayer();
@@ -54,5 +56,6 @@ namespace Nazo {
 		inline GameViewPort* GetEditorView() { return &m_editorView; }
 		inline GameViewPort* GetGameView() { return &m_gameView; }
 		inline PropertiesPanel* GetPropertiesPanel() {return &m_propertiesPanel;}
+		inline GridPanel* GetGridPanel(){return &m_gridPanel;}
 	};
 }

@@ -17,6 +17,7 @@
 #include <mutex>
 #include <future>
 #include <queue>
+#include <tgmath.h>
 
 //only windows
 #include <Windows.h>

@@ -60,7 +60,7 @@ namespace Nazo {
                     if(transform.parent != -1)
                     {
                         GameObject parent = GameObject(scene->GetEntity(transform.parent), scene);
-                        std::vector<ID>& children = parent.GetComponent<Transform>().children;
+                        std::vector<int>& children = parent.GetComponent<Transform>().children;
                         children.erase(remove(children.begin(), children.end(), payLoadGo->GetComponent<Tag>().id), children.end());
                         transform.pos += parent.GetComponent<Transform>().worldPos;
                     }
@@ -81,7 +81,7 @@ namespace Nazo {
                     {
                         GameObject parent = GameObject(scene->GetEntity(transform.parent), scene);
                         transform.parent = -1;
-                        std::vector<ID>& children = parent.GetComponent<Transform>().children;
+                        std::vector<int>& children = parent.GetComponent<Transform>().children;
                         children.erase(remove(children.begin(), children.end(), go->GetComponent<Tag>().id), children.end());
                         transform.pos += parent.GetComponent<Transform>().worldPos;
                     }
@@ -105,7 +105,7 @@ namespace Nazo {
                         {
                             GameObject parent = GameObject(scene->GetEntity(transform.parent), scene);
                             transform.parent = -1;
-                            std::vector<ID>& children = parent.GetComponent<Transform>().children;
+                            std::vector<int>& children = parent.GetComponent<Transform>().children;
                             children.erase(remove(children.begin(), children.end(), go->GetComponent<Tag>().id), children.end());
                             transform.pos += parent.GetComponent<Transform>().worldPos;
                         }
@@ -113,14 +113,14 @@ namespace Nazo {
                         {
                             transform.parent = m_rects[index].index;
                             GameObject temp = GameObject(scene->GetEntity(m_rects[index].index), scene);
-                            ID parentid = temp.GetComponent<Transform>().parent;
+                            int parentid = temp.GetComponent<Transform>().parent;
                             transform.parent = parentid;
                             transform.pos -= temp.GetComponent<Transform>().worldPos;
                             
                             if(parentid != -1)
                             {
                                 GameObject newParent = GameObject(scene->GetEntity(parentid), scene);
-                                std::vector<ID>& children = newParent.GetComponent<Transform>().children;
+                                std::vector<int>& children = newParent.GetComponent<Transform>().children;
                                 int j = -1;
                                 for(int i = 0; i < children.size(); i++)
                                 {
@@ -157,6 +157,7 @@ namespace Nazo {
     bool SceneHierarchyPanel::DoTreeNode(const GameObject& go)
     {
         std::shared_ptr<Scene> scene = m_application->GetSceneManager()->GetActiveScene();
+
         ImGui::PushID(go.GetEntity());
         bool treeNodeOpen = ImGui::TreeNodeEx(
                 go.GetComponent<Tag>().name.c_str(), 
@@ -201,12 +202,12 @@ namespace Nazo {
                         if(transform.parent != -1)
                         {
                             GameObject parent = GameObject(scene->GetEntity(transform.parent),scene);
-                            std::vector<ID>& children = parent.GetComponent<Transform>().children;
+                            std::vector<int>& children = parent.GetComponent<Transform>().children;
                             children.erase(remove(children.begin(), children.end(), payLoadGo->GetComponent<Tag>().id), children.end());
                             transform.pos += parent.GetComponent<Transform>().worldPos;
                         }
                         transform.parent = go.GetComponent<Tag>().id;
-                        std::vector<ID>& children = go.GetComponent<Transform>().children;
+                        std::vector<int>& children = go.GetComponent<Transform>().children;
                         children.push_back(-1);
                         for(int i = children.size() - 1; i > 0; i--)
                         {
@@ -243,7 +244,7 @@ namespace Nazo {
                 Entity entity = m_application->GetSceneManager()->GetActiveScene()->CreateEntity("new GameObject");
                 GameObject newGo = GameObject(entity, scene);
                 newGo.GetComponent<Transform>().parent = go.GetComponent<Tag>().id;
-                std::vector<ID>& children = go.GetComponent<Transform>().children;
+                std::vector<int>& children = go.GetComponent<Transform>().children;
                 children.push_back(-1);
                 for(int i = children.size() - 1; i > 0; i--)
                 {
@@ -276,6 +277,10 @@ namespace Nazo {
             for(auto& child : children)
             {
                 GameObject go = GameObject(scene->GetEntity(child), scene);
+                        
+                if(go.HasComponent<GridObject>())
+                     continue;
+
                 bool childTreeNodeOpen = DoTreeNode(go);
                 if(childTreeNodeOpen)
                 {

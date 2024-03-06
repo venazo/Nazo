@@ -1,15 +1,6 @@
 cmake_minimum_required(VERSION 3.28.0)
 
-#set cpp version
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-#enable intellisense in vs code
-set(EXPORT_COMPILE_COMMANDS ON)
-
-#set executable directory
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../)
+project(zewada)
 
 file(GLOB_RECURSE SRC
  "src/*.h"
@@ -34,7 +25,7 @@ add_library(zewada STATIC ${SRC})
 
 target_include_directories(zewada PRIVATE ${Stb_INCLUDE_DIR})
 
-target_link_libraries(zewada PRIVATE ${YAML_CPP_LIBRARIES} Boost::boost glm::glm Boost::filesystem yaml-cpp glfw glad::glad box2d::box2d)
+target_link_libraries(zewada PRIVATE ${YAML_CPP_LIBRARIES} Boost::boost Boost::filesystem glm::glm yaml-cpp glfw glad::glad box2d::box2d)
 
 target_precompile_headers(zewada PUBLIC src/zpch.h)
 

@@ -52,10 +52,32 @@ namespace Zewada {
                 auto coords = sprite->GetUV();
                 width *= abs(coords[0].x - coords[2].y);
                 height *= abs(coords[1].y - coords[3].y);
-				scale.x *= 1/(width/100.0f);
-				scale.y *= 1/(height/100.0f);
+				scale.x *= 1/(width*P2M);
+				scale.y *= 1/(height*P2M);
             }
 			transform.scale += scale;
+        }
+	}
+
+	void GameObject::SetWorldScale(float x, float y)
+	{
+		glm::vec2 scale(x, y);
+        Transform& transform = GetComponent<Transform>();
+        if(HasComponent<SpriteRenderer>())
+        {
+            auto sprite = GetComponent<SpriteRenderer>().sprite;
+            auto tex = sprite->GetTexture();
+            if(tex->GetID() != 0)
+            {
+                float height = tex->GetHeight();
+                float width = tex->GetWidth();
+                auto coords = sprite->GetUV();
+                width *= abs(coords[0].x - coords[2].y);
+                height *= abs(coords[1].y - coords[3].y);
+				scale.x *= 1/(width*P2M);
+				scale.y *= 1/(height*P2M);
+            }
+			transform.scale = scale;
         }
 	}
 
@@ -93,6 +115,41 @@ namespace Zewada {
 		if(HasComponent<Box2DCollider>())
 		{
 			result.AddComponent<Box2DCollider>(Box2DCollider(GetComponent<Box2DCollider>()));
+		}
+		if(HasComponent<Circle2DCollider>())
+		{
+			result.AddComponent<Circle2DCollider>(Circle2DCollider(GetComponent<Circle2DCollider>()));
+		}
+		if(HasComponent<Edge2DCollider>())
+		{
+			result.AddComponent<Edge2DCollider>(Edge2DCollider(GetComponent<Edge2DCollider>()));
+		}
+		if(HasComponent<Polygon2DCollider>())
+		{
+			result.AddComponent<Polygon2DCollider>(Polygon2DCollider(GetComponent<Polygon2DCollider>()));
+		}
+		if(HasComponent<NativeScript>())
+		{
+			result.AddComponent<NativeScript>(NativeScript(GetComponent<NativeScript>()));
+			result.GetComponent<NativeScript>().script = nullptr;
+		}
+		if(HasComponent<Animation>())
+		{
+			result.AddComponent<Animation>(Animation(GetComponent<Animation>()));
+		}
+		if(HasComponent<AnimationManager>())
+		{
+			result.AddComponent<AnimationManager>(AnimationManager(GetComponent<AnimationManager>()));
+		}
+		if(HasComponent<Grid>())
+		{
+			result.AddComponent<Grid>(Grid(GetComponent<Grid>()));
+		}
+		if(HasComponent<GridObject>())
+		{
+			result.AddComponent<GridObject>(GridObject(GetComponent<GridObject>()));
+			GameObject grid(m_scene->GetEntity(GetComponent<Transform>().parent), m_scene);
+			grid.GetComponent<Transform>().children.push_back(result.GetComponent<Tag>().id);
 		}
 		return result;
 	}

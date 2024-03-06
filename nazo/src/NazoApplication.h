@@ -14,6 +14,7 @@ namespace Nazo {
 		ImGuiLayer* m_imGuiLayer;
 	public:
 		NazoApplication(const ApplicationSpecs& settings);
+		~NazoApplication();
 
 		inline EditorLayer* GetEditorLayer() {return m_editorLayer;}
 		inline ImGuiLayer* GetImGuiLayer(){return m_imGuiLayer;}

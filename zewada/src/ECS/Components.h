@@ -8,8 +8,6 @@
 #include <array>
 #include <unordered_map>
 
-using ID = int;
-
 namespace Zewada
 {
 
@@ -20,10 +18,10 @@ namespace Zewada
 		struct Tag
 		{
 			Tag() = default;
-			Tag(std::string &str, ID uuid)
+			Tag(std::string &str, int uuid)
 				: name(str), id(uuid) {}
 			std::string name;
-			ID id;
+			int id;
 		};
 
 		struct Transform
@@ -31,13 +29,13 @@ namespace Zewada
 			//read only at runtime
 			glm::vec3 pos = glm::vec3();
 			glm::vec3 worldPos = glm::vec3();
-			glm::vec2 scale = glm::vec2();
+			glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 			glm::vec2 worldScale = glm::vec2();
 			float rotation = 0.0f;
 			
 			//read and write at runtime
-			ID parent = -1;
-			std::vector<ID> children;
+			int parent = -1;
+			std::vector<int> children;
 			bool destroyed = false;
 
 			Transform() = default;
@@ -169,7 +167,7 @@ namespace Zewada
 
 		struct Grid
 		{
-			float size = 100.0f;
+			float size = 1.0f;
 
 			Grid() = default;
 			Grid(float c_size)
@@ -179,11 +177,11 @@ namespace Zewada
 
 		struct GridObject
 		{
-			ID gridID;
+			glm::vec2 gridPos = glm::vec2();
 
 			GridObject() = default;
-			GridObject(const ID id)
-				: gridID(id) {}
+			GridObject(const glm::vec2& vec)
+				: gridPos(vec) {}
 		};
 	}
 

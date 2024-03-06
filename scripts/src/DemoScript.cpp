@@ -1,19 +1,5 @@
 #include "DemoScript.h"
 
-//animationmanager
-//grid
-
-//jumping timing based the better timing the higher jumps
-//dodges
-//bit level design
-//ideas game design in general
-
-//sound
-//improve engine features (quality of life)
-
-//cool weapons and boss fights
-//heavily movement based
-//map
 
 void DemoScript::OnStart()
 {

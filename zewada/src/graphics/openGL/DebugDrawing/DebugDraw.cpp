@@ -1,6 +1,7 @@
 #include <zpch.h>
 #include "DebugDraw.h"
 
+
 namespace Zewada {
 	DebugDraw::DebugDraw(std::shared_ptr<Shader> shader)
 	{
@@ -125,6 +126,41 @@ namespace Zewada {
 	void DebugDraw::AddCamera(const Transform& transform)
 	{
 		Add2DBox(transform.worldPos, transform.scale, 0.0f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 0);
+	}
+
+	void DebugDraw::AddGrid(const glm::vec2& center, float width, float height, const glm::vec2& gridCenter, float gridSize, const glm::vec3& color, unsigned int t)
+	{
+		if(width >= 50.0f)
+			return;
+
+		if(width >= 20.0f)
+		{
+			gridSize *= (int)(2.0f);
+		}
+
+		width += 10.0f;
+		height += 10.0f;
+
+		int dx = (int)((center.x - gridCenter.x)/gridSize);
+		int dy = (int)((center.y - gridCenter.y)/gridSize);
+		glm::vec2 realGridCenter = gridCenter + glm::vec2(dx * gridSize, dy * gridSize);
+
+		int numW = (int)(width / gridSize) + 3;
+		int numH = (int)(height /gridSize) + 3;
+
+		float startx = realGridCenter.x - (gridSize * ((int)(numW/2)));
+		for(int i = 0; i < numW; i++)
+		{
+			float x = startx + (i*gridSize);
+			AddLine(glm::vec2(x, realGridCenter.y - (height/2)), glm::vec2(x, realGridCenter.y + (height/2)), color, t);
+		}
+
+		float starty = realGridCenter.y - (gridSize * ((int)(numH/2)));
+		for(int i = 0; i < numH; i++)
+		{
+			float y = starty + (i*gridSize);
+			AddLine(glm::vec2(realGridCenter.x - (width/2), y), glm::vec2(realGridCenter.x + (width/2), y), color, t);
+		}
 	}
 
 	void DebugDraw::EndFrame(float dt)

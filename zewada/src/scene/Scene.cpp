@@ -21,6 +21,7 @@ namespace Zewada
 		m_nativeScriptSystem->Init(this->shared_from_this(), m_coordinator);
 		m_animationSystem->Init(this->shared_from_this(), m_coordinator);
 		m_animationManagerSystem->Init(this->shared_from_this(), m_coordinator);
+		m_gridObjectSystem->Init(this->shared_from_this(), m_coordinator);
 
 		m_application->GetRenderer2D()->SetBackgroundColor(m_scenePlan.backgroundColor);
 		m_application->GetPhysics2D()->SetGravity(m_scenePlan.gravity.x, m_scenePlan.gravity.y);
@@ -48,7 +49,7 @@ namespace Zewada
 		m_coordinator->RegisterComponent<NativeScript>();
 		m_coordinator->RegisterComponent<Animation>();
 		m_coordinator->RegisterComponent<AnimationManager>();
-		m_coordiantor->RegisterComponent<Grid>();
+		m_coordinator->RegisterComponent<Grid>();
 		m_coordinator->RegisterComponent<GridObject>();
 
 		m_transformSystem = m_coordinator->RegisterSystem<TransformSystem>();
@@ -92,6 +93,13 @@ namespace Zewada
 		Signature animationManagerSystemSignature;
 		animationManagerSystemSignature.set(m_coordinator->GetComponentType<AnimationManager>());
 		m_coordinator->SetSystemSignature<AnimationManagerSystem>(animationManagerSystemSignature);
+		
+		m_gridObjectSystem = m_coordinator->RegisterSystem<GridObjectSystem>();
+
+		Signature gridObjectSystemSignature;
+		gridObjectSystemSignature.set(m_coordinator->GetComponentType<GridObject>());
+		m_coordinator->SetSystemSignature<GridObjectSystem>(gridObjectSystemSignature);
+
 
 		for (int i = 0; i < MAX_ENTITIES; i++)
 		{
@@ -136,6 +144,7 @@ namespace Zewada
 		m_animationSystem->OnUpdate(dt);
 
 		//last systems
+		m_gridObjectSystem->OnUpdate(dt);
 		m_transformSystem->OnUpdate(dt);
 		m_spriteRendererSystem->OnUpdate(dt);
 	}
@@ -143,6 +152,8 @@ namespace Zewada
 	void Scene::OnUpdate(float dt)
 	{
 		m_cameraSystem->OnUpdate(dt);
+
+		m_gridObjectSystem->OnUpdate(dt);
 		m_transformSystem->OnUpdate(dt);
 
 		m_spriteRendererSystem->OnUpdate(dt);
@@ -169,7 +180,7 @@ namespace Zewada
 		return entity;
 	}
 
-	Entity Scene::CreateEntity(std::string name, ID id)
+	Entity Scene::CreateEntity(std::string name, int id)
 	{
 		Entity entity = m_coordinator->CreateEntity();
 		m_coordinator->AddComponent<Tag>(Tag(name, id), entity);
@@ -207,7 +218,7 @@ namespace Zewada
 		if (transform.parent != -1)
 		{
 			GameObject parent = GameObject(GetEntity(transform.parent), this->shared_from_this());
-			std::vector<ID> &children = parent.GetComponent<Transform>().children;
+			std::vector<int> &children = parent.GetComponent<Transform>().children;
 			children.erase(remove(children.begin(), children.end(), go.GetComponent<Tag>().id), children.end());
 		}
 
@@ -228,10 +239,13 @@ namespace Zewada
 			GetCameraSystem()->DestroyEntity(go.GetEntity());
 
 
-		std::vector<ID> &goChildren = transform.children;
-		for (auto &child : goChildren)
-		{
-			DestroyEntity(GetEntity(child));
+		std::vector<int> &goChildren = transform.children;
+		for(auto it = goChildren.begin(); it != goChildren.end();)
+        {
+            GameObject go(GetEntity(*it), this->shared_from_this());
+            auto& trans = go.GetComponent<Transform>();
+            DestroyEntity(go.GetEntity());
+            it = goChildren.begin();
 		}
 		m_ID2Entity.erase(go.GetComponent<Tag>().id);
 		m_coordinator->DestroyEntity(entity);
@@ -242,7 +256,7 @@ namespace Zewada
 		m_path = path;
 	}
 
-	Entity Scene::GetEntity(ID id)
+	Entity Scene::GetEntity(int id)
 	{
 		
 		bool result = false;

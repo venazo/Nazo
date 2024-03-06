@@ -11,6 +11,7 @@
 #include "../ECS/systems/NativeScriptSystem.h"
 #include "../ECS/systems/AnimationSystem.h"
 #include "../ECS/systems/AnimationManagerSystem.h"
+#include "../ECS/systems/GridObjectSystem.h"
 
 #include "../application.h"
 
@@ -35,8 +36,8 @@ namespace Zewada {
 	{
 	private:
 		std::string m_path = "Undefined";
-		std::vector<ID> m_ids;
-		std::unordered_map<ID, Entity> m_ID2Entity;
+		std::vector<int> m_ids;
+		std::unordered_map<int, Entity> m_ID2Entity;
 		
 		ScenePlan m_scenePlan;
 
@@ -52,6 +53,7 @@ namespace Zewada {
 		std::shared_ptr<NativeScriptSystem> m_nativeScriptSystem;
 		std::shared_ptr<AnimationSystem> m_animationSystem;
 		std::shared_ptr<AnimationManagerSystem> m_animationManagerSystem;
+		std::shared_ptr<GridObjectSystem> m_gridObjectSystem;
 
 		Scene() = default;
 		Scene(const std::string& path, ScenePlan scenePlan = ScenePlan());
@@ -66,12 +68,12 @@ namespace Zewada {
 
 		void OnResize(WindowResizeEvent& event);
 		Entity CreateEntity(std::string name);
-		Entity CreateEntity(std::string name, ID id);
+		Entity CreateEntity(std::string name, int id);
 		void Destroy();
 		bool Exist(Entity entity) const;
 		void DestroyEntity(Entity entity);
 
-		Entity GetEntity(ID id);
+		Entity GetEntity(int id);
 
 		void SetPath(const std::string& path);
 

@@ -74,6 +74,28 @@ namespace Nazo {
 			m_gizmoSystem->SetActiveGizmo(1);
 			return true;
 		}
+
+		if(event.GetKeyCode() == GLFW_KEY_G)
+		{
+			if(m_activeGameObject != nullptr)
+			{
+				if(m_activeGameObject->HasComponent<Grid>())
+				{
+					m_gridActive = !m_gridActive;
+					if(m_gridActive)
+					{
+						m_application->GetImGuiLayer()->GetGridPanel()->SetActiveGameObject(m_activeGameObject);
+						m_gizmoSystem->SetActiveGameObject(std::shared_ptr<GameObject>());	
+					}
+					else
+					{
+						m_gizmoSystem->SetActiveGameObject(m_activeGameObject);
+						m_application->GetImGuiLayer()->GetGridPanel()->SetActiveGameObject(nullptr);
+					}
+				}
+			}
+			
+		}
 		
 		if(event.GetKeyCode() == GLFW_KEY_F5)
 		{
@@ -97,6 +119,7 @@ namespace Nazo {
 
 		if(event.GetKeyCode() == GLFW_KEY_S && m_ctr)
 		{
+			m_application->GetSceneSerializer()->SerializeAssets(m_application->GetAssetPool());
 			if(!m_scenePlaying)
 			{
 				SaveSceneEvent event;
@@ -123,7 +146,6 @@ namespace Nazo {
 			}
 		}
 
-		//common used like delete ctr + c, ctr + v, ctr + d, ctr + x
 		if(event.GetKeyCode() == GLFW_KEY_D && m_ctr)
 		{
 			if(m_activeGameObject != nullptr)
@@ -201,7 +223,6 @@ namespace Nazo {
 			}
 		}
 
-
 		//Update Game
 		if(!m_scenePlaying)
 		{
@@ -254,7 +275,8 @@ namespace Nazo {
 
 	bool EditorLayer::CheckActiveGameObject()
 	{
-		if (m_application->GetInput()->IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !m_application->GetInput()->IsDraging() && m_application->GetImGuiLayer()->GetEditorView()->IsHovering() && m_application->GetSceneManager()->HasActiveScene())
+		if (m_application->GetInput()->IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && !m_application->GetInput()->IsDraging() && m_application->GetImGuiLayer()->GetEditorView()->IsHovering() && m_application->GetSceneManager()->HasActiveScene()
+			&& !m_gridActive)
 		{
 			//just bind because we want no clear and no translation
 			glm::vec2 pos = m_application->GetInput()->GetMousePosition();
@@ -285,7 +307,10 @@ namespace Nazo {
 			m_activeID = -1;
 		}	
 
+		m_gridActive = false;
 		m_gizmoSystem->SetActiveGameObject(m_activeGameObject);
+		m_application->GetImGuiLayer()->GetGridPanel()->SetActiveGameObject(nullptr);
+
 		return true;
 	}
 
@@ -299,7 +324,6 @@ namespace Nazo {
 			}
 		}
 		
-
 		if(m_activeGameObject == nullptr)
 			return;
 
@@ -336,6 +360,15 @@ namespace Nazo {
 			const Polygon2DCollider& polygon2DCollider = m_activeGameObject->GetComponent<Polygon2DCollider>();
 			const Transform& transform = m_activeGameObject->GetComponent<Transform>();
 			m_application->GetDebugDraw()->AddPolygon(glm::vec2(transform.worldPos) + polygon2DCollider.offset, polygon2DCollider.vertices, glm::vec4(0.2, 0.8f, 0.15f, 1.0f));
+		}
+
+		if(m_activeGameObject->HasComponent<Grid>() && m_gridActive)
+		{ 			
+			const Transform& cameraTransform = m_cameraController->GetTransform();
+			const Camera& camera = m_cameraController->GetCamera();
+			float gridSize = m_activeGameObject->GetComponent<Grid>().size;
+			m_application->GetDebugDraw()->AddGrid(cameraTransform.worldPos, cameraTransform.scale.x * camera.zoom, 
+				cameraTransform.scale.y * camera.zoom, glm::vec2(m_activeGameObject->GetComponent<Transform>().worldPos), gridSize, glm::vec3(1.0f, 1.0f, 1.0f));
 		}
 	}
 

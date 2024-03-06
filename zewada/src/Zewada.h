@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene/Scene.h"
+#include "ECS/Components.h"
 #include "Graphics/Window.h"
 #include "Graphics/OpenGL/Renderables/Framebuffer.h"
 #include "Utils/Resource/AssetPool.h"

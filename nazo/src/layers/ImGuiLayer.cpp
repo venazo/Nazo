@@ -7,7 +7,11 @@ namespace Nazo {
 #define BIND_EVENT_FN(x) std::bind(&Nazo::ImGuiLayer::x, this, std::placeholders::_1)
 
     ImGuiLayer::ImGuiLayer(NazoApplication* application)
-        :Layer("ImGuiLayer"), m_assetPanel(AssetPanel(this, application->GetAssetPool(), application->GetSceneManager())), m_propertiesPanel(PropertiesPanel(application)), m_sceneHierarchyPanel(SceneHierarchyPanel(application)), m_terminalPanel(TerminalPanel(application->GetLogger()))
+        :Layer("ImGuiLayer"), m_assetPanel(AssetPanel(this, application->GetAssetPool(), 
+        application->GetSceneManager())), m_propertiesPanel(PropertiesPanel(application)), 
+        m_sceneHierarchyPanel(SceneHierarchyPanel(application)), 
+        m_terminalPanel(TerminalPanel(application->GetLogger())),
+        m_gridPanel(GridPanel(application))
     {
         m_application = application;
         m_width = m_application->GetWindow()->GetWidth();
@@ -125,6 +129,9 @@ namespace Nazo {
             ImGui::EndMainMenuBar();
         }
 
+
+		m_gridPanel.OnUpdate(dt);
+        
         ImGui::ShowDemoWindow();
         m_editorView.ImGui();
         m_gameView.ImGui();
@@ -133,6 +140,7 @@ namespace Nazo {
         m_sceneHierarchyPanel.ImGui();
         m_assetPanel.ImGui();
         m_terminalPanel.ImGui();
+        m_gridPanel.ImGui();
         
         End();
     }

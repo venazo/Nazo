@@ -15,4 +15,5 @@ namespace Zewada {
 	float rotation);
 	void Rotate(glm::vec2& vec, float angle, 
 		const glm::vec2& center);
+
 }

@@ -29,12 +29,14 @@ namespace Nazo {
 		std::unique_ptr<GizmoSystem> m_gizmoSystem;
 
 		std::shared_ptr<GameObject> m_activeGameObject;
-		ID m_activeID = -1;
+		int m_activeID = -1;
 
 		unsigned int m_frames = 0;
 		float m_passed = 0.0f;
 
 		bool m_ctr, m_shift;	
+
+		bool m_gridActive = false;
 
 		bool CheckActiveGameObject();
 		void EditorDrawing();

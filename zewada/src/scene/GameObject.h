@@ -5,6 +5,9 @@
 #include "../ECS/core/Coordinator.h"
 #include "Scene.h"
 
+#define P2M 1/100
+#define M2P 100
+
 namespace Zewada {
 
 	class GameObject
@@ -20,6 +23,7 @@ namespace Zewada {
 
 		void Destroy();
 
+		void SetWorldScale(float x, float y);
 		void AddWorldScale(float x, float y);
 
 		void SetWorldPos(float x, float y, float z = 0.0f);
