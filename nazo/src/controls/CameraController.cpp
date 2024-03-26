@@ -9,6 +9,7 @@ namespace Nazo {
 		m_camera = Camera();
 		m_transform = Transform();
 		m_application = application;
+		m_camera.zoom = 0.05f;
 	}
 
 	void CameraController::OnEvent(Event& e)
@@ -36,7 +37,7 @@ namespace Nazo {
 	{
 		if(event.GetKeyCode() == GLFW_KEY_Q)
 		{
-			m_camera.zoom = 1.0f;
+			m_camera.zoom = 0.05f;
 			m_transform.worldPos = glm::vec3();
 			return true;
 		}
@@ -95,6 +96,9 @@ namespace Nazo {
 	{
 		float addValue = pow(abs(scrollY * pow(m_camera.zoom * m_scrollSens, m_camera.zoom)), 1 / m_camera.zoom);
 		addValue *= -sgn(scrollY);
-		m_camera.zoom += addValue;
+		if((m_camera.zoom + addValue) > 0.0001 && (m_camera.zoom + addValue) < 10000.0f)
+			m_camera.zoom += addValue;
+
+		Z_INFO() << m_camera.zoom;
 	}
 }
