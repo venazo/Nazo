@@ -44,7 +44,8 @@ namespace Zewada {
 		
 		void SaveActiveScene();
 
-		void SetActiveScene(const std::string path);
+		void SetActiveScene(const std::string path);	
+
 		inline std::shared_ptr<Scene> GetActiveScene() const { return m_scenes.front(); }
 
 		inline bool HasActiveScene() {return (m_scenes.size() > 0);}

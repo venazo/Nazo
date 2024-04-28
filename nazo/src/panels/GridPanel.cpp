@@ -36,6 +36,8 @@ namespace Nazo
             return;
         }
 
+        
+
         for(auto& sprite : m_sprites)
         {
             if(ZImGui::ImageButtonWithName(std::filesystem::path(sprite->GetTexture()->GetPath()).filename().string(), (ImTextureID)sprite->GetTexture()->GetID()))

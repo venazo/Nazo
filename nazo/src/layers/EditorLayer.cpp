@@ -374,8 +374,11 @@ namespace Nazo {
 
 	bool EditorLayer::OnGameStart(GameStartEvent& event)
 	{
+		SetGameObject(-1);
 		SaveSceneEvent SceneEvent;
 		m_callback(SceneEvent);
+		if(m_application->GetSceneManager()->GetActiveScene()->GetPath() != "assets/scenes/Default_Scene.zs")
+			m_application->GetSceneManager()->SetActiveScene("assets/scenes/Default_Scene.zs");
 		m_scenePlaying = true;
 		m_application->GetSceneManager()->OnStart();
 		return true;
@@ -383,8 +386,7 @@ namespace Nazo {
 
 	bool EditorLayer::OnGameEnd(GameEndEvent& event)
 	{
-		m_activeGameObject = nullptr;
-		m_activeID = -1;
+		SetGameObject(-1);
 		m_scenePlaying = false;
 		m_application->GetSceneManager()->OnStop();
 		LoadSceneEvent SceneEvent(m_application->GetSceneManager()->GetActiveScene()->GetPath());
@@ -406,6 +408,8 @@ namespace Nazo {
 	bool EditorLayer::OnChangedScene(ChangedSceneEvent& event)
 	{
 		m_loading = false;
+
+		SetGameObject(-1);
 
 		return true;
 	}

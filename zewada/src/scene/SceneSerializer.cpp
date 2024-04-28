@@ -540,6 +540,7 @@ namespace Zewada {
 
 	void SceneSerializer::Serialize(std::shared_ptr<Scene> scene)
 	{
+		std::lock_guard<std::mutex> lock(mutex);
 		std::filesystem::path path = FileUtils::RelativePath(scene->GetPath());
 		if(path.has_extension())
 		{
@@ -553,7 +554,6 @@ namespace Zewada {
 			return;
 		}
 
-		std::lock_guard<std::mutex> lock(mutex);
 		const std::string& filepath = scene->GetPath();
 		YAML::Emitter out;
 		out << YAML::BeginMap;

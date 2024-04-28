@@ -98,7 +98,5 @@ namespace Nazo {
 		addValue *= -sgn(scrollY);
 		if((m_camera.zoom + addValue) > 0.0001 && (m_camera.zoom + addValue) < 10000.0f)
 			m_camera.zoom += addValue;
-
-		Z_INFO() << m_camera.zoom;
 	}
 }

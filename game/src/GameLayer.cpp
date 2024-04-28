@@ -19,16 +19,19 @@ namespace Game
     {
 		m_application->GetRenderer2D()->Clear();
 		m_application->GetRenderer2D()->BindShader(m_defaultShader);
-		
-        GameObject maincamera = GameObject(m_application->GetSceneManager()->GetActiveScene()->GetCameraSystem()->GetMaincameraObject(), m_application->GetSceneManager()->GetActiveScene());
-		if(maincamera.operator bool())
-		{
-			m_application->GetInput()->CalcWorldMousePosition(maincamera.GetComponent<Transform>(), 
-				maincamera.GetComponent<Camera>());
-		}
-		else
-		{
-			m_application->GetInput()->CalcWorldMousePosition(Transform(), Camera());
+
+		if(m_application->GetSceneManager()->HasActiveScene())
+		{	
+        	GameObject maincamera = GameObject(m_application->GetSceneManager()->GetActiveScene()->GetCameraSystem()->GetMaincameraObject(), m_application->GetSceneManager()->GetActiveScene());
+			if(maincamera.operator bool())
+			{
+				m_application->GetInput()->CalcWorldMousePosition(maincamera.GetComponent<Transform>(), 
+					maincamera.GetComponent<Camera>());
+			}
+			else
+			{
+				m_application->GetInput()->CalcWorldMousePosition(Transform(), Camera());
+			}
 		}
 
 		m_application->GetSceneManager()->OnRuntimeUpdate(dt);

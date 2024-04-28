@@ -39,7 +39,7 @@ namespace Zewada {
 
 	void Sprite::LoadTexture(std::shared_ptr<AssetPool> assetPool)
 	{
-		SetTexture(assetPool->GetTextureAbsolutePath(m_textureToLoad.c_str()));
+		SetTexture(assetPool->GetTexture(m_textureToLoad.c_str()));
 	}
 
 	void Sprite::SetTextureToLoad(const std::string& textureToLoad)
