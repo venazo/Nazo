@@ -16,7 +16,10 @@ namespace Nazo
             std::shared_ptr<GameObject> m_activeGameObject;
 
             std::shared_ptr<GameObject> m_go;
-            std::vector<std::shared_ptr<Sprite>> m_sprites;
+            std::map<std::string, std::vector<std::shared_ptr<Sprite>>>* m_groups;
+            std::vector<std::shared_ptr<Sprite>>* m_sprites;
+            std::string m_activeSprites;
+            std::string m_activeWriting;
             NazoApplication* m_application;
         public:
             GridPanel(NazoApplication* application);
@@ -26,5 +29,6 @@ namespace Nazo
             void ImGui();
 
             bool IsDrawing() {return m_go != nullptr;}
+
     };
 }

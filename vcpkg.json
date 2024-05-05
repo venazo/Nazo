@@ -19,6 +19,7 @@
         "glad",
         "yaml-cpp",
         "stb",
-        "box2d"
+        "box2d",
+        "openal-soft"
     ]
 }

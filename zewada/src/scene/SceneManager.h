@@ -5,6 +5,7 @@
 #include <mutex>
 #include <future>
 #include <queue>
+#include <map>
 
 namespace Zewada {
 
@@ -25,7 +26,6 @@ namespace Zewada {
 		std::future<void> m_sceneSaving;
 
 		Application* m_application;
-
 		std::shared_ptr<SceneSerializer> m_sceneSerializer;
 
 	public:

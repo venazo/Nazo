@@ -7,7 +7,36 @@ namespace Nazo
     GridPanel::GridPanel(NazoApplication* application)
     {
         m_application = application;
-    }
+
+        m_groups = &application->GetAssetPool()->GetGridGroups();
+
+        m_groups = new std::map<std::string, std::vector<std::shared_ptr<Sprite>>>();
+
+        if(m_groups->size() == 0)
+        {
+            m_groups->insert({"Default", std::vector<std::shared_ptr<Sprite>>()});
+            m_sprites = &(*m_groups)["Default"];
+            m_activeSprites = "Default";
+            m_activeWriting = m_activeSprites; 
+        }
+        else
+        {
+            std::map<std::string, std::vector<std::shared_ptr<Sprite>>>::iterator it;
+            for(it = m_groups->begin(); it != m_groups->end(); it++)
+            {
+                for(auto& sprite : it->second)
+                {
+                    if(sprite->HasTextureToLoad())
+                    {
+                        sprite->LoadTexture(m_application->GetAssetPool());
+                    }
+                }
+            }
+            m_activeSprites = m_groups->begin()->first;
+            m_sprites = &(*m_groups)[m_activeSprites];
+            m_activeWriting = m_activeSprites; 
+        }
+   }
 
     void GridPanel::SetActiveGameObject(std::shared_ptr<GameObject> go)
     {
@@ -36,9 +65,55 @@ namespace Nazo
             return;
         }
 
+        std::vector<std::string> keys;
+        keys.reserve(m_groups->size());
+        
+        std::map<std::string, std::vector<std::shared_ptr<Sprite>>>::iterator it;
+        for (it = m_groups->begin(); it != m_groups->end(); it++)
+        {
+            keys.push_back(it->first);
+        }
+
+        std::string temp = m_activeSprites;
+
+        ZImGui::Combo("Grid Groups", keys, m_activeSprites);
+        
+        if(temp != m_activeSprites)
+            m_activeWriting = m_activeSprites;
+
+        ZImGui::TextInput("Name", m_activeWriting);
+        if(!ZImGui::IsWriting() && m_activeWriting != m_activeSprites)
+        {
+            m_activeSprites = m_activeWriting;  
+            while(m_groups->find(m_activeSprites) != m_groups->end())
+            {
+                m_activeSprites = "(new) " + m_activeSprites;
+            }
+            auto tempSprites = (*m_groups)[temp];
+            m_groups->erase(temp);
+            m_groups->insert({m_activeSprites, tempSprites});
+            m_activeWriting = m_activeSprites; 
+        }
         
 
-        for(auto& sprite : m_sprites)
+        if(ZImGui::DrawButton("Add", glm::vec4(0.1f, 0.7f, 0.2f, 1.0f)))
+        {
+            m_groups->insert({"new group " + std::to_string(m_groups->size()), std::vector<std::shared_ptr<Sprite>>()});
+        }
+
+        if(m_groups->size() > 1)
+        {
+            if(ZImGui::DrawButton("Delete", glm::vec4(0.7f, 0.1f, 0.2f, 1.0f)))
+            {
+                m_groups->erase(m_activeSprites);
+                m_activeSprites = m_groups->begin()->first;
+                m_activeWriting = m_activeSprites;
+            }
+        }
+        
+        m_sprites = &(*m_groups)[m_activeSprites];
+
+        for(auto& sprite : *m_sprites)
         {
             if(ZImGui::ImageButtonWithName(std::filesystem::path(sprite->GetTexture()->GetPath()).filename().string(), (ImTextureID)sprite->GetTexture()->GetID()))
             {
@@ -55,12 +130,9 @@ namespace Nazo
                 m_go->GetComponent<Transform>().parent = m_activeGameObject->GetComponent<Tag>().id;
             }
 
-            if(ImGui::BeginPopupContextWindow(sprite->GetTexture()->GetPath().c_str()))
+            if(ZImGui::DrawButton("Remove " + std::string(sprite->GetTexture()->GetPath().c_str()), glm::vec4(0.7f, 0.1f, 0.2f, 1.0f)))
             {
-                if(ImGui::MenuItem("Delete"))
-                {
-                    m_sprites.erase(std::remove(m_sprites.begin(), m_sprites.end(), sprite),  m_sprites.end());
-                }
+                m_sprites->erase(std::remove(m_sprites->begin(), m_sprites->end(), sprite),  m_sprites->end());
             }
         }
 
@@ -89,12 +161,12 @@ namespace Nazo
 			}
             if(sprite != nullptr)
             {
-                m_sprites.push_back(sprite);
+                m_sprites->push_back(sprite);
             }
 		}
 
 
-
+        
         ImGui::End();
     }
 

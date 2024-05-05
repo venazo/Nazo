@@ -34,3 +34,5 @@
 *.pdb
 .vscode
 build
+
+.VSCodeCounter

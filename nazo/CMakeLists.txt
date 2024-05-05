@@ -4,10 +4,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+project(nazo)
+
 #set executable directory
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../)
-
-project(nazo)
 
 file(GLOB_RECURSE SRC
  "src/*.h"
@@ -22,6 +22,7 @@ find_package(yaml-cpp CONFIG REQUIRED)
 find_package(box2d CONFIG REQUIRED)
 find_package(Stb REQUIRED)
 find_package(imgui CONFIG REQUIRED)
+find_package(OpenAL CONFIG REQUIRED)
 
 add_definitions(-D_WIN)
 
@@ -29,6 +30,6 @@ add_executable(nazo ${SRC})
 
 target_include_directories(nazo PRIVATE src ../zewada/src ${Stb_INCLUDE_DIR})
 
-target_link_libraries(nazo PRIVATE zewada imgui::imgui ${YAML_CPP_LIBRARIES} Boost::boost Boost::filesystem glm::glm  yaml-cpp glfw glad::glad box2d::box2d)
+target_link_libraries(nazo PRIVATE zewada imgui::imgui ${YAML_CPP_LIBRARIES} Boost::boost Boost::filesystem glm::glm  yaml-cpp glfw glad::glad box2d::box2d OpenAL::OpenAL)
 
 target_precompile_headers(nazo PUBLIC ../zewada/src/zpch.h)

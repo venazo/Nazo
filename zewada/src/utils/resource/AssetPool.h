@@ -1,6 +1,9 @@
 #pragma once
 
 #include <map>
+#include <unordered_map>
+#include <vector>
+#include <string>
 #include <fstream>
 #include <iostream>
 #include <filesystem>
@@ -18,6 +21,7 @@ namespace Zewada {
 		std::map<std::filesystem::path, std::shared_ptr<Shader>> m_shaders;
 		std::map<std::filesystem::path, std::shared_ptr<Texture>> m_textures;
 		std::map<std::filesystem::path, std::shared_ptr<SpriteSheet>> m_spriteSheets;
+		std::map<std::string, std::vector<std::shared_ptr<Zewada::Sprite>>> m_gridGroups;
 	public:
 		std::shared_ptr<Shader> GetShader(const char* source);
 		std::shared_ptr<Texture> GetTexture(const char* source);
@@ -29,6 +33,11 @@ namespace Zewada {
 		void AddSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet);
 		std::shared_ptr<SpriteSheet> GetSpriteSheet(const char* source);
 		const std::map<std::filesystem::path, std::shared_ptr<SpriteSheet>>& GetAllSpriteSheets() {return m_spriteSheets; }
+
+		inline std::map<std::string, std::vector<std::shared_ptr<Sprite>>>& GetGridGroups() 
+		{
+			return m_gridGroups;
+		}
 
 		AssetPool();
 	};

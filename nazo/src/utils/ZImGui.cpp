@@ -401,6 +401,44 @@ namespace Nazo
 
 		ImGui::PopID();
 	}
+
+	void ZImGui::Combo(const std::string& label, const std::vector<std::string>& values, std::string& activeObject)
+	{
+		ImGui::PushID(label.c_str());
+
+		float lineHeight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2.0f;
+		float width = ImGui::CalcItemWidth();
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, COLUMNWIDTH);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushItemWidth(COLUMNWIDTH);
+
+		std::string result = activeObject;
+
+		if(ImGui::BeginCombo("##Combo", activeObject.c_str()))
+		{
+			for(int i = 0; i < values.size(); i++)
+			{
+				bool is_selected = (activeObject == values[i]);
+				if (ImGui::Selectable(values[i].c_str(), is_selected))
+            		result = values[i];
+        		if (is_selected)
+            		ImGui::SetItemDefaultFocus(); 
+			}
+			ImGui::EndCombo();
+		}
+
+		ImGui::PopItemWidth();
+		ImGui::Columns(1);
+
+		ImGui::PopID();
+
+		activeObject = result;
+	}
+
 	
 	void ZImGui::SetAssetPool(std::shared_ptr<AssetPool> assetPool)
 	{

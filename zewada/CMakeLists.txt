@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.28.0)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 project(zewada)
+
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../)
 
 file(GLOB_RECURSE SRC
  "src/*.h"
@@ -16,6 +22,7 @@ find_package(glad CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
 find_package(box2d CONFIG REQUIRED)
 find_package(Stb REQUIRED)
+find_package(OpenAL CONFIG REQUIRED)
 
 add_definitions(-D_WIN)
 
@@ -25,7 +32,7 @@ add_library(zewada STATIC ${SRC})
 
 target_include_directories(zewada PRIVATE ${Stb_INCLUDE_DIR})
 
-target_link_libraries(zewada PRIVATE ${YAML_CPP_LIBRARIES} Boost::boost Boost::filesystem glm::glm yaml-cpp glfw glad::glad box2d::box2d)
+target_link_libraries(zewada PRIVATE ${YAML_CPP_LIBRARIES} Boost::boost Boost::filesystem glm::glm yaml-cpp glfw glad::glad box2d::box2d OpenAL::OpenAL)
 
 target_precompile_headers(zewada PUBLIC src/zpch.h)
 

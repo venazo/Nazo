@@ -31,6 +31,7 @@ namespace Nazo {
 		static void ScriptInput(const std::string& label, NativeScript& nativeScript);
 		static void Frame(const std::string& label, Animation::Frame& frame);
 		static void Animation(const std::string& label, Zewada::Animation& animation);
+		static void Combo(const std::string& label, const std::vector<std::string>& values, std::string& activeObject);
 
 		template<typename T>
 		static void Vector(std::string label, std::string singleLabel, std::vector<T>& values, std::function<void(const std::string&, T&)> draw)
@@ -124,6 +125,8 @@ namespace Nazo {
 
 		static void SetWriting(bool value);
 		static void SetAssetPool(std::shared_ptr<AssetPool> assetPool);
+
+		static const bool IsWriting() {return Get().m_writing;}
 
 		inline static ZImGui& Get()
 		{

@@ -9,3 +9,5 @@ SpriteSheets:
     Height: 16
     Num: 4
     Spacing: 0
+GridGroups:
+  {}

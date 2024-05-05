@@ -1,6 +1,7 @@
 #include <zpch.h>
 #include "SceneSerializer.h"
 #include <Scene/GameObject.h>
+#include <graphics/openGL/renderables/Sprite.h>
 
 namespace YAML {
 
@@ -105,6 +106,52 @@ namespace YAML {
 			rhs.z = node[2].as<float>();
 			rhs.w = node[3].as<float>();
 			return true;
+		}
+	};
+
+template<>
+	struct convert<std::shared_ptr<Zewada::Sprite>>
+	{
+		static Node encode(const std::shared_ptr<Zewada::Sprite>& rhs)
+		{
+			Node node;
+			const std::shared_ptr<Texture> texture = rhs->GetTexture();	
+			if(texture->operator bool())
+			{
+				std::filesystem::path texPath(rhs->GetTexture()->GetPath());
+				texPath = FileUtils::RelativePath(texPath);
+				node["TexPath"] = texPath.string();
+				const std::array<glm::vec2, 4>& UV = rhs->GetUV();
+				node["UV"] = UV;
+			}
+			node.SetStyle(EmitterStyle::Flow);
+			return node;
+		}
+
+		static bool decode(const Node& node, std::shared_ptr<Zewada::Sprite>& rhs)
+		{
+			if(!node.IsMap())
+				return false;
+
+			if(node.size() == 0)
+			{
+				rhs = std::make_shared<Sprite>();
+
+				return true;
+			}
+
+			if(node.size() == 2)
+			{
+				rhs = std::make_shared<Sprite>();
+				std::string texPath = node["TexPath"].as<std::string>();
+				rhs->SetTextureToLoad(texPath);
+				std::array<glm::vec2, 4> uv = node["UV"].as<std::array<glm::vec2, 4>>();
+				rhs->SetTexCoords(uv);
+
+				return true;
+			}
+
+			return false;
 		}
 	};
 
@@ -218,6 +265,24 @@ namespace YAML {
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << v.z << v.w << YAML::EndSeq;
+		return out;
+	}
+
+	YAML::Emitter& operator<<(YAML::Emitter& out, const std::shared_ptr<Zewada::Sprite> v)
+	{
+		out << YAML::Flow;
+		out << YAML::BeginMap;
+		const std::shared_ptr<Texture> texture = v->GetTexture();
+		if(texture->operator bool())
+		{
+			std::filesystem::path texPath(v->GetTexture()->GetPath());
+			texPath = FileUtils::RelativePath(texPath);
+			out << YAML::Key << "TexPath" << YAML::Value << texPath.string();
+			const std::array<glm::vec2, 4> UV = v->GetUV();
+			out << YAML::Key << "UV" << YAML::Value << UV;
+		}
+		out << YAML::EndMap;
+
 		return out;
 	}
 
@@ -484,6 +549,12 @@ namespace Zewada {
 			SerializeSpriteSheet(out, ss.second);
 		}
 
+		out << YAML::EndSeq;
+
+		auto& gridGroups = assetPool->GetGridGroups();
+
+		out << YAML::Key << "GridGroups" << YAML::Value << gridGroups;
+				
 		out << YAML::EndMap;
 
 		std::ofstream fout(filepath);
@@ -522,6 +593,11 @@ namespace Zewada {
 				std::shared_ptr<SpriteSheet> srcSpriteSheet = std::make_shared<SpriteSheet>(assetPool->GetTextureAbsolutePath(path.c_str()), width, height, num, spacing);
 				assetPool->AddSpriteSheet(srcSpriteSheet);
 			}
+		}
+
+		if(data["GridGroups"])
+		{
+			assetPool->GetGridGroups() = data["GridGroups"].as<std::map<std::string, std::vector<std::shared_ptr<Zewada::Sprite>>>>();
 		}
 	}
 

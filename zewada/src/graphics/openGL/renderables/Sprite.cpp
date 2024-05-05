@@ -8,7 +8,6 @@ namespace Zewada {
 	{
 		m_texture = std::make_shared<Texture>();
 		GenTexCoords();
-
 	}
 	
 	Sprite::Sprite(std::shared_ptr<Texture> texture)
