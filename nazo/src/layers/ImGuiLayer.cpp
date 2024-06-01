@@ -121,11 +121,6 @@ namespace Nazo {
                 GameEndEvent event;
                 m_eventCallback(event);
             }
-
-            if(ImGui::MenuItem("DEBUG STOP", ""))
-            {
-                Z_INFO() << "STOP";
-            }
             ImGui::EndMainMenuBar();
         }
 

@@ -44,6 +44,7 @@ namespace Zewada {
 			return m_gridGroups;
 		}
 
+		void DeleteSounds();
 		AssetPool();
 	};
 
