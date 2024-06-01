@@ -38,7 +38,7 @@ namespace Zewada
 
 	Application::~Application()
 	{
-		
+		m_assetPool->DeleteSounds();
 	}
 
 	void Application::OnEvent(Event& e)
@@ -84,6 +84,8 @@ namespace Zewada
     bool Application::OnWindowClose(WindowCloseEvent &e)
     {
 		m_running = false;
+		GameEndEvent event;
+        OnEvent(event);
 		return true;
 	}
 

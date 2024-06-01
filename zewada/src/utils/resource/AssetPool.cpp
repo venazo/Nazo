@@ -120,6 +120,14 @@ namespace Zewada {
 		Z_WARN() << "The SpriteSheet " + pathstr.string() + " has not been found!";
 	}
 
+	void AssetPool::DeleteSounds()
+	{
+		for(auto& sound : m_sounds)
+		{
+			sound.second->Delete();
+		}
+	}
+
 	AssetPool::AssetPool()
 	{
 		GetShader("assets/shaders/Default_Editor.glsl");
