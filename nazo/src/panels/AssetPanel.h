@@ -21,6 +21,7 @@ namespace Nazo
         Sprite m_sceneSprite;
         Sprite m_fileSprite;
         Sprite m_prefabsSprite;
+        Sprite m_soundSprite;
 
         std::unordered_map<std::string, bool> m_open;
 
@@ -45,5 +46,6 @@ namespace Nazo
         void FileImGui(std::filesystem::path& path);
         void ScriptImGui(std::filesystem::path& path);
         void PrefabsImGui(std::filesystem::path& path);
+        void SoundImGui(std::filesystem::path& path);
     };
 }

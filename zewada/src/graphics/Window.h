@@ -7,6 +7,8 @@
 #include "../Events/ApplicationEvent.h"
 #include "../Events/KeyEvent.h"
 #include "../Events/MouseEvent.h"
+#include <AL/alc.h>
+#include <AL/al.h>
 
 namespace Zewada {
 
@@ -14,6 +16,9 @@ namespace Zewada {
 	private:
 		GLFWwindow* m_window;
 		GLFWmonitor* m_monitor;
+
+		ALCcontext* m_audioContext;
+		ALCdevice* m_audioDevice;
 
 		void Init();
 		void SetupCallbacks();

@@ -44,6 +44,28 @@ namespace Zewada {
 		return texture;
 	}
 
+	void AssetPool::AddSound(std::shared_ptr<Sound> sound)
+	{
+		std::filesystem::path pathstr(sound->GetFilepath());
+		if (Utils::Contains(m_sounds, pathstr))
+		{
+			Z_WARN() << "The sound " + pathstr.string() + " has already been added!";
+			return;
+		}
+		m_sounds.insert({ pathstr, sound });
+	}
+
+	std::shared_ptr<Sound> AssetPool::GetSound(const char* source)
+	{
+		std::filesystem::path pathstr(std::filesystem::current_path().string() + "/" + source);
+		if (Utils::Contains(m_sounds, pathstr))
+		{
+			return m_sounds[pathstr];
+		}
+		Z_ERROR() << "The Sound " + pathstr.string() + " has not been added!";
+		return std::make_shared<Sound>();
+	}
+
 	void AssetPool::AddSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet)
 	{
 		std::filesystem::path pathstr(spriteSheet->GetTexture()->GetPath());

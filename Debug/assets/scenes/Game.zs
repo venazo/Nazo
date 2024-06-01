@@ -1,4 +1,4 @@
-Scene: assets\scenes\Game.zs
+Scene: assets/scenes/Game.zs
 BackgroundColor: [0.170000002, 0.170000002, 0.170000002, 1]
 Gravity: [0, -10]
 Entities:
@@ -321,7 +321,7 @@ Entities:
       Tag: player
       ID: 9984
     Transform:
-      Position: [0, 1.4823668, 0]
+      Position: [0, 1.47963011, 0]
       Rotation: 0
       Scale: [0.100000001, 0.100000001]
       Parent: -1

@@ -9,9 +9,7 @@ namespace Nazo
         m_application = application;
 
         m_groups = &application->GetAssetPool()->GetGridGroups();
-
-        m_groups = new std::map<std::string, std::vector<std::shared_ptr<Sprite>>>();
-
+        
         if(m_groups->size() == 0)
         {
             m_groups->insert({"Default", std::vector<std::shared_ptr<Sprite>>()});

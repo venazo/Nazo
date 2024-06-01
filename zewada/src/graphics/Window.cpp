@@ -53,9 +53,14 @@ namespace Zewada {
 		m_monitor =  glfwGetPrimaryMonitor();
 		glfwGetWindowPos(m_window, &m_data.xpos, &m_data.ypos);
 		m_data.updateViewPort = true;
+
+		const ALCchar* defaultDeviceName = alcGetString(0, ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
+		m_audioDevice = alcOpenDevice(defaultDeviceName);
+
+		int* attributes = {0};
+		m_audioContext = alcCreateContext(m_audioDevice, attributes);
+		alcMakeContextCurrent(m_audioContext);
 	}
-
-
 
 	void Window::SetupCallbacks()
 	{
@@ -216,7 +221,12 @@ namespace Zewada {
 		glfwSwapBuffers(m_window);
 	}
 
-	Window::~Window() {
+	Window::~Window() 
+	{
+		alcDestroyContext(m_audioContext);
+		alcCloseDevice(m_audioDevice);
+
+		glfwDestroyWindow(m_window);
 		glfwTerminate();
 	}
 	

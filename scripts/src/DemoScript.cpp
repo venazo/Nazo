@@ -2,7 +2,7 @@
 
 void DemoScript::OnStart()
 {
-    
+    GetApplication()->GetAssetPool()->AddSound(std::make_shared<Sound>("assets/sounds/jump.ogg", false));
 }
 
 void DemoScript::OnUpdate(float dt)
@@ -19,6 +19,7 @@ void DemoScript::OnUpdate(float dt)
         touchGround &&
         dbounce > 0.05f)
     {
+        application->GetAssetPool()->GetSound("assets/sounds/jump.ogg")->Play();
         GetGameObject().ApplyImpulse(glm::vec2(0.0f, 6.0f));
         dbounce = 0.0f;
     }

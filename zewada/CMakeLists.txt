@@ -8,11 +8,6 @@ project(zewada)
 
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../)
 
-file(GLOB_RECURSE SRC
- "src/*.h"
- "src/*.cpp"
-)
-
 #add packages from vcpkg
 #vcpkg install should run automatically before the cmake compilation
 find_package(Boost 1.82.0 REQUIRED COMPONENTS filesystem)
@@ -25,6 +20,11 @@ find_package(Stb REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
 
 add_definitions(-D_WIN)
+
+file(GLOB_RECURSE SRC
+ "src/*.h"
+ "src/*.cpp"
+)
 
 include_directories(AFTER src)
  
