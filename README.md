@@ -15,13 +15,11 @@ Prerequisites:
 
 ## Downloading packages and building CMAKE
 ```cmd
-
 > vcpkg integrate install
 > cmake -DCMAKE_TOOLCHAIN_FILE=path/to/toolchainfile -DCMAKE_BUILD_TYPE=Debug -B"Build" -G"Visual Studio 17 2022"
 ```
 
-## Building
-
+## Open in Visual Studio 2022
 ```cmd
-> dotnet build build/nazo.sln
+> start nazo.sln
 ```
