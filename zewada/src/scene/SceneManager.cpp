@@ -95,14 +95,14 @@ namespace Zewada {
 		{
 			m_scenes.front()->Save();
 			std::shared_ptr<Scene> scene = std::make_shared<Scene>(*m_scenes.front().get());
-			m_sceneSaving = std::move(std::async(std::launch::async, &SceneSerializer::Serialize, *m_sceneSerializer, scene));	
+			m_sceneSaving = std::move(std::async(std::launch::async, &SceneSerializer::Serialize, m_sceneSerializer, scene));	
 		}
 	}
 
 	void SceneManager::SetActiveScene(const std::string path)
 	{
 		if(m_sceneLoading._Ptr() == nullptr)
-			m_sceneLoading = std::move(std::async(std::launch::async, &SceneSerializer::Deserialize, *m_sceneSerializer, path));
+			m_sceneLoading = std::move(std::async(std::launch::async, &SceneSerializer::Deserialize, m_sceneSerializer, path));
 	}
 
 	void SceneManager::SetEventCallback(const EventCallbackFn& callback)

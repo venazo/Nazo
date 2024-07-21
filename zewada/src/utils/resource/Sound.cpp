@@ -44,6 +44,11 @@ namespace Zewada
         free(rawAudioBuffer);
     }
 
+    Sound::~Sound()
+    {
+        
+    }
+
     void Sound::Delete()
     {
         alDeleteSources(1, &m_sourceId);

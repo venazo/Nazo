@@ -25,6 +25,7 @@ namespace Zewada {
 		void SerializeEntitesForPrefabs(YAML::Emitter& out, const GameObject& go, std::shared_ptr<Scene> scene);
 	public:
 		SceneSerializer();
+		~SceneSerializer();
 		void SerializeAssets(std::shared_ptr<AssetPool> assetPool);
 		void DeserializeAssets(std::shared_ptr<AssetPool> assetPool);
 		void Serialize(std::shared_ptr<Scene> scene);
@@ -32,5 +33,7 @@ namespace Zewada {
 
 		void SerializePrefabs(const GameObject& go, const std::string& filepath);
 		void DeserializePrefabs(const std::string& filepath, std::shared_ptr<Scene> scene);
+
+		bool IsBusy();
 	};
 }

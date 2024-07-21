@@ -18,6 +18,7 @@ namespace Zewada
     public:
         Sound() = default;
         Sound(const std::string& filepath, bool loops);
+        ~Sound();
         void Play();
         void Stop();
         void Delete();
