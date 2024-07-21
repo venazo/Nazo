@@ -126,5 +126,7 @@ namespace Zewada
 			dt = endTime - beginTime;
 			beginTime = endTime;
 		}
+
+		m_sceneSerializer->IsBusy();
 	}
 }

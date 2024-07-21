@@ -225,7 +225,6 @@ namespace Zewada {
 	{
 		alcDestroyContext(m_audioContext);
 		alcCloseDevice(m_audioDevice);
-
 		glfwDestroyWindow(m_window);
 		glfwTerminate();
 	}

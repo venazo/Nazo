@@ -22,14 +22,15 @@ namespace Zewada {
 		std::map<std::filesystem::path, std::shared_ptr<Shader>> m_shaders;
 		std::map<std::filesystem::path, std::shared_ptr<Texture>> m_textures;
 		std::map<std::filesystem::path, std::shared_ptr<SpriteSheet>> m_spriteSheets;
-		std::map<std::filesystem::path, std::shared_ptr<Zewada::Sound>> m_sounds;
-		std::map<std::string, std::vector<std::shared_ptr<Zewada::Sprite>>> m_gridGroups;
+		std::map<std::filesystem::path, std::shared_ptr<Sound>> m_sounds;
+		std::map<std::string, std::vector<std::shared_ptr<Sprite>>> m_gridGroups;
 	public:
 		std::shared_ptr<Shader> GetShader(const char* source);
 		std::shared_ptr<Texture> GetTexture(const char* source);
 		std::shared_ptr<Texture> GetTextureAbsolutePath(const char* source);
 
 		void AddSound(std::shared_ptr<Sound> sound);
+		void RemoveSound(const char* source);
 		std::shared_ptr<Sound> GetSound(const char* source);
 
 		bool ExistSpriteSheet(const char* source);

@@ -35,7 +35,7 @@ void DemoScript::OnUpdate(float dt)
 
 void DemoScript::OnDestroy()
 {
-    
+    GetApplication()->GetAssetPool()->RemoveSound("assets/sounds/jump.ogg");
 }
 
 DemoScript::~DemoScript()
