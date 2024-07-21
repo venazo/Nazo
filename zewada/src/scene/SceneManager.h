@@ -28,6 +28,8 @@ namespace Zewada {
 		Application* m_application;
 		std::shared_ptr<SceneSerializer> m_sceneSerializer;
 
+		std::string m_activeSceneNextFrame;
+
 	public:
 		SceneManager(Application* application);
 		~SceneManager();
@@ -44,6 +46,10 @@ namespace Zewada {
 		
 		void SaveActiveScene();
 
+		//for scripts
+		void SetActiveSceneNextFrame(const std::string& path);
+
+		//dont use in scripts
 		void SetActiveScene(const std::string path);	
 
 		inline std::shared_ptr<Scene> GetActiveScene() const { return m_scenes.front(); }

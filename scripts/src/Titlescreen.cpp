@@ -12,7 +12,7 @@ void Titlescreen::OnUpdate(float dt)
     if(application->GetInput()->IsKeyPressed(GLFW_KEY_SPACE) && db >= 5 * 60.0f)
     {
         db = 0.0f;
-        application->GetSceneManager()->SetActiveScene("assets/scenes/Game.zs");
+        application->GetSceneManager()->SetActiveSceneNextFrame("assets/scenes/Game.zs");
     }
 
     db += dt;

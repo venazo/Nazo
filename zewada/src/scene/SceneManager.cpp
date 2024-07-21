@@ -36,6 +36,13 @@ namespace Zewada {
 
 	void SceneManager::OnRuntimeUpdate(float dt)
 	{	
+		if(m_activeSceneNextFrame != "")
+		{
+			std::string path = m_activeSceneNextFrame;
+			m_activeSceneNextFrame = "";
+			SetActiveScene(path);
+		}
+
 		if(m_sceneLoading._Is_ready())
 		{
 			if(m_scenes.size() > 0)
@@ -61,6 +68,13 @@ namespace Zewada {
 
 	void SceneManager::OnUpdate(float dt)
 	{
+		if(m_activeSceneNextFrame != "")
+		{
+			std::string path = m_activeSceneNextFrame;
+			m_activeSceneNextFrame = "";
+			SetActiveScene(path);
+		}
+		 
 		if(m_sceneLoading._Is_ready())
 		{
 			if(m_scenes.size() > 0)
@@ -99,9 +113,14 @@ namespace Zewada {
 		}
 	}
 
+	void SceneManager::SetActiveSceneNextFrame(const std::string& path)
+	{
+		m_activeSceneNextFrame = path;
+	}
+
 	void SceneManager::SetActiveScene(const std::string path)
 	{
-		if(m_sceneLoading._Ptr() == nullptr)
+		if(m_sceneLoading._Ptr() == nullptr && m_activeSceneNextFrame == "")
 			m_sceneLoading = std::move(std::async(std::launch::async, &SceneSerializer::Deserialize, m_sceneSerializer, path));
 	}
 
