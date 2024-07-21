@@ -55,6 +55,18 @@ namespace Zewada {
 		m_sounds.insert({ pathstr, sound });
 	}
 
+	void AssetPool::RemoveSound(const char* source)
+	{
+		std::filesystem::path pathstr(std::filesystem::current_path().string() + "/" + source);
+		if (Utils::Contains(m_sounds, pathstr))
+		{
+			m_sounds[pathstr]->Delete();
+			m_sounds.erase(pathstr);
+			return;
+		}
+		Z_ERROR() << "The Sound " + pathstr.string() + " has not been added!";
+	}
+
 	std::shared_ptr<Sound> AssetPool::GetSound(const char* source)
 	{
 		std::filesystem::path pathstr(std::filesystem::current_path().string() + "/" + source);

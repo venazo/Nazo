@@ -963,4 +963,15 @@ namespace Zewada {
 			}
 		}
 	}
+
+	bool SceneSerializer::IsBusy()
+	{
+		std::lock_guard<std::mutex> lock(mutex);
+		return false;
+	}
+
+	SceneSerializer::~SceneSerializer()
+	{
+
+	}
 }
