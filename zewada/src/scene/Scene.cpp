@@ -246,6 +246,8 @@ namespace Zewada
             auto& trans = go.GetComponent<Transform>();
             DestroyEntity(go.GetEntity());
             it = goChildren.begin();
+			if(goChildren.size() == 0)
+				break;
 		}
 		m_ID2Entity.erase(go.GetComponent<Tag>().id);
 		m_coordinator->DestroyEntity(entity);

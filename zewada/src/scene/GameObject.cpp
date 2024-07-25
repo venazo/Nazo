@@ -141,7 +141,8 @@ namespace Zewada {
 		{
 			result.AddComponent<AnimationManager>(AnimationManager(GetComponent<AnimationManager>()));
 		}
-		if(HasComponent<Grid>())
+		//obsolete
+		/*if(HasComponent<Grid>())
 		{
 			result.AddComponent<Grid>(Grid(GetComponent<Grid>()));
 		}
@@ -150,7 +151,7 @@ namespace Zewada {
 			result.AddComponent<GridObject>(GridObject(GetComponent<GridObject>()));
 			GameObject grid(m_scene->GetEntity(GetComponent<Transform>().parent), m_scene);
 			grid.GetComponent<Transform>().children.push_back(result.GetComponent<Tag>().id);
-		}
+		}*/
 		return result;
 	}
 
