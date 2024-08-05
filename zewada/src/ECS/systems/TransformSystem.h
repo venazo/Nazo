@@ -9,6 +9,7 @@ namespace Zewada
     public:
         TransformSystem();
         void OnUpdate(float dt);
+        void OnStart();
 
         void CalcPos(Entity entity);
         void CalcSize(Entity entity);

@@ -29,7 +29,7 @@ namespace Zewada {
 		if(parent.operator bool())
 		{
 			glm::vec3 parentPos = parent.GetComponent<Transform>().worldPos;
-			SetPosition(pos - parentPos);
+			SetPosition((pos - parentPos));
 		}
 		else
 		{
@@ -91,10 +91,20 @@ namespace Zewada {
 		{
 			GameObject childgo = GameObject(m_scene->GetEntity(child), m_scene);
 			GameObject newChild = childgo.Copy();
+			GameObject parent(m_scene->GetEntity(newChild.GetComponent<Transform>().parent), m_scene);
+			auto& oldChildren = parent.GetComponent<Transform>().children;
+			oldChildren.erase(std::remove(oldChildren.begin(), oldChildren.end(), newChild.GetComponent<Tag>().id), oldChildren.end());
 			newChild.GetComponent<Transform>().parent = result.GetComponent<Tag>().id;
 			newChildren.push_back(newChild.GetComponent<Tag>().id);
 		}
 		children = newChildren;
+		auto id = result.GetComponent<Transform>().parent;
+		if(id != -1)
+		{
+			GameObject parent(m_scene->GetEntity(id), m_scene);
+			parent.GetComponent<Transform>().children.push_back(result.GetComponent<Tag>().id);
+		}
+
 		if(HasComponent<SpriteRenderer>())
 		{
 			result.AddComponent<SpriteRenderer>(SpriteRenderer(GetComponent<SpriteRenderer>()));

@@ -1,5 +1,5 @@
-Scene: assets/scenes/Default_Scene.zs
-BackgroundColor: [0.170000002, 0.170000002, 0.170000002, 1]
+Scene: assets\scenes\Default_Scene.zs
+BackgroundColor: [0, 0, 0, 1]
 Gravity: [0, -10]
 Entities:
   - Tag:
@@ -14,9 +14,9 @@ Entities:
       Children:
         {}
     SpriteRenderer:
-      Color: [1, 1, 1, 1]
+      Color: [0.333333343, 0.333333343, 0.333333343, 1]
       Sprite:
-        TexturePath: assets\textures\duolingo.png
+        TexturePath: assets\textures\background.png
         UV:
           0: [0, 0]
           1: [0, 1]

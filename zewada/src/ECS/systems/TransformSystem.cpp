@@ -10,6 +10,11 @@ namespace Zewada
         
     }
 
+    void TransformSystem::OnStart()
+    {
+        OnUpdate(0.0f);
+    }
+
     void TransformSystem::OnUpdate(float dt)
     {
         int i = 0;

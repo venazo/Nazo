@@ -261,7 +261,9 @@ namespace Nazo {
 
 				ZImGui::DragFloat("Angular damping", rigidbody2D.angularDamping);
 				ZImGui::DragFloat("Linear damping", rigidbody2D.linearDamping);
-				ZImGui::DragFloat("Mass", rigidbody2D.mass);
+				ZImGui::DragFloat("Restitution", rigidbody2D.restitution);
+				ZImGui::DragFloat("Density", rigidbody2D.density);
+				ZImGui::DragFloat("Friction", rigidbody2D.friction);
 				
 				if (ImGui::BeginCombo("##BodyType", bodyType2Names[rigidbody2D.bodyType].c_str()))
 				{

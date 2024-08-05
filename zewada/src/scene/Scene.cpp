@@ -115,6 +115,7 @@ namespace Zewada
 
 	void Scene::OnStart()
 	{
+		m_transformSystem->OnStart();
 		m_physics2D->OnStart();
 		for (auto &entity : m_coordinator->GetAllEntities())
 		{
@@ -199,9 +200,15 @@ namespace Zewada
 			GameObject go = GameObject(entities[i], this->shared_from_this());
 			Transform &transform = go.GetComponent<Transform>();
 			if (transform.parent == -1)
+			{
 				DestroyEntity(entities[i]);
+				i = 0;
+			}
 			else
+			{
 				i++;
+			}
+
 		}
 	}
 
@@ -239,16 +246,17 @@ namespace Zewada
 			GetCameraSystem()->DestroyEntity(go.GetEntity());
 
 
-		std::vector<int> &goChildren = transform.children;
-		for(auto it = goChildren.begin(); it != goChildren.end();)
-        {
-            GameObject go(GetEntity(*it), this->shared_from_this());
-            auto& trans = go.GetComponent<Transform>();
-            DestroyEntity(go.GetEntity());
-            it = goChildren.begin();
-			if(goChildren.size() == 0)
-				break;
+		if(transform.children.size() > 0)
+		{
+			std::vector<int> goChildren = transform.children;
+			for(auto it = goChildren.begin(); it != goChildren.end(); it++)
+        	{
+				GameObject goChild(GetEntity(*it), this->shared_from_this());
+           		auto& trans = goChild.GetComponent<Transform>();
+            	DestroyEntity(goChild.GetEntity());
+			}
 		}
+
 		m_ID2Entity.erase(go.GetComponent<Tag>().id);
 		m_coordinator->DestroyEntity(entity);
 	}

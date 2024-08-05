@@ -412,7 +412,9 @@ namespace Zewada {
 			const Rigidbody2D& rb = go.GetComponent<Rigidbody2D>();
 			out << YAML::Key << "AngularDamping" << YAML::Value << rb.angularDamping;
 			out << YAML::Key << "LinearDamping" << YAML::Value << rb.linearDamping;
-			out << YAML::Key << "Mass" << YAML::Value << rb.mass;
+			out << YAML::Key << "Restitution" << YAML::Value << rb.restitution;
+			out << YAML::Key << "Density" << YAML::Value << rb.density;
+			out << YAML::Key << "Friction" << YAML::Value << rb.friction;
 			out << YAML::Key << "BodyType" << YAML::Value << bodyType2Names[rb.bodyType];
 			out << YAML::Key << "FixedRotation" << YAML::Value << rb.fixedRotation;
 			out << YAML::Key << "ContinuousCollision" << YAML::Value << rb.continuousCollision;
@@ -786,7 +788,7 @@ namespace Zewada {
 
 				GameObject deserializedEntity;
 				if(!prefabs)
-				{
+				{ 
 					deserializedEntity = GameObject(scene->CreateEntity(name, id), scene);
 				}
 				else
@@ -867,7 +869,9 @@ namespace Zewada {
 
 					src.angularDamping = rigidbodyComponent["AngularDamping"].as<float>();
 					src.linearDamping = rigidbodyComponent["LinearDamping"].as<float>();
-					src.mass = rigidbodyComponent["Mass"].as<float>();				
+					src.restitution = rigidbodyComponent["Restitution"].as<float>();
+					src.density = rigidbodyComponent["Density"].as<float>();
+					src.friction = rigidbodyComponent["Friction"].as<float>();				
 					src.bodyType = names2BodyType[rigidbodyComponent["BodyType"].as<std::string>()];				
 					src.fixedRotation = rigidbodyComponent["FixedRotation"].as<bool>();
 					src.continuousCollision = rigidbodyComponent["ContinuousCollision"].as<bool>();
