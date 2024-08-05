@@ -74,7 +74,7 @@ void Ball::OnUpdate(float dt)
 void Ball::OnDestroy()
 {
     GetApplication()->GetAssetPool()->RemoveSound("assets/sounds/Wall.ogg");
-GetApplication()->GetAssetPool()->RemoveSound("assets/sounds/Block.ogg");
+    GetApplication()->GetAssetPool()->RemoveSound("assets/sounds/Block.ogg");
 }
 
 void Ball::OnEndContact(const glm::vec2& hitNormal, GameObject* other)

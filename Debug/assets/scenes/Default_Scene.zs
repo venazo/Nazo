@@ -1,4 +1,4 @@
-Scene: assets\scenes\Default_Scene.zs
+Scene: assets/scenes/Default_Scene.zs
 BackgroundColor: [0, 0, 0, 1]
 Gravity: [0, -10]
 Entities:
