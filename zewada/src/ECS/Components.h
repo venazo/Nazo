@@ -85,7 +85,9 @@ namespace Zewada
 			//read only is only needed to initialize
 			float angularDamping = 0.8f;
 			float linearDamping = 0.9f;
-			float mass = 1.0f;
+			float density = 1.0f;
+			float friction = 1.0f;
+			float restitution = 0.0f;
 			BodyType bodyType = BodyType::Static;
 			bool fixedRotation = false;
 			bool continuousCollision = false;

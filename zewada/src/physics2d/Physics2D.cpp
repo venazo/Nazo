@@ -63,7 +63,7 @@ namespace Zewada {
         Transform& transform = go->GetComponent<Transform>();
         b2BodyDef bodyDef = b2BodyDef();
         bodyDef.angle = transform.rotation * (M_PI / 180.0f);
-        bodyDef.position.Set(transform.pos.x, transform.pos.y);
+        bodyDef.position.Set(transform.worldPos.x, transform.worldPos.y);
         Rigidbody2D& rb = go->GetComponent<Rigidbody2D>();
         bodyDef.angularDamping = rb.angularDamping;
         bodyDef.linearDamping = rb.linearDamping;
@@ -202,8 +202,9 @@ namespace Zewada {
 
         b2FixtureDef* fixtureDef = new b2FixtureDef();
         fixtureDef->shape = shape;
-        fixtureDef->density = 1.0f;
-        fixtureDef->friction = rb.mass;
+        fixtureDef->density = rb.density;
+        fixtureDef->friction = rb.friction;
+        fixtureDef->restitution = rb.restitution;
         fixtureDef->userData.pointer = reinterpret_cast<uintptr_t>(go);
         //fixtureDef->isSensor = rb.isSensor();
         body->CreateFixture(fixtureDef);

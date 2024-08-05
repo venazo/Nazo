@@ -23,8 +23,8 @@ namespace Zewada {
             virtual void OnUpdate(float dt){}
             virtual void OnDestroy(){}
 
-            virtual void OnBeginContact(const glm::vec2& hitNormal){}
-            virtual void OnEndContact(const glm::vec2& hitNormal){}
+            virtual void OnBeginContact(const glm::vec2& hitNormal, GameObject* other){}
+            virtual void OnEndContact(const glm::vec2& hitNormal, GameObject* other){}
 
             void SetGameObject(const GameObject go) {m_gameObject = go;}
             GameObject& GetGameObject() {return m_gameObject;}

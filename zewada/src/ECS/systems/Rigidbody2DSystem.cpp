@@ -20,7 +20,17 @@ namespace Zewada {
             if(rawBody)
             {
                 Transform& transform = go.GetComponent<Transform>();
-                go.SetWorldPos(rawBody->GetPosition().x, rawBody->GetPosition().y);
+
+                if(transform.parent != -1)
+                {
+                    GameObject parent(m_scene->GetEntity(transform.parent), m_scene);
+                    glm::vec3 parentPos = parent.GetComponent<Transform>().worldPos;
+                    transform.pos = glm::vec3(rawBody->GetPosition().x, rawBody->GetPosition().y, 0.0f) - parentPos;
+                }
+                else
+                {
+                    transform.pos = glm::vec3(rawBody->GetPosition().x, rawBody->GetPosition().y, 0.0f);
+                }
                 transform.rotation = rawBody->GetAngle() * (180.0f / M_PI);
             }
         }

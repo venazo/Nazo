@@ -38,7 +38,8 @@ namespace Zewada {
 
         bool RaycastLine(const glm::vec2& first, const glm::vec2& second);
 
+        inline b2World* GetWorld() { return m_world; }
         void SetGravity(float x, float y);
         inline glm::vec2 GetGravity() {return glm::vec2(m_gravity.x, m_gravity.y);}
     };
-}\
+}

@@ -378,9 +378,16 @@ namespace Nazo {
 		SaveSceneEvent SceneEvent;
 		m_callback(SceneEvent);
 		if(m_application->GetSceneManager()->GetActiveScene()->GetPath() != "assets/scenes/Default_Scene.zs")
+		{
 			m_application->GetSceneManager()->SetActiveScene("assets/scenes/Default_Scene.zs");
-		m_scenePlaying = true;
-		m_application->GetSceneManager()->OnStart();
+			m_shouldPlay = true;
+		}
+		else 
+		{
+			m_scenePlaying = true;
+			m_application->GetSceneManager()->OnStart();
+		}
+
 		return true;
 	}
 
@@ -410,6 +417,13 @@ namespace Nazo {
 		m_loading = false;
 
 		SetGameObject(-1);
+
+		if(m_shouldPlay)
+		{
+			m_scenePlaying = true;
+			m_application->GetSceneManager()->OnStart();
+			m_shouldPlay = false;
+		}
 
 		return true;
 	}

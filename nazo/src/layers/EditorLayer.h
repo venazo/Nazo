@@ -25,6 +25,7 @@ namespace Nazo {
 		
 		bool m_loading;
 		bool m_scenePlaying;
+		bool m_shouldPlay = false;
 		std::unique_ptr<CameraController> m_cameraController;
 		std::unique_ptr<GizmoSystem> m_gizmoSystem;
 

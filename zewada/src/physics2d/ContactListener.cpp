@@ -23,7 +23,7 @@ namespace Zewada
             auto& ns = objA->GetComponent<NativeScript>();
             if(ns.className != "NONE")
             {
-                ns.script->OnBeginContact(aNormal);
+                ns.script->OnBeginContact(aNormal, objB);
             }
         }
         if(objB->HasComponent<NativeScript>())
@@ -31,7 +31,7 @@ namespace Zewada
             auto& ns = objB->GetComponent<NativeScript>();
             if(ns.className != "NONE")
             {
-                ns.script->OnBeginContact(bNormal);
+                ns.script->OnBeginContact(bNormal, objA);
             }
         }
     }
@@ -54,7 +54,7 @@ namespace Zewada
                 auto& ns = objA->GetComponent<NativeScript>();
                 if(ns.className != "NONE")
                 {
-                    ns.script->OnEndContact(aNormal);
+                    ns.script->OnEndContact(aNormal, objB);
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace Zewada
                 auto& ns = objB->GetComponent<NativeScript>();
                 if(ns.className != "NONE")
                 {   
-                    ns.script->OnEndContact(bNormal);
+                    ns.script->OnEndContact(bNormal, objA);
                 }
             }
         }
