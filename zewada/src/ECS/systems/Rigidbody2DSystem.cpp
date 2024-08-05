@@ -25,11 +25,11 @@ namespace Zewada {
                 {
                     GameObject parent(m_scene->GetEntity(transform.parent), m_scene);
                     glm::vec3 parentPos = parent.GetComponent<Transform>().worldPos;
-                    transform.pos = glm::vec3(rawBody->GetPosition().x, rawBody->GetPosition().y, 0.0f) - parentPos;
+                    transform.pos = glm::vec3(rawBody->GetPosition().x, rawBody->GetPosition().y, transform.worldPos.z) - parentPos;
                 }
                 else
                 {
-                    transform.pos = glm::vec3(rawBody->GetPosition().x, rawBody->GetPosition().y, 0.0f);
+                    transform.pos = glm::vec3(rawBody->GetPosition().x, rawBody->GetPosition().y, transform.worldPos.z);
                 }
                 transform.rotation = rawBody->GetAngle() * (180.0f / M_PI);
             }
