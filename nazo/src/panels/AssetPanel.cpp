@@ -14,6 +14,8 @@ namespace Nazo
         m_fileSprite = Sprite(m_assetPool->GetTexture("assets/nazo/textures/fileIcon.png"));
         m_prefabsSprite = Sprite(m_assetPool->GetTexture("assets/nazo/textures/prefabsIcon.png"));
         m_soundSprite = Sprite(m_assetPool->GetTexture("assets/nazo/textures/soundIcon.png"));
+        m_fontSprite = Sprite(m_assetPool->GetTexture("assets/nazo/textures/fontIcon.png"));
+
         m_imGuiLayer = imGuiLayer;
     }
 
@@ -76,6 +78,10 @@ namespace Nazo
                 else if(filetype == ".zp")
                 {
                     PrefabsImGui(path);
+                }
+                else if(filetype == ".ttf" || filetype == ".TTF")
+                {
+                    FontImgui(path);
                 }
                 else if(filetype == ".wave" || filetype == ".wav" || filetype == ".mp3")
                 {
@@ -308,6 +314,30 @@ namespace Nazo
 		ImGui::ImageButton(textureid, {128, 128}, {0, 1}, {1, 0});
         ImGui::Text(name.c_str());
         
+        ImGui::EndChild();
+		ImGui::PopID();
+    }
+
+    void AssetPanel::FontImgui(std::filesystem::path& path)
+    {
+        ImTextureID textureid = (ImTextureID)m_fontSprite.GetTexture()->GetID();
+        std::string name = path.filename().string();
+        ImGui::PushID(name.c_str());
+		ImVec2 padding = ImGui::GetStyle().FramePadding;
+
+		ImGui::BeginChild(name.c_str(), ImVec2(128.0f + (padding.x * 2.0f),
+			128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
+		ImGui::ImageButton(textureid, {128, 128}, {0, 1}, {1, 0});
+        if(ImGui::BeginDragDropSource())
+        {
+            std::filesystem::path relativePath = FileUtils::RelativePath(path);
+			const wchar_t* itemPath = relativePath.c_str();
+            ImGui::SetDragDropPayload(dragDropFont, itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+            ImGui::Text(name.c_str());
+            ImGui::EndDragDropSource();
+        }
+		ImGui::Text(name.c_str());
+
         ImGui::EndChild();
 		ImGui::PopID();
     }

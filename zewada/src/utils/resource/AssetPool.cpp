@@ -44,6 +44,19 @@ namespace Zewada {
 		return texture;
 	}
 
+	std::shared_ptr<Font> AssetPool::GetFont(const char* source)
+	{
+		std::filesystem::path pathstr(source);
+		if(Utils::Contains(m_fonts, pathstr))
+		{
+			return m_fonts[pathstr];
+		}
+
+		std::shared_ptr<Font> font = std::make_shared<Font>(pathstr.string());
+		m_fonts.insert({pathstr, font});
+		return font;
+	}
+
 	void AssetPool::AddSound(std::shared_ptr<Sound> sound)
 	{
 		std::filesystem::path pathstr(sound->GetFilepath());
@@ -142,6 +155,6 @@ namespace Zewada {
 
 	AssetPool::AssetPool()
 	{
-		GetShader("assets/shaders/Default_Editor.glsl");
+		GetShader("assets/shaders/Default.glsl");
 	}
 }

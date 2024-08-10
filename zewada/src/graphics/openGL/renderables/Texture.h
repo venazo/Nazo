@@ -1,6 +1,9 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <ft2build.h>
+#include <freetype/freetype.h>
+#include <utils/debug/Logger.h>
 
 namespace Zewada {
 
@@ -19,6 +22,8 @@ namespace Zewada {
 		Texture(unsigned int width, unsigned int height);
 		Texture();
 		~Texture();
+		
+		void LoadFont(char* textureBuffer, unsigned int textureSize);
 
 		inline const unsigned int GetWidth() const { return m_Width; }
 		inline const unsigned int GetHeight() const { return m_Height; }

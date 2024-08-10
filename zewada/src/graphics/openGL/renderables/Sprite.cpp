@@ -54,6 +54,14 @@ namespace Zewada {
 		m_texCoords[3] = glm::vec2(1, 0);
 	}
 
+	void Sprite::GenFontCoords()
+	{
+		m_texCoords[0] = glm::vec2(0, 1);
+		m_texCoords[1] = glm::vec2(0, 0);
+		m_texCoords[2] = glm::vec2(1, 0);
+		m_texCoords[3] = glm::vec2(1, 1);
+	}
+
 	void Sprite::SetTexCoords(const std::array<glm::vec2, 4>& uv)
 	{
 		m_texCoords = uv;

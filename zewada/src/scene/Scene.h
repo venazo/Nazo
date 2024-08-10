@@ -12,6 +12,7 @@
 #include "../ECS/systems/AnimationSystem.h"
 #include "../ECS/systems/AnimationManagerSystem.h"
 #include "../ECS/systems/GridObjectSystem.h"
+#include "../ECS/systems/TextSystem.h"
 
 #include "../application.h"
 
@@ -54,6 +55,7 @@ namespace Zewada {
 		std::shared_ptr<AnimationSystem> m_animationSystem;
 		std::shared_ptr<AnimationManagerSystem> m_animationManagerSystem;
 		std::shared_ptr<GridObjectSystem> m_gridObjectSystem;
+		std::shared_ptr<TextSystem> m_textSystem;
 
 		Scene() = default;
 		Scene(const std::string& path, ScenePlan scenePlan = ScenePlan());

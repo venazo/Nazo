@@ -43,8 +43,8 @@ namespace Nazo {
         m_filename = (std::filesystem::current_path().string() + "\\Assets\\nazo\\ImGUI\\ImGUI.ini");
         io.IniFilename = m_filename.c_str();
 
-        std::string bold = (std::string)std::filesystem::current_path().string() + "\\Assets\\nazo\\Fonts\\OpenSans-Bold.TTF";
-        std::string regular = (std::string)std::filesystem::current_path().string() + "\\Assets\\nazo\\Fonts\\OpenSans-Regular.TTF";
+        std::string bold = (std::string)std::filesystem::current_path().string() + "\\Assets\\Fonts\\OpenSans-Bold.TTF";
+        std::string regular = (std::string)std::filesystem::current_path().string() + "\\Assets\\Fonts\\OpenSans-Regular.TTF";
         io.Fonts->AddFontFromFileTTF(bold.c_str(), 21.0f);
         io.FontDefault = io.Fonts->AddFontFromFileTTF(regular.c_str(), 21.0f);
         io.ConfigFlags = ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable;

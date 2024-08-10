@@ -7,6 +7,7 @@
 #include <boost/shared_ptr.hpp>
 #include <array>
 #include <unordered_map>
+#include "../graphics/opengl/renderables/font.h"
 
 namespace Zewada
 {
@@ -49,7 +50,7 @@ namespace Zewada
 
 		struct SpriteRenderer
 		{
-			glm::vec4 color;
+			glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 			std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
 			SpriteRenderer() = default;
 			SpriteRenderer(glm::vec4 c_color)
@@ -184,6 +185,18 @@ namespace Zewada
 			GridObject() = default;
 			GridObject(const glm::vec2& vec)
 				: gridPos(vec) {}
+		};
+
+		struct Text
+		{
+			std::string text = "";
+			std::string font = "assets/fonts/OpenSans-Regular.TTF";
+			float scale = 12;
+			glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+			Text() = default;
+			Text(const std::string& c_text)
+				: text(c_text) {}
 		};
 	}
 

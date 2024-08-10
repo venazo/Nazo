@@ -14,6 +14,7 @@
 #include "../../Graphics/OpenGL/Renderables/SpriteSheet.h"
 #include "../Utils.h"
 #include "Sound.h"
+#include "../../graphics/openGL/Renderables/Font.h"
 
 namespace Zewada {
 	class AssetPool
@@ -24,10 +25,12 @@ namespace Zewada {
 		std::map<std::filesystem::path, std::shared_ptr<SpriteSheet>> m_spriteSheets;
 		std::map<std::filesystem::path, std::shared_ptr<Sound>> m_sounds;
 		std::map<std::string, std::vector<std::shared_ptr<Sprite>>> m_gridGroups;
+		std::map<std::filesystem::path, std::shared_ptr<Font>> m_fonts;
 	public:
 		std::shared_ptr<Shader> GetShader(const char* source);
 		std::shared_ptr<Texture> GetTexture(const char* source);
 		std::shared_ptr<Texture> GetTextureAbsolutePath(const char* source);
+		std::shared_ptr<Font> GetFont(const char* source);
 
 		void AddSound(std::shared_ptr<Sound> sound);
 		void RemoveSound(const char* source);

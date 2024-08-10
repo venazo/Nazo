@@ -22,6 +22,7 @@ namespace Zewada
 		m_animationSystem->Init(this->shared_from_this(), m_coordinator);
 		m_animationManagerSystem->Init(this->shared_from_this(), m_coordinator);
 		m_gridObjectSystem->Init(this->shared_from_this(), m_coordinator);
+		m_textSystem->Init(this->shared_from_this(), m_coordinator);
 
 		m_application->GetRenderer2D()->SetBackgroundColor(m_scenePlan.backgroundColor);
 		m_application->GetPhysics2D()->SetGravity(m_scenePlan.gravity.x, m_scenePlan.gravity.y);
@@ -51,6 +52,7 @@ namespace Zewada
 		m_coordinator->RegisterComponent<AnimationManager>();
 		m_coordinator->RegisterComponent<Grid>();
 		m_coordinator->RegisterComponent<GridObject>();
+		m_coordinator->RegisterComponent<Text>();
 
 		m_transformSystem = m_coordinator->RegisterSystem<TransformSystem>();
 
@@ -100,6 +102,11 @@ namespace Zewada
 		gridObjectSystemSignature.set(m_coordinator->GetComponentType<GridObject>());
 		m_coordinator->SetSystemSignature<GridObjectSystem>(gridObjectSystemSignature);
 
+		m_textSystem = m_coordinator->RegisterSystem<TextSystem>();
+
+		Signature textSystemSignature;
+		textSystemSignature.set(m_coordinator->GetComponentType<Text>());
+		m_coordinator->SetSystemSignature<TextSystem>(textSystemSignature);
 
 		for (int i = 0; i < MAX_ENTITIES; i++)
 		{
@@ -147,6 +154,7 @@ namespace Zewada
 		//last systems
 		m_gridObjectSystem->OnUpdate(dt);
 		m_transformSystem->OnUpdate(dt);
+		m_textSystem->OnUpdate(dt);
 		m_spriteRendererSystem->OnUpdate(dt);
 	}
 
@@ -157,6 +165,7 @@ namespace Zewada
 		m_gridObjectSystem->OnUpdate(dt);
 		m_transformSystem->OnUpdate(dt);
 
+		m_textSystem->OnUpdate(dt);
 		m_spriteRendererSystem->OnUpdate(dt);
 	}
 

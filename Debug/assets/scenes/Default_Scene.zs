@@ -1,4 +1,4 @@
-Scene: assets/scenes/Default_Scene.zs
+Scene: assets\scenes\Default_Scene.zs
 BackgroundColor: [0.170000002, 0.170000002, 0.170000002, 1]
 Gravity: [0, -10]
 Entities:
@@ -8,7 +8,7 @@ Entities:
     Transform:
       Position: [0, 0, 0]
       Rotation: 0
-      Scale: [1, 1]
+      Scale: [5, 5]
       Parent: -1
       ChildrenCount: 0
       Children:
@@ -16,7 +16,7 @@ Entities:
     SpriteRenderer:
       Color: [1, 1, 1, 1]
       Sprite:
-        TexturePath: assets\textures\duolingo.png
+        TexturePath: assets\textures\Icon.png
         UV:
           0: [0, 0]
           1: [0, 1]

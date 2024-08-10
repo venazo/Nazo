@@ -48,7 +48,6 @@ namespace Zewada {
 
 		//LINEAR verschwommen
 		//NEAREST pixelig
-		//for gamelook
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
@@ -58,6 +57,30 @@ namespace Zewada {
 			stbi_image_free(texture);
 
 		return result;
+	}
+
+	void Texture::LoadFont(char* textureBuffer, unsigned int textureSize)
+	{
+		glGenTextures(1, &m_TID);
+        glBindTexture(GL_TEXTURE_2D, m_TID);
+        glTexImage2D(
+            GL_TEXTURE_2D,
+            0,
+            GL_RED,
+            textureSize,
+            textureSize,
+            0,
+            GL_RED,
+            GL_UNSIGNED_BYTE,
+            textureBuffer
+        );
+            
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void Texture::Bind() const

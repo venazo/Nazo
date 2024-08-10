@@ -439,10 +439,44 @@ namespace Nazo
 		activeObject = result;
 	}
 
-	
 	void ZImGui::SetAssetPool(std::shared_ptr<AssetPool> assetPool)
 	{
 		Get().m_assetPool = assetPool;
+	}
+
+	void ZImGui::FontInput(std::string& font)
+	{
+		ImGui::PushID(font.c_str());
+
+		float lineHeight = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2.0f;
+		float width = ImGui::CalcItemWidth();
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, COLUMNWIDTH);
+		ImGui::Text("Font");
+		ImGui::NextColumn();
+
+		ImGui::PushItemWidth(COLUMNWIDTH);
+		if(ImGui::Button(font.c_str()))
+		{
+			font = "assets/fonts/OpenSans-Regular.TTF";
+		}
+
+		if(ImGui::BeginDragDropTarget())
+	    {
+			const ImGuiPayload* payLoadObj = ImGui::AcceptDragDropPayload("Font");
+			if(payLoadObj != nullptr)
+			{
+				const wchar_t* path = (wchar_t*)payLoadObj->Data;
+				std::filesystem::path fontPath(path);
+				std::filesystem::path relativePath = FileUtils::RelativePath(fontPath);
+				font = relativePath.string();
+			}
+		}
+		ImGui::PopItemWidth();
+		ImGui::Columns(1);
+
+		ImGui::PopID();
 	}
 
 	void ZImGui::SetWriting(bool value)
