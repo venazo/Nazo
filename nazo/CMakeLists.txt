@@ -23,6 +23,7 @@ find_package(box2d CONFIG REQUIRED)
 find_package(Stb REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
+find_package(Freetype REQUIRED)
 
 add_definitions(-D_WIN)
 
@@ -30,6 +31,6 @@ add_executable(nazo ${SRC})
 
 target_include_directories(nazo PRIVATE src ../zewada/src ${Stb_INCLUDE_DIR})
 
-target_link_libraries(nazo PRIVATE zewada imgui::imgui ${YAML_CPP_LIBRARIES} Boost::boost Boost::filesystem glm::glm  yaml-cpp glfw glad::glad box2d::box2d OpenAL::OpenAL)
+target_link_libraries(nazo PRIVATE zewada imgui::imgui ${YAML_CPP_LIBRARIES} Boost::boost Boost::filesystem glm::glm  yaml-cpp glfw glad::glad box2d::box2d OpenAL::OpenAL Freetype::Freetype)
 
 target_precompile_headers(nazo PUBLIC ../zewada/src/zpch.h)

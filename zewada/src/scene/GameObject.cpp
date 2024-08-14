@@ -151,6 +151,11 @@ namespace Zewada {
 		{
 			result.AddComponent<AnimationManager>(AnimationManager(GetComponent<AnimationManager>()));
 		}
+		if(HasComponent<Text>())
+		{
+			result.AddComponent<Text>(Text(GetComponent<Text>()));
+		}
+
 		//obsolete
 		/*if(HasComponent<Grid>())
 		{

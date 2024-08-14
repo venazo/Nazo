@@ -3,7 +3,7 @@
 #include "../../Utils/Debug/Logger.h"
 #include "../../utils/Utils.h"
 
-#define MAX_COMPONENTS 15
+#define MAX_COMPONENTS 16
 #define MAX_ENTITIES 10000
 
 using Signature = std::bitset<MAX_COMPONENTS>;

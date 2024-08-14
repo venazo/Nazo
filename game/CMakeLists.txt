@@ -22,6 +22,7 @@ find_package(yaml-cpp CONFIG REQUIRED)
 find_package(box2d CONFIG REQUIRED)
 find_package(Stb REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
+find_package(Freetype REQUIRED)
 
 add_definitions(-D_WIN)
 
@@ -29,7 +30,7 @@ add_executable(game ${SRC})
 
 target_include_directories(game PRIVATE ../zewada/src ${Stb_INCLUDE_DIR})
 
-target_link_libraries(game PRIVATE zewada ${YAML_CPP_LIBRARIES} glm::glm Boost::boost Boost::filesystem yaml-cpp glfw glad::glad box2d::box2d OpenAL::OpenAL)
+target_link_libraries(game PRIVATE zewada ${YAML_CPP_LIBRARIES} glm::glm Boost::boost Boost::filesystem yaml-cpp glfw glad::glad box2d::box2d OpenAL::OpenAL Freetype::Freetype)
 
 
 target_precompile_headers(game PUBLIC ../zewada/src/zpch.h)

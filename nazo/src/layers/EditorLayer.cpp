@@ -22,7 +22,7 @@ namespace Nazo {
 		ZImGui::SetAssetPool(m_application->GetAssetPool());
 		m_cameraController = std::make_unique<CameraController>(m_application);
 		m_gizmoSystem = std::make_unique<GizmoSystem>(m_application, m_cameraController->GetCamera());
-		m_defaultShader = m_application->GetAssetPool()->GetShader("assets/shaders/Default_Editor.glsl");
+		m_defaultShader = m_application->GetAssetPool()->GetShader("assets/shaders/Default.glsl");
 	}
 
 	void EditorLayer::OnEvent(Event& event)

@@ -22,6 +22,7 @@ namespace Zewada {
 		void LoadTexture(std::shared_ptr<AssetPool> assetPool);
 
 		void GenTexCoords();
+		void GenFontCoords();
 		void SetTexCoords(const std::array<glm::vec2, 4>& uv);
 		void SetTexture(std::shared_ptr<Texture> texture);
 		void SetTextureToLoad(const std::string& textureToLoad);

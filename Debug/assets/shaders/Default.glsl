@@ -43,8 +43,17 @@ void main()
 	vec4 texColor = vec4(1, 1, 1, 1);
 	if(fTID > 0)
 	{
-		int tid = int(fTID);
-		texColor = fColor * texture(textures[tid], fUV);
+		if(fEntityID != -2)
+		{
+			int tid = int(fTID);
+			texColor = fColor * texture(textures[tid], fUV);
+		}
+		else
+		{
+			int tid = int(fTID);
+			vec4 sampled = vec4(1.0, 1.0, 1.0, texture(textures[tid], fUV).r);
+    		texColor = fColor * sampled;
+		}
 	}
 	else
 	{

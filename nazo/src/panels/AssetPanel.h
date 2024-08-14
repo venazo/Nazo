@@ -22,6 +22,7 @@ namespace Nazo
         Sprite m_fileSprite;
         Sprite m_prefabsSprite;
         Sprite m_soundSprite;
+        Sprite m_fontSprite;
 
         std::unordered_map<std::string, bool> m_open;
 
@@ -30,6 +31,7 @@ namespace Nazo
         const char* dragDropSprite = "Sprite";
         const char* dragDropScript = "Script";
         const char* dragDropGameObject = "SceneHierarchy";
+        const char* dragDropFont = "Font";
 
         ImGuiLayer* m_imGuiLayer;
         std::shared_ptr<AssetPool> m_assetPool;
@@ -47,5 +49,6 @@ namespace Nazo
         void ScriptImGui(std::filesystem::path& path);
         void PrefabsImGui(std::filesystem::path& path);
         void SoundImGui(std::filesystem::path& path);
+        void FontImgui(std::filesystem::path& path);
     };
 }

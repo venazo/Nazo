@@ -110,18 +110,19 @@ namespace Nazo {
 
 		if(ImGui::BeginPopupContextWindow("ComponentAdder"))
 		{
-			if(!m_activeGameObject->HasComponent<Camera>() && !m_activeGameObject->HasComponent<SpriteRenderer>())
+			if(!m_activeGameObject->HasComponent<Text>() && !m_activeGameObject->HasComponent<SpriteRenderer>() && !m_activeGameObject->HasComponent<Camera>())
 			{
 				if(ImGui::MenuItem("Add Camera"))
 				{
 					m_activeGameObject->AddComponent<Camera>(Camera());
 				}
-			}			
-			if(!m_activeGameObject->HasComponent<SpriteRenderer>() && !m_activeGameObject->HasComponent<Camera>())
-			{
 				if(ImGui::MenuItem("Add SpriteRenderer"))
 				{
 					m_activeGameObject->AddComponent<SpriteRenderer>(SpriteRenderer());
+				}
+				if(ImGui::MenuItem("Add Text"))
+				{
+					m_activeGameObject->AddComponent<Text>(Text());
 				}
 			}
 
@@ -415,6 +416,24 @@ namespace Nazo {
 			else if(temp == 2)
 			{
 				m_activeGameObject->RemoveComponent<Grid>();
+			}
+		}
+
+		if(m_activeGameObject->HasComponent<Text>())
+		{
+			int temp = ZImGui::ComponentHeader("Text");
+			if(temp == 1)
+			{
+				auto& text = m_activeGameObject->GetComponent<Text>();
+
+				ZImGui::TextInput("Content", text.text);
+				ZImGui::DragFloat("Scale", text.scale);
+				ZImGui::ColorPicker4("Color", text.color);
+				ZImGui::FontInput(text.font);
+			}
+			else if(temp == 2)
+			{
+				m_activeGameObject->RemoveComponent<Text>();
 			}
 		}
 		

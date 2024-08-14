@@ -9,6 +9,8 @@ namespace Zewada {
 		//m_path will be shit cause assetpool
 		m_shaderID = Load();
 
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 		glEnable(GL_BLEND);

@@ -17,8 +17,8 @@ find_package(glad CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
 find_package(box2d CONFIG REQUIRED)
 find_package(Stb REQUIRED)
-find_package(OpenAL CONFIG REQUIRED)
-
+find_package(OpenAL CONFIG REQUIRED) 
+find_package(Freetype REQUIRED)
 add_definitions(-D_WIN)
 
 file(GLOB_RECURSE SRC
@@ -32,7 +32,7 @@ add_library(zewada STATIC ${SRC})
 
 target_include_directories(zewada PRIVATE ${Stb_INCLUDE_DIR})
 
-target_link_libraries(zewada PRIVATE ${YAML_CPP_LIBRARIES} Boost::boost Boost::filesystem glm::glm yaml-cpp glfw glad::glad box2d::box2d OpenAL::OpenAL)
+target_link_libraries(zewada PRIVATE ${YAML_CPP_LIBRARIES} Boost::boost Boost::filesystem glm::glm yaml-cpp glfw glad::glad box2d::box2d OpenAL::OpenAL Freetype::Freetype)
 
 target_precompile_headers(zewada PUBLIC src/zpch.h)
 

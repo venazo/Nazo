@@ -23,7 +23,7 @@ namespace Zewada
 		m_physics2D = std::make_shared<Physics2D>(m_sceneManager);
 		m_scriptLoader = std::make_shared<ScriptLoader>();
 
-		m_window->SetIcon("assets/textures/test.png");
+		m_window->SetIcon("assets/textures/Icon.png");
 
 		m_sceneManager->CreateDefaultScene();
 

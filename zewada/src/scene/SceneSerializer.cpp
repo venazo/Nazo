@@ -535,6 +535,21 @@ namespace Zewada {
 			out << YAML::EndMap;
 		}
 
+		if(go.HasComponent<Text>())
+		{
+			out << YAML::Key << "Text";
+			out << YAML::BeginMap;
+
+			Text& text = go.GetComponent<Text>();
+			out << YAML::Key << "Content" << YAML::Value << text.text;
+			out << YAML::Key << "Font" << YAML::Value << text.font;
+			out << YAML::Key << "Scale" << YAML::Value << text.scale;
+			out << YAML::Key << "Color" << YAML::Value << text.color;
+
+
+			out << YAML::EndMap;
+		}
+
 		out << YAML::EndMap;
 	}
 
@@ -648,7 +663,7 @@ namespace Zewada {
 			if(gameObject.HasComponent<UnSerializable>())
 				break;	
 
-			SerializeEntity(out, gameObject);	
+			SerializeEntity(out, gameObject);
 		}
 		out << YAML::EndSeq;
 		out << YAML::EndMap;
@@ -964,6 +979,18 @@ namespace Zewada {
 					src.gridPos = gridObject["GridPosition"].as<glm::vec2>();
 				}
 
+				auto text = entity["Text"];
+				if(text)
+				{
+					deserializedEntity.AddComponent<Text>(Text());
+					auto& src = deserializedEntity.GetComponent<Text>();
+
+					src.text = text["Content"].as<std::string>();
+					src.font = text["Font"].as<std::string>();
+					src.scale = text["Scale"].as<float>();
+					src.color = text["Color"].as<glm::vec4>();
+
+				}
 			}
 		}
 	}

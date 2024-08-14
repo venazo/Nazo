@@ -20,6 +20,7 @@
         "yaml-cpp",
         "stb",
         "box2d",
-        "openal-soft"
+        "openal-soft",
+        "freetype"
     ]
 }

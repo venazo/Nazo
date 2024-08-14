@@ -11,4 +11,4 @@ SpriteSheets:
     Spacing: 0
 GridGroups:
   Default:
-    - {TexPath: assets\textures\test.png, UV: [[0, 0], [0, 1], [1, 1], [1, 0]]}
+    - {TexPath: assets\textures\Icon.png, UV: [[0, 0], [0, 1], [1, 1], [1, 0]]}
