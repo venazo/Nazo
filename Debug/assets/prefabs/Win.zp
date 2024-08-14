@@ -1,0 +1,18 @@
+Name: Win
+Entities:
+  - Tag:
+      Tag: Win
+      ID: 9978
+    Transform:
+      Position: [-4.80000019, -1, 2]
+      Rotation: 0
+      Scale: [1, 1]
+      Parent: -1
+      ChildrenCount: 0
+      Children:
+        {}
+    Text:
+      Content: You Win
+      Font: assets\fonts\breakoutFont.ttf
+      Scale: 64
+      Color: [1, 1, 1, 1]

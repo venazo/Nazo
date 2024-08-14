@@ -9,7 +9,11 @@ void Ball::OnStart()
 {
     GetApplication()->GetAssetPool()->AddSound(std::make_shared<Sound>("assets/sounds/Wall.ogg", false));
     GetApplication()->GetAssetPool()->AddSound(std::make_shared<Sound>("assets/sounds/Block.ogg", false));
-    float max = 1.0f;
+    GetApplication()->GetAssetPool()->AddSound(std::make_shared<Sound>("assets/sounds/Win.ogg", false));
+    GetApplication()->GetAssetPool()->AddSound(std::make_shared<Sound>("assets/sounds/Lose.ogg", false));
+
+    float max = 1.0f / 2.0f;
+    srand((int) time(0));
     float x = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     if(0 + (rand() % (1 - 0 + 1)) == 1)
         x *= -1;
@@ -29,6 +33,8 @@ void Ball::OnUpdate(float dt)
 {   
     auto* b = GetComponent<Rigidbody2D>().rawBody;
 
+    Application* application = GetApplication();
+
     b2Vec2 velocity = b->GetLinearVelocity();
     float speed = velocity.Length();   
 
@@ -43,14 +49,18 @@ void Ball::OnUpdate(float dt)
     if(trans.worldPos.y < -5.4f)
     {
         static float lWait = 0.0f;
+        if(lWait == 0.0f)
+        {
+            application->GetSceneSerializer()->DeserializePrefabs("assets/prefabs/Game Over.zp", application->GetSceneManager()->GetActiveScene());
+            GetApplication()->GetAssetPool()->GetSound("assets/sounds/Lose.ogg")->Play();
+        }
         if(lWait < 3.0f)
         {
             lWait += dt;
         }
         else
         {
-            Z_INFO() << "LOST";
-            GetApplication()->GetSceneManager()->SetActiveSceneNextFrame("assets/scenes/Default_Scene.zs");
+            application->GetSceneManager()->SetActiveSceneNextFrame("assets/scenes/Default_Scene.zs");
             lWait = -1000.0f;
         }
     }
@@ -58,13 +68,17 @@ void Ball::OnUpdate(float dt)
     if(m_won)
     {
         static float wWait = 0.0f;
+        if(wWait == 0.0f)
+        {
+            application->GetSceneSerializer()->DeserializePrefabs("assets/prefabs/Win.zp", application->GetSceneManager()->GetActiveScene());
+            GetApplication()->GetAssetPool()->GetSound("assets/sounds/Win.ogg")->Play();
+        }
         if(wWait < 3.0f)
         {
             wWait += dt;
         }
         else
         {
-            Z_INFO() << "WON";
             GetApplication()->GetSceneManager()->SetActiveSceneNextFrame("assets/scenes/Default_Scene.zs");
             wWait = -1000.0f;
         }
@@ -75,6 +89,8 @@ void Ball::OnDestroy()
 {
     GetApplication()->GetAssetPool()->RemoveSound("assets/sounds/Wall.ogg");
     GetApplication()->GetAssetPool()->RemoveSound("assets/sounds/Block.ogg");
+    GetApplication()->GetAssetPool()->RemoveSound("assets/sounds/Win.ogg");
+    GetApplication()->GetAssetPool()->RemoveSound("assets/sounds/Lose.ogg");
 }
 
 void Ball::OnEndContact(const glm::vec2& hitNormal, GameObject* other)

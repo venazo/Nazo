@@ -23,7 +23,7 @@ namespace Zewada
         std::string m_path;
         std::map<char, Character> m_characters;
 
-        void Load();        
+        void Load();
     public:
         Font();
         Font(const std::string& path);

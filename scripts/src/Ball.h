@@ -4,6 +4,7 @@
 #include <boost/config.hpp>
 #include <boost/dll/alias.hpp>
 #include <Zewada.h>
+#include <ctime>
 
 using namespace Zewada;
 

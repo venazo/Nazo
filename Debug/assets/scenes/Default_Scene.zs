@@ -37,3 +37,19 @@ Entities:
         {}
     Camera:
       Maincamera: true
+  - Tag:
+      Tag: Title
+      ID: 9997
+    Transform:
+      Position: [-5.6500001, -1, 2]
+      Rotation: 0
+      Scale: [1, 1]
+      Parent: -1
+      ChildrenCount: 0
+      Children:
+        {}
+    Text:
+      Content: Breakout
+      Font: assets\fonts\breakoutFont.ttf
+      Scale: 64
+      Color: [1, 1, 1, 1]
