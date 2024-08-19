@@ -28,11 +28,11 @@ void Platform::OnUpdate(float dt)
     auto transform = GetComponent<Transform>();
     if(application->GetInput()->IsKeyPressed(GLFW_KEY_D))
     {
-        GetGameObject().ApplyForce(glm::vec2(20.0f, 0.0f));
+        GetGameObject().ApplyForce(glm::vec2(40.0f, 0.0f));
     }
     if(application->GetInput()->IsKeyPressed(GLFW_KEY_A))
     {
-        GetGameObject().ApplyForce(glm::vec2(-20.0f, 0.0f));
+        GetGameObject().ApplyForce(glm::vec2(-40.0f, 0.0f));
     }
 }
 
