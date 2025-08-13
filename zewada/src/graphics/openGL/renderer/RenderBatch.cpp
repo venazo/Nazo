@@ -110,7 +110,7 @@ namespace Zewada {
 			if (isRotated)
 			{
 				transformMatrix = glm::translate(transformMatrix, position);
-				transformMatrix = glm::rotate(transformMatrix, (float)(rotation / 180.0f * M_PI), glm::vec3(0, 0, 1));
+				transformMatrix = glm::rotate(transformMatrix, (float)(rotation / 180.0f * PI), glm::vec3(0, 0, 1));
 				transformMatrix = glm::scale(transformMatrix, glm::vec3(size.x, size.y, 0.0f));
 
 				currentPos = transformMatrix * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);

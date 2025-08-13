@@ -9,6 +9,11 @@ SpriteSheets:
     Height: 16
     Num: 4
     Spacing: 0
+  - Path: C:\Users\n7\Dev\Nazo\Debug/assets/nazo/textures/gizmos.png
+    Width: 24
+    Height: 48
+    Num: 3
+    Spacing: 0
 GridGroups:
   Default:
     - {TexPath: assets\textures\Icon.png, UV: [[0, 0], [0, 1], [1, 1], [1, 0]]}

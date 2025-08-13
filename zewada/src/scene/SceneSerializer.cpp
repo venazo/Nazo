@@ -404,74 +404,6 @@ namespace Zewada {
 			out << YAML::EndMap;
 		}
 
-		if(go.HasComponent<Rigidbody2D>())
-		{
-			out << YAML::Key << "RigidBody2D";
-			out << YAML::BeginMap;
-
-			const Rigidbody2D& rb = go.GetComponent<Rigidbody2D>();
-			out << YAML::Key << "AngularDamping" << YAML::Value << rb.angularDamping;
-			out << YAML::Key << "LinearDamping" << YAML::Value << rb.linearDamping;
-			out << YAML::Key << "Restitution" << YAML::Value << rb.restitution;
-			out << YAML::Key << "Density" << YAML::Value << rb.density;
-			out << YAML::Key << "Friction" << YAML::Value << rb.friction;
-			out << YAML::Key << "BodyType" << YAML::Value << bodyType2Names[rb.bodyType];
-			out << YAML::Key << "FixedRotation" << YAML::Value << rb.fixedRotation;
-			out << YAML::Key << "ContinuousCollision" << YAML::Value << rb.continuousCollision;
-
-			out << YAML::EndMap;
-		}
-
-		if(go.HasComponent<Box2DCollider>())
-		{
-			out << YAML::Key << "Box2DCollider";
-			out << YAML::BeginMap;
-
-			const Box2DCollider& cc = go.GetComponent<Box2DCollider>();
-			out << YAML::Key << "HalfSize" << YAML::Value << cc.halfSize;
-			out << YAML::Key << "Offset" << YAML::Value << cc.offset;
-
-			out << YAML::EndMap;	
-		}
-
-		if(go.HasComponent<Circle2DCollider>())
-		{
-			out << YAML::Key << "Circle2DCollider";
-			out << YAML::BeginMap;
-
-			const Circle2DCollider& cc = go.GetComponent<Circle2DCollider>();
-			out << YAML::Key << "Radius" << YAML::Value << cc.radius;
-			out << YAML::Key << "Offset" << YAML::Value << cc.offset;
-
-			out << YAML::EndMap;	
-		}
-
-		if(go.HasComponent<Polygon2DCollider>())
-		{
-			out << YAML::Key << "Polygon2DCollider";
-			out << YAML::BeginMap;
-
-			const Polygon2DCollider& pc = go.GetComponent<Polygon2DCollider>();
-			out << YAML::Key << "Vertices" << YAML::Value << pc.vertices;
-			out << YAML::Key << "Offset" << YAML::Value << pc.offset;
-
-			out << YAML::EndMap;	
-		}
-		
-		if(go.HasComponent<Edge2DCollider>())
-		{
-			out << YAML::Key << "Edge2DCollider";
-			out << YAML::BeginMap;
-
-			const Edge2DCollider& ec = go.GetComponent<Edge2DCollider>();
-			out << YAML::Key << "Vertices" << YAML::Value << ec.vertices;
-			out << YAML::Key << "Offset" << YAML::Value << ec.offset;
-			out << YAML::Key << "PreviousGhost" << YAML::Value << ec.previousGhostVertex;
-			out << YAML::Key << "NextGhost" << YAML::Value << ec.nextGhostVertex;
-
-			out << YAML::EndMap;
-		}
-
 		if(go.HasComponent<NativeScript>())
 		{
 			out << YAML::Key << "NativeScript";
@@ -757,10 +689,8 @@ namespace Zewada {
 		{
 			Z_INFO() << filepath + " is empty.";
 		}
-		
-		auto& entities = data["Entities"];
 
-		DeserializeEntities(entities, scene, true);
+		DeserializeEntities(data["Entities"], scene, true);
 	}
 
 	void SceneSerializer::SerializeEntitesForPrefabs(YAML::Emitter& out, const GameObject& go, std::shared_ptr<Scene> scene)
@@ -874,64 +804,6 @@ namespace Zewada {
 					deserializedEntity.AddComponent<Camera>(Camera());
 					Camera& camera = deserializedEntity.GetComponent<Camera>();
 					camera.maincamera = cameraComponent["Maincamera"].as<bool>();
-				}
-
-				auto rigidbodyComponent = entity["RigidBody2D"];
-				if(rigidbodyComponent)
-				{
-					deserializedEntity.AddComponent<Rigidbody2D>(Rigidbody2D());
-					auto& src = deserializedEntity.GetComponent<Rigidbody2D>();
-
-					src.angularDamping = rigidbodyComponent["AngularDamping"].as<float>();
-					src.linearDamping = rigidbodyComponent["LinearDamping"].as<float>();
-					src.restitution = rigidbodyComponent["Restitution"].as<float>();
-					src.density = rigidbodyComponent["Density"].as<float>();
-					src.friction = rigidbodyComponent["Friction"].as<float>();				
-					src.bodyType = names2BodyType[rigidbodyComponent["BodyType"].as<std::string>()];				
-					src.fixedRotation = rigidbodyComponent["FixedRotation"].as<bool>();
-					src.continuousCollision = rigidbodyComponent["ContinuousCollision"].as<bool>();
-				}
-
-				auto box2DCollider = entity["Box2DCollider"];
-				if(box2DCollider)
-				{
-					deserializedEntity.AddComponent<Box2DCollider>(Box2DCollider());
-					auto& src  = deserializedEntity.GetComponent<Box2DCollider>();
-
-					src.halfSize = box2DCollider["HalfSize"].as<glm::vec2>();
-					src.offset = box2DCollider["Offset"].as<glm::vec2>();
-				}
-				
-				auto circle2DCollider = entity["Circle2DCollider"];
-				if(circle2DCollider)
-				{
-					deserializedEntity.AddComponent<Circle2DCollider>(Circle2DCollider());
-					auto& src  = deserializedEntity.GetComponent<Circle2DCollider>();
-
-					src.radius = circle2DCollider["Radius"].as<float>();
-					src.offset = circle2DCollider["Offset"].as<glm::vec2>();
-				}		
-
-				auto polygon2DCollider = entity["Polygon2DCollider"];
-				if(polygon2DCollider)
-				{
-					deserializedEntity.AddComponent<Polygon2DCollider>(Polygon2DCollider());
-					auto& src  = deserializedEntity.GetComponent<Polygon2DCollider>();
-
-					src.vertices = polygon2DCollider["Vertices"].as<std::vector<glm::vec2>>();
-					src.offset = polygon2DCollider["Offset"].as<glm::vec2>();
-				}
-				
-				auto edge2DCollider = entity["Edge2DCollider"];
-				if(edge2DCollider)
-				{
-					deserializedEntity.AddComponent<Edge2DCollider>(Edge2DCollider());
-					auto& src  = deserializedEntity.GetComponent<Edge2DCollider>();
-
-					src.vertices = edge2DCollider["Vertices"].as<std::vector<glm::vec2>>();
-					src.offset = edge2DCollider["Offset"].as<glm::vec2>();
-					src.previousGhostVertex = edge2DCollider["PreviousGhost"].as<glm::vec2>();
-					src.nextGhostVertex = edge2DCollider["NextGhost"].as<glm::vec2>();
 				}
 
 				auto nativeScript = entity["NativeScript"];

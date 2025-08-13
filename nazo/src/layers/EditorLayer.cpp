@@ -43,7 +43,7 @@ namespace Nazo {
 			m_cameraController->OnEvent(event);
 		}
 	}
-
+ 
 	//all shortcuts
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& event)
 	{
@@ -326,41 +326,6 @@ namespace Nazo {
 		
 		if(m_activeGameObject == nullptr)
 			return;
-
-		if(m_activeGameObject->HasComponent<Box2DCollider>())
-		{
-			const Box2DCollider& boxCollider = m_activeGameObject->GetComponent<Box2DCollider>();
-			const Transform& transform = m_activeGameObject->GetComponent<Transform>();
-			m_application->GetDebugDraw()->Add2DBox(boxCollider.offset + glm::vec2(transform.worldPos), boxCollider.halfSize, transform.rotation, glm::vec4(0.2f, 0.8f, 0.15f, 1.0f));
-		}
-
-		if(m_activeGameObject->HasComponent<Circle2DCollider>())
-		{
-			const Circle2DCollider& circle2DCollider = m_activeGameObject->GetComponent<Circle2DCollider>();
-			const Transform& transform = m_activeGameObject->GetComponent<Transform>();
-			m_application->GetDebugDraw()->AddCircle(circle2DCollider.offset + glm::vec2(transform.worldPos), circle2DCollider.radius, glm::vec4(0.2f, 0.8f, 0.15f, 1.0f));
-		}
-
-		if(m_activeGameObject->HasComponent<Edge2DCollider>())
-		{
-			const Edge2DCollider& edge2DCollider = m_activeGameObject->GetComponent<Edge2DCollider>();
-			const Transform& transform = m_activeGameObject->GetComponent<Transform>();
-			if(edge2DCollider.vertices.size() > 1)
-			{
-				m_application->GetDebugDraw()->AddEdge(glm::vec2(transform.worldPos) + edge2DCollider.offset, edge2DCollider.vertices, glm::vec4(0.2, 0.8f, 0.15f, 1.0f));
-				m_application->GetDebugDraw()->AddLine(glm::vec2(transform.worldPos) + edge2DCollider.offset + edge2DCollider.vertices[0], 
-					glm::vec2(transform.worldPos) + edge2DCollider.offset + edge2DCollider.previousGhostVertex, glm::vec4(0.9, 0.15f, 0.2f, 1.0f));
-				m_application->GetDebugDraw()->AddLine(glm::vec2(transform.worldPos) + edge2DCollider.offset + edge2DCollider.vertices[edge2DCollider.vertices.size() - 1], 
-					glm::vec2(transform.worldPos) + edge2DCollider.offset + edge2DCollider.nextGhostVertex, glm::vec4(0.9, 0.15f, 0.2f, 1.0f));
-			}
-		}
-
-		if(m_activeGameObject->HasComponent<Polygon2DCollider>())
-		{
-			const Polygon2DCollider& polygon2DCollider = m_activeGameObject->GetComponent<Polygon2DCollider>();
-			const Transform& transform = m_activeGameObject->GetComponent<Transform>();
-			m_application->GetDebugDraw()->AddPolygon(glm::vec2(transform.worldPos) + polygon2DCollider.offset, polygon2DCollider.vertices, glm::vec4(0.2, 0.8f, 0.15f, 1.0f));
-		}
 
 		if(m_activeGameObject->HasComponent<Grid>() && m_gridActive)
 		{ 			

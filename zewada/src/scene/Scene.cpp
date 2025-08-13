@@ -17,7 +17,6 @@ namespace Zewada
 		m_transformSystem->Init(this->shared_from_this(), m_coordinator);
 		m_spriteRendererSystem->Init(this->shared_from_this(), m_coordinator);
 		m_cameraSystem->Init(this->shared_from_this(), m_coordinator);
-		m_rigidBody2Dsystem->Init(this->shared_from_this(), m_coordinator);
 		m_nativeScriptSystem->Init(this->shared_from_this(), m_coordinator);
 		m_animationSystem->Init(this->shared_from_this(), m_coordinator);
 		m_animationManagerSystem->Init(this->shared_from_this(), m_coordinator);
@@ -25,7 +24,6 @@ namespace Zewada
 		m_textSystem->Init(this->shared_from_this(), m_coordinator);
 
 		m_application->GetRenderer2D()->SetBackgroundColor(m_scenePlan.backgroundColor);
-		m_application->GetPhysics2D()->SetGravity(m_scenePlan.gravity.x, m_scenePlan.gravity.y);
 
 		m_physics2D = m_application->GetPhysics2D();
 	}
@@ -42,11 +40,6 @@ namespace Zewada
 		m_coordinator->RegisterComponent<SpriteRenderer>();
 		m_coordinator->RegisterComponent<Camera>();
 		m_coordinator->RegisterComponent<UnSerializable>();
-		m_coordinator->RegisterComponent<Rigidbody2D>();
-		m_coordinator->RegisterComponent<Box2DCollider>();
-		m_coordinator->RegisterComponent<Circle2DCollider>();
-		m_coordinator->RegisterComponent<Edge2DCollider>();
-		m_coordinator->RegisterComponent<Polygon2DCollider>();
 		m_coordinator->RegisterComponent<NativeScript>();
 		m_coordinator->RegisterComponent<Animation>();
 		m_coordinator->RegisterComponent<AnimationManager>();
@@ -71,12 +64,6 @@ namespace Zewada
 		Signature cameraSystemSignature;
 		cameraSystemSignature.set(m_coordinator->GetComponentType<Camera>());
 		m_coordinator->SetSystemSignature<CameraSystem>(cameraSystemSignature);
-
-		m_rigidBody2Dsystem = m_coordinator->RegisterSystem<Rigidbody2DSystem>();
-
-		Signature rigidBody2DSystemSignature;
-		rigidBody2DSystemSignature.set(m_coordinator->GetComponentType<Rigidbody2D>());
-		m_coordinator->SetSystemSignature<Rigidbody2DSystem>(rigidBody2DSystemSignature);
 		
 		m_nativeScriptSystem = m_coordinator->RegisterSystem<NativeScriptSystem>();
 
@@ -124,10 +111,6 @@ namespace Zewada
 	{
 		m_transformSystem->OnStart();
 		m_physics2D->OnStart();
-		for (auto &entity : m_coordinator->GetAllEntities())
-		{
-			m_physics2D->Add(entity);
-		}
 
 		m_animationManagerSystem->OnStart();
 
@@ -145,8 +128,7 @@ namespace Zewada
 		m_cameraSystem->OnUpdate(dt);
 
 		m_nativeScriptSystem->OnUpdate(dt);
-		m_physics2D->OnUpdate(dt);	
-		m_rigidBody2Dsystem->OnUpdate(dt);
+		m_physics2D->OnUpdate(dt);
 
 		m_animationManagerSystem->OnUpdate(dt);
 		m_animationSystem->OnUpdate(dt);
@@ -248,9 +230,6 @@ namespace Zewada
 			}
 		}
 
-		if(go.HasComponent<Rigidbody2D>())
-			m_application->GetPhysics2D()->DestroyEntity(go.GetEntity());
-
 		if(go.HasComponent<Camera>())
 			GetCameraSystem()->DestroyEntity(go.GetEntity());
 
@@ -307,7 +286,6 @@ namespace Zewada
 
 	void Scene::Save()
 	{
-		m_scenePlan.gravity = m_physics2D->GetGravity();
 		m_scenePlan.backgroundColor = m_application->GetRenderer2D()->GetBackgroundColor();
 	}
 }

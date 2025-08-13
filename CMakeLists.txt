@@ -10,9 +10,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 #enable intellisense in vs code
 set(EXPORT_COMPILE_COMMANDS ON)
 
-#set executable directory
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../)
-
 add_subdirectory(zewada)
 add_subdirectory(scripts)
 add_subdirectory(nazo)

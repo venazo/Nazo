@@ -278,7 +278,7 @@ namespace Nazo
 
 		ImGui::BeginChild(label.c_str(), ImVec2(128.0f + (padding.x * 2.0f),
 			128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
-		bool result = ImGui::ImageButton(texid, {128, 128}, {0, 1}, {1, 0});
+		bool result = ImGui::ImageButton("", texid, {128, 128}, {0, 1}, {1, 0});
 		ImGui::Text(label.c_str());
 		ImGui::EndChild();
 

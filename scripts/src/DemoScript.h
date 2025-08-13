@@ -1,5 +1,13 @@
 #pragma once
 
+#if defined(_WIN32) && defined(MYLIB_EXPORTS)
+    #define MYLIB_API __declspec(dllexport)
+#elif defined(_WIN32)
+    #define MYLIB_API __declspec(dllimport)
+#else
+    #define MYLIB_API
+#endif
+
 #include <boost/dll.hpp>
 #include <boost/config.hpp>
 #include <boost/dll/alias.hpp>

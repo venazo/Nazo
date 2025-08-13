@@ -117,27 +117,6 @@ namespace Zewada {
 		{
 			result.AddComponent<UnSerializable>(UnSerializable());
 		}
-		if(HasComponent<Rigidbody2D>())
-		{
-			result.AddComponent<Rigidbody2D>(Rigidbody2D(GetComponent<Rigidbody2D>()));
-			result.GetComponent<Rigidbody2D>().rawBody = nullptr;
-		}
-		if(HasComponent<Box2DCollider>())
-		{
-			result.AddComponent<Box2DCollider>(Box2DCollider(GetComponent<Box2DCollider>()));
-		}
-		if(HasComponent<Circle2DCollider>())
-		{
-			result.AddComponent<Circle2DCollider>(Circle2DCollider(GetComponent<Circle2DCollider>()));
-		}
-		if(HasComponent<Edge2DCollider>())
-		{
-			result.AddComponent<Edge2DCollider>(Edge2DCollider(GetComponent<Edge2DCollider>()));
-		}
-		if(HasComponent<Polygon2DCollider>())
-		{
-			result.AddComponent<Polygon2DCollider>(Polygon2DCollider(GetComponent<Polygon2DCollider>()));
-		}
 		if(HasComponent<NativeScript>())
 		{
 			result.AddComponent<NativeScript>(NativeScript(GetComponent<NativeScript>()));
@@ -174,11 +153,6 @@ namespace Zewada {
 	{
 		Transform& transform = GetComponent<Transform>();
 
-		if(HasComponent<Rigidbody2D>())
-		{
-			GetComponent<Rigidbody2D>().rawBody->SetTransform(b2Vec2(x, y), transform.rotation / 180.0f * M_PI);
-		}
-
 		transform.pos.x = x;
 		transform.pos.y = y;
 		transform.pos.z = z;
@@ -189,74 +163,13 @@ namespace Zewada {
 		SetPosition(vec.x, vec.y, vec.z);
 	}
 
-	void GameObject::AddRotation(float r)
-	{
-		SetRotation(GetComponent<Transform>().rotation + r);
-	}
-
-	void GameObject::SetRotation(float r)
-	{
-		auto& trans = GetComponent<Transform>();
-		trans.rotation = r;
-		if(HasComponent<Rigidbody2D>())
-		{
-			GetComponent<Rigidbody2D>().rawBody->SetTransform(b2Vec2(trans.worldPos.x, trans.worldPos.y), r);
-		}
-	}
-
 	GameObject* GameObject::GetNullObject()
 	{ 
 		static GameObject* go = new GameObject();
 		return go;
 	}
 
-	void GameObject::ApplyForce(float x, float y)
-	{
-		if(!HasComponent<Rigidbody2D>() || !HasCollider())
-		{
-			return;
-		}
 
-		b2Vec2 vec = b2Vec2(x, y) ;
-		auto& rb = GetComponent<Rigidbody2D>();
-		auto body = rb.rawBody;
-		body->ApplyForceToCenter(vec, true);
-	}
-
-	void GameObject::ApplyForce(const glm::vec2& force)
-	{
-		ApplyForce(force.x, force.y);
-	}
-
-	void GameObject::ApplyImpulse(float x, float y)
-	{
-		if(!HasComponent<Rigidbody2D>() || !HasCollider())
-		{
-			return;
-		}
-
-		b2Vec2 vec = b2Vec2(x, y);
-		auto& rb = GetComponent<Rigidbody2D>();
-		auto body = rb.rawBody;
-		body->ApplyLinearImpulseToCenter(vec, true);
-	}
-
-	void GameObject::ApplyImpulse(const glm::vec2& impulse)
-	{
-		ApplyImpulse(impulse.x, impulse.y);
-	}
-
-	void GameObject::ApplyTorque(float torque)
-	{
-		if(!HasComponent<Rigidbody2D>() || !HasCollider())
-		{
-			return;
-		}
-
-		auto& rb = GetComponent<Rigidbody2D>();
-		auto body = rb.rawBody;
-		body->ApplyTorque(torque, true);
-	}
 
 	void GameObject::SetAnimation(const std::string& animation)
 	{
@@ -267,10 +180,5 @@ namespace Zewada {
 			am.animations[am.activeAnimation].dt = 0.0f;
 			am.animations[am.activeAnimation].activeFrame = 0;
 		}
-	}
-
-	bool GameObject::HasCollider()
-	{
-		return (HasComponent<Box2DCollider>() || HasComponent<Circle2DCollider>() || HasComponent<Edge2DCollider>() || HasComponent<Polygon2DCollider>());
 	}
 }

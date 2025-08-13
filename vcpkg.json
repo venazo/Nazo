@@ -19,8 +19,8 @@
         "glad",
         "yaml-cpp",
         "stb",
-        "box2d",
         "openal-soft",
-        "freetype"
+        "freetype",
+        "zlib"
     ]
 }

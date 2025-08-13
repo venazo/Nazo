@@ -24,7 +24,6 @@ namespace Zewada {
 
 		std::future<std::shared_ptr<Scene>> m_sceneLoading;
 		std::future<void> m_sceneSaving;
-
 		Application* m_application;
 		std::shared_ptr<SceneSerializer> m_sceneSerializer;
 

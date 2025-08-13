@@ -43,24 +43,28 @@ namespace Zewada {
 			SetActiveScene(path);
 		}
 
-		if(m_sceneLoading._Is_ready())
+		if(m_sceneLoading.valid())
 		{
-			if(m_scenes.size() > 0)
+			if(m_sceneLoading.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
 			{
-				m_scenes.front()->OnStop();
-				m_scenes.pop();
+				if(m_scenes.size() > 0)
+				{
+					m_scenes.front()->OnStop();
+					m_scenes.pop();
+				}
+
+				m_scenes.push(m_sceneLoading.get());
+				m_sceneLoading = std::future<std::shared_ptr<Scene>>();
+				m_scenes.front()->Init(m_application);
+
+				ChangedSceneEvent event(m_scenes.front());
+				m_callback(event);
+				m_scenes.front()->OnStart();
+				m_scenes.front()->OnRuntimeUpdate(dt);
+				return;
 			}
-
-			m_scenes.push(m_sceneLoading.get());
-			m_sceneLoading = std::future<std::shared_ptr<Scene>>();
-			m_scenes.front()->Init(m_application);
-
-			ChangedSceneEvent event(m_scenes.front());
-			m_callback(event);
-			m_scenes.front()->OnStart();
-			m_scenes.front()->OnRuntimeUpdate(dt);
-			return;
 		}
+		
 		
 		if(m_scenes.size() > 0)
 			m_scenes.front()->OnRuntimeUpdate(dt);
@@ -74,23 +78,26 @@ namespace Zewada {
 			m_activeSceneNextFrame = "";
 			SetActiveScene(path);
 		}
-		 
-		if(m_sceneLoading._Is_ready())
-		{
-			if(m_scenes.size() > 0)
-			{
-				m_scenes.front()->Destroy();
-				m_scenes.pop();
-			}
 		
-			m_scenes.push(m_sceneLoading.get());
-			m_sceneLoading = std::future<std::shared_ptr<Scene>>();
-			m_scenes.front()->Init(m_application);
+		if(m_sceneLoading.valid())
+		{
+			if(m_sceneLoading.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+			{
+				if(m_scenes.size() > 0)
+				{
+					m_scenes.front()->Destroy();
+					m_scenes.pop();
+				}
+			
+				m_scenes.push(m_sceneLoading.get());
+				m_sceneLoading = std::future<std::shared_ptr<Scene>>();
+				m_scenes.front()->Init(m_application);
 
-			ChangedSceneEvent event(m_scenes.front());
-			m_callback(event);
-			m_scenes.front()->OnUpdate(dt);
-			return;
+				ChangedSceneEvent event(m_scenes.front());
+				m_callback(event);
+				m_scenes.front()->OnUpdate(dt);
+				return;
+			}
 		}
 		
 		if(m_scenes.size() > 0)
@@ -105,12 +112,17 @@ namespace Zewada {
 
 	void SceneManager::SaveActiveScene()
 	{
-		if(m_sceneLoading._Ptr() == nullptr)
+		if(m_sceneLoading.valid())
 		{
-			m_scenes.front()->Save();
-			std::shared_ptr<Scene> scene = std::make_shared<Scene>(*m_scenes.front().get());
-			m_sceneSaving = std::move(std::async(std::launch::async, &SceneSerializer::Serialize, m_sceneSerializer, scene));	
+			if(m_sceneLoading.get() != nullptr)
+			{
+				return;
+			}
 		}
+
+		m_scenes.front()->Save();
+		std::shared_ptr<Scene> scene = std::make_shared<Scene>(*m_scenes.front().get());
+		m_sceneSaving = std::move(std::async(std::launch::async, &SceneSerializer::Serialize, m_sceneSerializer, scene));	
 	}
 
 	void SceneManager::SetActiveSceneNextFrame(const std::string& path)
@@ -120,8 +132,17 @@ namespace Zewada {
 
 	void SceneManager::SetActiveScene(const std::string path)
 	{
-		if(m_sceneLoading._Ptr() == nullptr && m_activeSceneNextFrame == "")
-			m_sceneLoading = std::move(std::async(std::launch::async, &SceneSerializer::Deserialize, m_sceneSerializer, path));
+		if(m_sceneLoading.valid()) {
+			if(m_sceneLoading.get() != nullptr)
+			{
+				return;
+			}
+		}
+
+		if(m_activeSceneNextFrame != "")
+			return;
+
+		m_sceneLoading = std::move(std::async(std::launch::async, &SceneSerializer::Deserialize, m_sceneSerializer, path));
 	}
 
 	void SceneManager::SetEventCallback(const EventCallbackFn& callback)

@@ -32,14 +32,6 @@ namespace Zewada {
 		void SetPosition(float x, float y, float z);
 		void SetPosition(const glm::vec3& vec);
 
-		void AddRotation(float r);
-		void SetRotation(float r);
-
-		void ApplyForce(float x, float y);
-		void ApplyForce(const glm::vec2& force);
-		void ApplyImpulse(float x, float y);
-		void ApplyImpulse(const glm::vec2& impulse);
-		void ApplyTorque(float torque);
 
 		void SetAnimation(const std::string& animation);
 
@@ -72,8 +64,6 @@ namespace Zewada {
 		{
 			m_coordinator->RemoveComponent<T>(m_entity);
 		}
-
-		bool HasCollider();
 
 		GameObject Copy() const;
 

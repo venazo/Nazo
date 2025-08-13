@@ -81,48 +81,6 @@ namespace Zewada
 
 		};
 
-		struct Rigidbody2D
-		{
-			//read only is only needed to initialize
-			float angularDamping = 0.8f;
-			float linearDamping = 0.9f;
-			float density = 1.0f;
-			float friction = 1.0f;
-			float restitution = 0.0f;
-			BodyType bodyType = BodyType::Static;
-			bool fixedRotation = false;
-			bool continuousCollision = false;
-
-			b2Body *rawBody = nullptr;
-			Rigidbody2D() = default;
-		};
-
-		struct Box2DCollider
-		{
-			glm::vec2 halfSize = glm::vec2(1.0f, 1.0f);
-			glm::vec2 offset = glm::vec2();
-		};
-		
-		struct Circle2DCollider
-		{
-			float radius = 1.0f;
-			glm::vec2 offset = glm::vec2();
-		};
-
-		struct Edge2DCollider
-		{
-			std::vector<glm::vec2> vertices;
-			glm::vec2 previousGhostVertex = glm::vec2();
-			glm::vec2 nextGhostVertex = glm::vec2();
-			glm::vec2 offset = glm::vec2();
-		};
-
-		struct Polygon2DCollider
-		{
-			std::vector<glm::vec2> vertices;
-			glm::vec2 offset = glm::vec2();
-		};
-
 		struct NativeScript
 		{
 			std::string className = "NONE";

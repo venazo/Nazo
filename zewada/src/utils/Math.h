@@ -6,6 +6,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#define PI 3.14159265359
+
 namespace Zewada {
 	template <typename T> int sgn(T val) {
 		return (T(0) < val) - (val < T(0));

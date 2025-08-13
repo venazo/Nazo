@@ -10,7 +10,6 @@
 #include "../../../ECS/core/Coordinator.h"
 #include "../../../utils/debug/Logger.h"
 
-
 #define MAX_SPRITES 10000
 #define VERTEX_SIZE sizeof(Vertex)
 #define SPRITE_SIZE VERTEX_SIZE * 4

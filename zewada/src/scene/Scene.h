@@ -7,7 +7,6 @@
 #include "../Utils/Resource/AssetPool.h"
 #include "../ECS/systems/CameraSystem.h"
 #include "../ECS/systems/TransformSystem.h"
-#include "../ECS/systems/Rigidbody2DSystem.h"
 #include "../ECS/systems/NativeScriptSystem.h"
 #include "../ECS/systems/AnimationSystem.h"
 #include "../ECS/systems/AnimationManagerSystem.h"
@@ -50,7 +49,6 @@ namespace Zewada {
 		std::shared_ptr<TransformSystem> m_transformSystem;
 		std::shared_ptr<SpriteRendererSystem> m_spriteRendererSystem;
 		std::shared_ptr<CameraSystem> m_cameraSystem;
-		std::shared_ptr<Rigidbody2DSystem> m_rigidBody2Dsystem;
 		std::shared_ptr<NativeScriptSystem> m_nativeScriptSystem;
 		std::shared_ptr<AnimationSystem> m_animationSystem;
 		std::shared_ptr<AnimationManagerSystem> m_animationManagerSystem;
@@ -85,7 +83,6 @@ namespace Zewada {
 		inline std::shared_ptr<TransformSystem> GetTransformSystem(){return m_transformSystem;}
 		inline std::shared_ptr<SpriteRendererSystem> GetSpriteSystem(){return m_spriteRendererSystem;}
 		inline std::shared_ptr<CameraSystem> GetCameraSystem(){return m_cameraSystem;}
-		inline std::shared_ptr<Rigidbody2DSystem> GetRigidbody2DSystem(){return m_rigidBody2Dsystem;}
 		
 		inline const std::string& GetPath() const {return m_path;}
 		inline std::shared_ptr<Physics2D> GetPhysics2D() const {return m_physics2D;} 

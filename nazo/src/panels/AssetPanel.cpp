@@ -110,7 +110,7 @@ namespace Nazo
 
 		ImGui::BeginChild(name.c_str(), ImVec2(128.0f + (padding.x * 2.0f),
 			128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
-		ImGui::ImageButton(textureid, {128, 128}, {0, 1}, {1, 0});
+		ImGui::ImageButton(name.c_str(), textureid, {128, 128}, {0, 1}, {1, 0});
         if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 		{
 			m_currentPath /= path.filename();
@@ -148,7 +148,7 @@ namespace Nazo
 
 		ImGui::BeginChild(name.c_str(), ImVec2(128.0f + (padding.x * 2.0f),
 			128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
-		ImGui::ImageButton(textureid, {128, 128}, {0, 1}, {1, 0});
+		ImGui::ImageButton(name.c_str(), textureid, {128, 128}, {0, 1}, {1, 0});
         if(ImGui::BeginDragDropSource())
         {
             std::filesystem::path relativePath = FileUtils::RelativePath(path);
@@ -180,7 +180,7 @@ namespace Nazo
 		ImGui::BeginChild(name.c_str(), ImVec2(128.0f + (padding.x * 2.0f),
 			128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
         
-		if(ImGui::ImageButton(textureid, {128, 128}, {0, 1}, {1, 0}))
+		if(ImGui::ImageButton(name.c_str(), textureid, {128, 128}, {0, 1}, {1, 0}))
         {     
             m_open[pathStr] = !m_open[pathStr];
         }
@@ -216,7 +216,7 @@ namespace Nazo
 
 		ImGui::BeginChild(name.c_str(), ImVec2(128.0f + (padding.x * 2.0f),
 			128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
-		ImGui::ImageButton(textureid, {128, 128}, {0, 1}, {1, 0});
+		ImGui::ImageButton(name.c_str(), textureid, {128, 128}, {0, 1}, {1, 0});
 		ImGui::Text(name.c_str());
 
         ImGui::EndChild();
@@ -232,7 +232,7 @@ namespace Nazo
 
 		ImGui::BeginChild(name.c_str(), ImVec2(128.0f + (padding.x * 2.0f),
 			128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
-		ImGui::ImageButton(textureid, {128, 128}, {0, 1}, {1, 0});
+		ImGui::ImageButton(name.c_str(), textureid, {128, 128}, {0, 1}, {1, 0});
         std::filesystem::path relativePath = FileUtils::RelativePath(path);
         if(ImGui::BeginDragDropSource())
         {
@@ -264,7 +264,7 @@ namespace Nazo
 			    128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
 
             auto UV = sprites[i]->GetUV();
-		    ImGui::ImageButton(textureid, {128, 128}, {UV[1].x, UV[1].y}, {UV[3].x, UV[3].y});
+		    ImGui::ImageButton(name.c_str(), textureid, {128, 128}, {UV[1].x, UV[1].y}, {UV[3].x, UV[3].y});
             if(ImGui::BeginDragDropSource())
             {
                 std::string sprite = relativePath.string() + "$.%.$" + std::to_string(i);
@@ -291,7 +291,7 @@ namespace Nazo
 
 		ImGui::BeginChild(name.c_str(), ImVec2(128.0f + (padding.x * 2.0f),
 			128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
-		ImGui::ImageButton(textureid, {128, 128}, {0, 1}, {1, 0});
+		ImGui::ImageButton(name.c_str(), textureid, {128, 128}, {0, 1}, {1, 0});
         if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 		{
 			m_sceneManager->GetSceneSerializer()->DeserializePrefabs(path.string(), m_sceneManager->GetActiveScene());
@@ -311,7 +311,7 @@ namespace Nazo
 
 		ImGui::BeginChild(name.c_str(), ImVec2(128.0f + (padding.x * 2.0f),
 			128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
-		ImGui::ImageButton(textureid, {128, 128}, {0, 1}, {1, 0});
+		ImGui::ImageButton(name.c_str(), textureid, {128, 128}, {0, 1}, {1, 0});
         ImGui::Text(name.c_str());
         
         ImGui::EndChild();
@@ -327,7 +327,7 @@ namespace Nazo
 
 		ImGui::BeginChild(name.c_str(), ImVec2(128.0f + (padding.x * 2.0f),
 			128.0f + ImGui::GetFontSize() + (padding.y * 4.0f)));
-		ImGui::ImageButton(textureid, {128, 128}, {0, 1}, {1, 0});
+		ImGui::ImageButton(name.c_str(), textureid, {128, 128}, {0, 1}, {1, 0});
         if(ImGui::BeginDragDropSource())
         {
             std::filesystem::path relativePath = FileUtils::RelativePath(path);

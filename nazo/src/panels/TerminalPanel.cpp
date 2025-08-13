@@ -16,9 +16,9 @@ namespace Nazo
         {
             float edge = -(ImGui::GetStyle().WindowPadding.x);
             static float x = edge;
-            if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_LeftArrow)))
+            if (ImGui::IsKeyDown(ImGuiKey_LeftArrow))
                 x -= ImGui::GetIO().DeltaTime * 1000.0f;
-            if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_RightArrow)))
+            if (ImGui::IsKeyDown(ImGuiKey_RightArrow))
                 x += ImGui::GetIO().DeltaTime * 1000.0f;
             if((float)(int)x >= edge)
             {

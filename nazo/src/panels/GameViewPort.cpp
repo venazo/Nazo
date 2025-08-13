@@ -72,6 +72,7 @@ namespace Nazo {
 				LoadSceneEvent event(scenePath.string());
 				m_callback(event);
 			}
+			ImGui::EndDragDropTarget();
 		}
 
 		ImGui::End();
