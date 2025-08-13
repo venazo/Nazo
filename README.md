@@ -2,10 +2,9 @@
 
 Prerequisites:
 - Windows
-- CMAKE
 - VCPKG
-- Visual Studio 17 2022
-- .NET SDK
+- CMAKE
+- GNU
 
 ## Clone repository and setup
 ```cmd
@@ -16,10 +15,13 @@ Prerequisites:
 ## Downloading packages and building CMAKE
 ```cmd
 > vcpkg integrate install
-> cmake -DCMAKE_TOOLCHAIN_FILE=path/to/toolchainfile -DCMAKE_BUILD_TYPE=Debug -B"Build" -G"Visual Studio 17 2022"
+> cmake -DCMAKE_TOOLCHAIN_FILE=path/to/vcpkg -DVCPKG_HOST_TRIPLET=x64-mingw-static -DCMAKE_BUILD_TYPE=Debug -B'Build' -G'MinGW Makefiles'
 ```
 
-## Open in Visual Studio 2022
+## Build Makefiles
 ```cmd
-> start nazo.sln
+> Build/mingw32-make -j8
 ```
+
+
+
