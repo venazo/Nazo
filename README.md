@@ -20,7 +20,8 @@ Prerequisites:
 
 ## Build Makefiles
 ```cmd
-> Build/mingw32-make -j8
+> cd Build
+> mingw32-make -j8
 ```
 
 
